@@ -1,7 +1,7 @@
 import React, { useState, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { Send, X, Cpu, Zap, Activity, Trash2, Shield, ExternalLink } from 'lucide-react';
-import ReactMarkdown from 'react-markdown';
+
 
 // ── Quick-start options shown in the welcome card ──────────────────────────
 const QUICK_OPTIONS = [
@@ -166,9 +166,7 @@ const Chatbot = ({ isOpen, onClose }) => {
 
                                 <div className={`message-card ${msg.role} animate-fade-in`}>
                                     {msg.role === 'bot' ? (
-                                        <div className="prose-invert">
-                                            <ReactMarkdown>{msg.content}</ReactMarkdown>
-                                        </div>
+                                        <span className="bot-text" style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</span>
                                     ) : (
                                         msg.content
                                     )}

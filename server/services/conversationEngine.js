@@ -14,11 +14,8 @@ if (!process.env.GROQ_API_KEY) {
  * Orchestrates the flow between raw input, expert system, and Groq LLM.
  */
 const handleConversation = async (sessionId, userMessage, history = []) => {
-    // 1. Expert System Layer (Heuristics)
-    // We can use the expert system to provide "thoughts" or pre-processing
     const analysis = processMessage(userMessage);
     
-    // 2. Groq LLM Layer for Natural Language Response
     try {
         const chatCompletion = await groq.chat.completions.create({
             messages: [
@@ -27,29 +24,27 @@ const handleConversation = async (sessionId, userMessage, history = []) => {
                     content: `You are VoterAI, a focused assistant designed ONLY to help users with voting-related information.
 
 STRICT RULES:
-1. ONLY answer questions related to:
-   - Elections
-   - Voting process
-   - Voter registration
-   - Political candidates or parties (neutral information only)
-   - Government policies (informational only)
+1. Only answer questions about elections, voting, voter registration, candidates (neutral), or government policies.
 
-2. If the user asks ANYTHING unrelated (like coding, jokes, personal questions, etc.):
-   - DO NOT answer the question
-   - Respond politely with exactly: "I'm here to assist only with voting and election-related queries. Please ask something related to voting."
+2. If the user asks anything unrelated, respond with exactly:
+"I'm here to assist only with voting and election-related queries. Please ask something related to voting."
 
-3. Keep answers SHORT, CLEAR, and TO THE POINT. Do NOT generate long explanations unless absolutely necessary.
+3. Keep answers short, clear, and to the point.
 4. Stay neutral, factual, and non-opinionated.
 5. Never generate harmful, biased, or misleading political content.
-6. Use Markdown for structure where helpful:
-   - **bold** for key terms
-   - Bullet points for lists
-   - ### headers for sections
-   - Keep paragraphs short
+
+FORMATTING — FOLLOW STRICTLY:
+- Do NOT use any Markdown. No **, no ##, no __, no backticks, no > quotes, no --- dividers.
+- Do NOT use - or * as bullet points.
+- Write each point or fact on its own separate line.
+- Leave one blank line between separate points or sections.
+- Use plain numbers (1. 2. 3.) only when listing steps in order.
+- Keep each line short and scannable. No dense paragraphs.
+- Plain, conversational English only.
 
 Heuristic Context: ${analysis.thought}
 
-Tone: Professional, Helpful, Concise.`
+Tone: Friendly, Professional, Minimal.`
                 },
                 ...history,
                 {
@@ -59,7 +54,7 @@ Tone: Professional, Helpful, Concise.`
             ],
             model: "llama-3.3-70b-versatile",
             temperature: 0.6,
-            max_tokens: 2048,
+            max_tokens: 1024,
         });
 
         const botResponse = chatCompletion.choices[0]?.message?.content || analysis.response;
@@ -69,19 +64,14 @@ Tone: Professional, Helpful, Concise.`
             content: botResponse,
             thought: analysis.thought,
             timestamp: new Date(),
-            version: "4.0.0 (Groq-Powered)",
-            node: "Neural-Groq-Alpha"
         };
     } catch (error) {
         console.error('Groq Error:', error);
-        // Fallback to expert system if LLM fails
         return {
             role: 'assistant',
             content: analysis.response,
             thought: analysis.thought + " (Fallback Active)",
             timestamp: new Date(),
-            version: "4.0.0 (Fallback)",
-            node: "Heuristic-Core"
         };
     }
 };
