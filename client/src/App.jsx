@@ -5,10 +5,10 @@ import axios from 'axios';
 // Eliminates all external component imports to resolve the white screen issue.
 
 const SimulationPage = () => {
-  const [votes, setVotes] = useState({ 
-    "Candidate A (Progressive)": 1452, 
-    "Candidate B (Conservative)": 1320, 
-    "Candidate C (Independent)": 450 
+  const [votes, setVotes] = useState({
+    "Candidate A (Progressive)": 1452,
+    "Candidate B (Conservative)": 1320,
+    "Candidate C (Independent)": 450
   });
   const [hasVoted, setHasVoted] = useState(false);
   const [selectedCandidate, setSelectedCandidate] = useState(null);
@@ -42,12 +42,12 @@ const SimulationPage = () => {
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <h1 style={{ fontSize: 'clamp(32px, 8vw, 60px)', fontWeight: '900', marginBottom: '20px' }}>Live Voting Simulation.</h1>
       <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginBottom: '40px' }}>Experience a secure, real-time cryptographic voting terminal with live analytics.</p>
-      
+
       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {/* Voting Terminal */}
         <div style={{ flex: 1, minWidth: 'min(300px, 100%)', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
           <h2 style={{ fontSize: '24px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ color: '#ef4444', animation: 'pulse 2s infinite' }}>●</span> Cast Your Vote</h2>
-          
+
           {hasVoted ? (
             <div style={{ textAlign: 'center', padding: '40px 0', animation: 'scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
               <div style={{ fontSize: '60px', marginBottom: '20px' }}>✅</div>
@@ -57,13 +57,13 @@ const SimulationPage = () => {
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
               {Object.keys(votes).map(candidate => (
-                <div 
+                <div
                   key={candidate}
                   onClick={() => setSelectedCandidate(candidate)}
-                  style={{ 
-                    padding: '20px', 
-                    borderRadius: '16px', 
-                    border: selectedCandidate === candidate ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)', 
+                  style={{
+                    padding: '20px',
+                    borderRadius: '16px',
+                    border: selectedCandidate === candidate ? '2px solid #3b82f6' : '1px solid rgba(255,255,255,0.1)',
                     backgroundColor: selectedCandidate === candidate ? 'rgba(59,130,246,0.1)' : 'rgba(255,255,255,0.03)',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
@@ -73,17 +73,17 @@ const SimulationPage = () => {
                   <div style={{ fontWeight: 'bold', fontSize: '1.1rem' }}>{candidate}</div>
                 </div>
               ))}
-              <button 
+              <button
                 onClick={handleVote}
                 disabled={!selectedCandidate}
-                style={{ 
-                  marginTop: '20px', 
-                  padding: '20px', 
-                  backgroundColor: selectedCandidate ? '#3b82f6' : '#1e293b', 
-                  color: selectedCandidate ? 'white' : '#64748b', 
-                  border: 'none', 
-                  borderRadius: '16px', 
-                  fontWeight: 'bold', 
+                style={{
+                  marginTop: '20px',
+                  padding: '20px',
+                  backgroundColor: selectedCandidate ? '#3b82f6' : '#1e293b',
+                  color: selectedCandidate ? 'white' : '#64748b',
+                  border: 'none',
+                  borderRadius: '16px',
+                  fontWeight: 'bold',
                   fontSize: '1.1rem',
                   cursor: selectedCandidate ? 'pointer' : 'not-allowed',
                   transition: 'all 0.3s',
@@ -104,7 +104,7 @@ const SimulationPage = () => {
               {totalVotes.toLocaleString()} Total Votes
             </div>
           </div>
-          
+
           <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
             {sortedVotes.map(([candidate, count], index) => {
               const percentage = ((count / totalVotes) * 100).toFixed(1);
@@ -115,9 +115,9 @@ const SimulationPage = () => {
                     <span style={{ color: '#94a3b8' }}>{count.toLocaleString()} ({percentage}%)</span>
                   </div>
                   <div style={{ width: '100%', height: '12px', backgroundColor: 'rgba(255,255,255,0.05)', borderRadius: '6px', overflow: 'hidden' }}>
-                    <div style={{ 
-                      width: `${percentage}%`, 
-                      height: '100%', 
+                    <div style={{
+                      width: `${percentage}%`,
+                      height: '100%',
                       backgroundColor: index === 0 ? '#10b981' : '#3b82f6',
                       transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)'
                     }} />
@@ -126,11 +126,11 @@ const SimulationPage = () => {
               );
             })}
           </div>
-          
+
           <div style={{ marginTop: '40px', padding: '20px', backgroundColor: 'rgba(0,0,0,0.3)', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.05)' }}>
             <h4 style={{ color: '#94a3b8', marginBottom: '10px', fontSize: '14px' }}>SYSTEM INSIGHTS</h4>
             <p style={{ color: '#e2e8f0', fontSize: '14px', lineHeight: '1.6' }}>
-              The leading candidate currently holds a <strong>{((sortedVotes[0][1] / totalVotes) * 100).toFixed(1)}%</strong> majority. 
+              The leading candidate currently holds a <strong>{((sortedVotes[0][1] / totalVotes) * 100).toFixed(1)}%</strong> majority.
               Live telemetry indicates sustained high turnout. Cryptographic hash rate remains stable.
             </p>
           </div>
@@ -222,10 +222,10 @@ const AdminDashboard = ({ token, currentUser }) => {
                     <td style={{ padding: '20px 30px', borderBottom: '1px solid rgba(255,255,255,0.05)', color: '#94a3b8' }}>{u.email}</td>
                     <td style={{ padding: '20px 30px', borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
-                        <span style={{ 
-                          padding: '4px 10px', 
-                          borderRadius: '6px', 
-                          fontSize: '12px', 
+                        <span style={{
+                          padding: '4px 10px',
+                          borderRadius: '6px',
+                          fontSize: '12px',
                           fontWeight: 'bold',
                           backgroundColor: u.role === 'admin' ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
                           color: u.role === 'admin' ? '#ef4444' : '#10b981',
@@ -234,13 +234,13 @@ const AdminDashboard = ({ token, currentUser }) => {
                           {u.role.toUpperCase()}
                         </span>
                         {currentUser && currentUser.username !== u.username && (
-                          <button 
+                          <button
                             onClick={() => handleRoleChange(u._id, u.role)}
-                            style={{ 
-                              background: 'none', 
-                              border: '1px solid rgba(255,255,255,0.2)', 
-                              color: '#94a3b8', 
-                              fontSize: '11px', 
+                            style={{
+                              background: 'none',
+                              border: '1px solid rgba(255,255,255,0.2)',
+                              color: '#94a3b8',
+                              fontSize: '11px',
                               padding: '4px 8px',
                               borderRadius: '4px',
                               cursor: 'pointer',
@@ -268,9 +268,9 @@ const AdminDashboard = ({ token, currentUser }) => {
 
 const ECIPortal = () => {
   const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({ 
+  const [formData, setFormData] = useState({
     state: '', constituency: '', district: '',
-    firstName: '', lastName: '', 
+    firstName: '', lastName: '',
     relativeName: '', relativeType: '',
     mobile: '', email: '',
     aadhar: '', epicId: '',
@@ -283,7 +283,7 @@ const ECIPortal = () => {
 
   const handleNext = () => setStep(prev => Math.min(prev + 1, 9));
   const handlePrev = () => setStep(prev => Math.max(prev - 1, 1));
-  
+
   const submitForm = () => {
     setSubmitted(true);
     setTimeout(() => {
@@ -305,8 +305,8 @@ const ECIPortal = () => {
       <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginBottom: '40px', flexWrap: 'wrap' }}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
           <div key={num} style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-            <div style={{ 
-              width: '30px', height: '30px', borderRadius: '50%', 
+            <div style={{
+              width: '30px', height: '30px', borderRadius: '50%',
               backgroundColor: step >= num ? '#3b82f6' : 'rgba(255,255,255,0.05)',
               color: step >= num ? 'white' : 'gray',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -340,11 +340,11 @@ const ECIPortal = () => {
               {step === 8 && "Step 8: Disability & Optional Details"}
               {step === 9 && "Step 9: Declaration"}
             </h3>
-            
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '30px' }}>
               {step === 1 && (
                 <>
-                  <select value={formData.state} onChange={e => setFormData({...formData, state: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
+                  <select value={formData.state} onChange={e => setFormData({ ...formData, state: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
                     <option value="" disabled>Select State / Union Territory</option>
                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
@@ -385,20 +385,20 @@ const ECIPortal = () => {
                       <option value="Puducherry">Puducherry</option>
                     </optgroup>
                   </select>
-                  <input type="text" placeholder="District" value={formData.district} onChange={e => setFormData({...formData, district: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <input type="text" placeholder="Assembly Constituency" value={formData.constituency} onChange={e => setFormData({...formData, constituency: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="District" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="Assembly Constituency" value={formData.constituency} onChange={e => setFormData({ ...formData, constituency: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                 </>
               )}
               {step === 2 && (
                 <>
-                  <input type="text" placeholder="First Name" value={formData.firstName} onChange={e => setFormData({...formData, firstName: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <input type="text" placeholder="Surname" value={formData.lastName} onChange={e => setFormData({...formData, lastName: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="First Name" value={formData.firstName} onChange={e => setFormData({ ...formData, firstName: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="Surname" value={formData.lastName} onChange={e => setFormData({ ...formData, lastName: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                 </>
               )}
               {step === 3 && (
                 <>
-                  <input type="text" placeholder="Name of Relative" value={formData.relativeName} onChange={e => setFormData({...formData, relativeName: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <select value={formData.relativeType} onChange={e => setFormData({...formData, relativeType: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
+                  <input type="text" placeholder="Name of Relative" value={formData.relativeName} onChange={e => setFormData({ ...formData, relativeName: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <select value={formData.relativeType} onChange={e => setFormData({ ...formData, relativeType: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
                     <option value="" disabled>Relation Type</option>
                     <option value="Father">Father</option>
                     <option value="Mother">Mother</option>
@@ -410,25 +410,25 @@ const ECIPortal = () => {
               )}
               {step === 4 && (
                 <>
-                  <input type="tel" placeholder="Mobile Number" value={formData.mobile} onChange={e => setFormData({...formData, mobile: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <input type="email" placeholder="Email ID (Optional)" value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="tel" placeholder="Mobile Number" value={formData.mobile} onChange={e => setFormData({ ...formData, mobile: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="email" placeholder="Email ID (Optional)" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                 </>
               )}
               {step === 5 && (
                 <>
-                  <input type="text" placeholder="12-Digit Aadhaar Number" value={formData.aadhar} onChange={e => setFormData({...formData, aadhar: e.target.value})} maxLength="12" style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', letterSpacing: '2px', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="12-Digit Aadhaar Number" value={formData.aadhar} onChange={e => setFormData({ ...formData, aadhar: e.target.value })} maxLength="12" style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', letterSpacing: '2px', boxSizing: 'border-box' }} />
                   <p style={{ color: '#64748b', fontSize: '12px', marginTop: '-10px' }}>Providing Aadhaar is voluntary for electoral roll authentication (Form 6B).</p>
                 </>
               )}
               {step === 6 && (
                 <>
-                  <select value={formData.gender} onChange={e => setFormData({...formData, gender: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
+                  <select value={formData.gender} onChange={e => setFormData({ ...formData, gender: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
                     <option value="" disabled>Select Gender</option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
                     <option value="Third Gender">Third Gender</option>
                   </select>
-                  <input type="date" placeholder="Date of Birth" value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', colorScheme: 'dark', boxSizing: 'border-box' }} />
+                  <input type="date" placeholder="Date of Birth" value={formData.dob} onChange={e => setFormData({ ...formData, dob: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', colorScheme: 'dark', boxSizing: 'border-box' }} />
                   <div style={{ border: '1px dashed rgba(59,130,246,0.5)', padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)' }}>
                     <p style={{ color: '#60a5fa', marginBottom: '10px', fontSize: '14px' }}>Upload Date of Birth Proof (Birth Certificate, Class 10 Marksheet, etc.)</p>
                     <input type="file" style={{ color: '#94a3b8', fontSize: '14px' }} />
@@ -437,9 +437,9 @@ const ECIPortal = () => {
               )}
               {step === 7 && (
                 <>
-                  <input type="text" placeholder="House/Building/Apartment No." value={formData.address} onChange={e => setFormData({...formData, address: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <input type="text" placeholder="Village / Town" value={formData.village} onChange={e => setFormData({...formData, village: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <input type="text" placeholder="PIN Code" value={formData.pinCode} onChange={e => setFormData({...formData, pinCode: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="House/Building/Apartment No." value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="Village / Town" value={formData.village} onChange={e => setFormData({ ...formData, village: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="PIN Code" value={formData.pinCode} onChange={e => setFormData({ ...formData, pinCode: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                   <div style={{ border: '1px dashed rgba(59,130,246,0.5)', padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)' }}>
                     <p style={{ color: '#60a5fa', marginBottom: '10px', fontSize: '14px' }}>Upload Address Proof (Utility Bill, Passport, etc.)</p>
                     <input type="file" style={{ color: '#94a3b8', fontSize: '14px' }} />
@@ -448,7 +448,7 @@ const ECIPortal = () => {
               )}
               {step === 8 && (
                 <>
-                  <select value={formData.disability} onChange={e => setFormData({...formData, disability: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
+                  <select value={formData.disability} onChange={e => setFormData({ ...formData, disability: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: '#0a0a0c', color: 'white', width: '100%', boxSizing: 'border-box', appearance: 'none', cursor: 'pointer' }}>
                     <option value="" disabled>Category of Disability (Optional)</option>
                     <option value="None">None</option>
                     <option value="Locomotive">Locomotive</option>
@@ -456,7 +456,7 @@ const ECIPortal = () => {
                     <option value="Deaf & Dumb">Deaf & Dumb</option>
                     <option value="Other">Other</option>
                   </select>
-                  <input type="text" placeholder="Existing EPIC No. of Family Member (Optional)" value={formData.epicId} onChange={e => setFormData({...formData, epicId: e.target.value})} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
+                  <input type="text" placeholder="Existing EPIC No. of Family Member (Optional)" value={formData.epicId} onChange={e => setFormData({ ...formData, epicId: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                 </>
               )}
               {step === 9 && (
@@ -464,12 +464,12 @@ const ECIPortal = () => {
                   <div style={{ padding: '20px', backgroundColor: 'rgba(255,255,255,0.02)', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.05)' }}>
                     <h4 style={{ color: '#e2e8f0', marginBottom: '10px' }}>Declaration</h4>
                     <p style={{ color: '#94a3b8', fontSize: '13px', lineHeight: '1.6', marginBottom: '15px' }}>
-                      I hereby declare that to the best of my knowledge and belief: <br/>
-                      (i) I am a citizen of India and place of my birth is within India. <br/>
-                      (ii) I am ordinarily a resident at the address given in Step 7. <br/>
+                      I hereby declare that to the best of my knowledge and belief: <br />
+                      (i) I am a citizen of India and place of my birth is within India. <br />
+                      (ii) I am ordinarily a resident at the address given in Step 7. <br />
                       (iii) I have not applied for the inclusion of my name in the electoral roll for any other constituency.
                     </p>
-                    <input type="text" placeholder="Place" value={formData.declarationPlace} onChange={e => setFormData({...formData, declarationPlace: e.target.value})} style={{ padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', marginBottom: '15px' }} />
+                    <input type="text" placeholder="Place" value={formData.declarationPlace} onChange={e => setFormData({ ...formData, declarationPlace: e.target.value })} style={{ padding: '10px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', marginBottom: '15px' }} />
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                       <input type="checkbox" id="declare" style={{ marginTop: '4px' }} />
                       <label htmlFor="declare" style={{ color: '#3b82f6', fontSize: '14px', fontWeight: 'bold' }}>I Agree and Accept</label>
@@ -581,10 +581,10 @@ const App = () => {
   const handleSend = async (text, isInitial = false) => {
     const msg = text || input;
     if (!msg.trim() && !attachedFile && !isInitial) return;
-    
+
     let displayContent = msg;
     if (attachedFile && !isInitial) {
-        displayContent += (msg ? '\n\n' : '') + `📎 [Document Attached: ${attachedFile.name}]`;
+      displayContent += (msg ? '\n\n' : '') + `📎 [Document Attached: ${attachedFile.name}]`;
     }
 
     if (!isInitial) {
@@ -596,12 +596,12 @@ const App = () => {
 
     let payloadMessage = msg;
     if (attachedFile && !isInitial) {
-        payloadMessage += `\n\n[System Note: The user has uploaded a document named "${attachedFile.name}". Please simulate a secure document verification process for this file assuming it is related to voter registration (like an ID card, utility bill, etc.) and give them feedback on whether it looks valid or what else might be needed.]`;
+      payloadMessage += `\n\n[System Note: The user has uploaded a document named "${attachedFile.name}". Please simulate a secure document verification process for this file assuming it is related to voter registration (like an ID card, utility bill, etc.) and give them feedback on whether it looks valid or what else might be needed.]`;
     }
 
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat', 
+      const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat',
         { message: payloadMessage, conversationId: activeConvId },
         { headers }
       );
@@ -649,7 +649,7 @@ const App = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br/><span style={{ color: '#3b82f6', WebkitTextFillColor: '#3b82f6' }}>Execute.</span></h1>
+                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br /><span style={{ color: '#3b82f6', WebkitTextFillColor: '#3b82f6' }}>Execute.</span></h1>
                 <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '600px', marginBottom: '40px', lineHeight: 1.6 }}>The advanced expert system for the Indian Electoral Process. Accurate, fast, and encrypted. Ask any question about voter registration, document proof, or local constituencies.</p>
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
                   <button onClick={() => setIsChatOpen(true)} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.5)', transition: 'all 0.3s' }}>Start Neural Session</button>
@@ -674,20 +674,20 @@ const App = () => {
                   "How do I find out where my polling booth is located?",
                   "Can I vote if I am an NRI (Non-Resident Indian)?"
                 ].map((q, i) => (
-                  <button 
-                    key={i} 
+                  <button
+                    key={i}
                     onClick={() => {
                       setIsChatOpen(true);
                       setTimeout(() => handleSend(q, false), 100);
                     }}
-                    style={{ 
-                      padding: '15px 20px', 
-                      backgroundColor: 'rgba(59,130,246,0.05)', 
-                      border: '1px solid rgba(59,130,246,0.2)', 
-                      borderRadius: '12px', 
-                      color: '#60a5fa', 
-                      fontSize: '14px', 
-                      cursor: 'pointer', 
+                    style={{
+                      padding: '15px 20px',
+                      backgroundColor: 'rgba(59,130,246,0.05)',
+                      border: '1px solid rgba(59,130,246,0.2)',
+                      borderRadius: '12px',
+                      color: '#60a5fa',
+                      fontSize: '14px',
+                      cursor: 'pointer',
                       transition: 'all 0.2s',
                       textAlign: 'left'
                     }}
@@ -736,23 +736,23 @@ const App = () => {
             <h2 style={{ fontSize: '2rem', marginBottom: '30px', textAlign: 'center' }}>{currentPage.toUpperCase()}</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {currentPage === 'signup' && (
-                <input 
-                  type="text" placeholder="Username" 
-                  value={authData.username} onChange={e => setAuthData({...authData, username: e.target.value})}
+                <input
+                  type="text" placeholder="Username"
+                  value={authData.username} onChange={e => setAuthData({ ...authData, username: e.target.value })}
                   style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
                 />
               )}
-              <input 
-                type="email" placeholder="Email" 
-                value={authData.email} onChange={e => setAuthData({...authData, email: e.target.value})}
+              <input
+                type="email" placeholder="Email"
+                value={authData.email} onChange={e => setAuthData({ ...authData, email: e.target.value })}
                 style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
               />
-              <input 
-                type="password" placeholder="Password" 
-                value={authData.password} onChange={e => setAuthData({...authData, password: e.target.value})}
+              <input
+                type="password" placeholder="Password"
+                value={authData.password} onChange={e => setAuthData({ ...authData, password: e.target.value })}
                 style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
               />
-              <button 
+              <button
                 onClick={() => handleAuth(currentPage)}
                 style={{ padding: '15px', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '12px', fontWeight: 'bold', cursor: 'pointer' }}
               >
@@ -760,7 +760,7 @@ const App = () => {
               </button>
               <p style={{ textAlign: 'center', color: '#64748b', fontSize: '0.9rem' }}>
                 {currentPage === 'login' ? "New here? " : "Already have a profile? "}
-                <span 
+                <span
                   onClick={() => setCurrentPage(currentPage === 'login' ? 'signup' : 'login')}
                   style={{ color: '#3b82f6', cursor: 'pointer', fontWeight: 'bold' }}
                 >
@@ -779,7 +779,7 @@ const App = () => {
             <span style={{ fontWeight: 'bold' }}>Neural Core V4.0</span>
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
               {user && (
-                <button 
+                <button
                   onClick={() => { setActiveConvId(null); setMessages([]); }}
                   style={{ background: 'none', border: '1px solid #3b82f6', color: '#3b82f6', fontSize: '12px', borderRadius: '4px', cursor: 'pointer', padding: '2px 8px' }}
                 >
@@ -788,15 +788,15 @@ const App = () => {
               )}
               <button onClick={() => setIsExpanded(!isExpanded)} style={{ background: 'none', border: 'none', color: 'gray', cursor: 'pointer', display: 'flex', padding: 0 }} title={isExpanded ? "Collapse" : "Expand"}>
                 {isExpanded ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" /></svg>
                 ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
                 )}
               </button>
               <button onClick={() => setIsChatOpen(false)} style={{ background: 'none', border: 'none', color: 'gray', fontSize: '24px', cursor: 'pointer', lineHeight: '18px', padding: 0 }}>×</button>
             </div>
           </div>
-          
+
           {!activeConvId && messages.length === 0 && (
             <div style={{ padding: '20px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
               {user ? (
@@ -804,8 +804,8 @@ const App = () => {
                   <>
                     <div style={{ color: 'gray', fontSize: '12px', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '1px' }}>YOUR PAST SESSIONS</div>
                     {historyList.map(h => (
-                      <div 
-                        key={h._id} 
+                      <div
+                        key={h._id}
                         onClick={() => loadConversation(h)}
                         style={{ padding: '15px', backgroundColor: 'rgba(59,130,246,0.05)', borderRadius: '12px', marginBottom: '10px', cursor: 'pointer', border: '1px solid rgba(59,130,246,0.2)', transition: 'background 0.2s', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
                         onMouseOver={e => e.currentTarget.style.backgroundColor = 'rgba(59,130,246,0.1)'}
@@ -815,8 +815,8 @@ const App = () => {
                           <div style={{ fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white', fontWeight: '500' }}>{h.title}</div>
                           <div style={{ fontSize: '11px', color: '#64748b', marginTop: '5px' }}>{new Date(h.updatedAt).toLocaleString()}</div>
                         </div>
-                        <button 
-                          onClick={(e) => deleteConversation(e, h._id)} 
+                        <button
+                          onClick={(e) => deleteConversation(e, h._id)}
                           style={{ background: 'none', border: 'none', color: '#ef4444', fontSize: '16px', cursor: 'pointer', padding: '5px', opacity: 0.7, transition: 'opacity 0.2s' }}
                           onMouseOver={e => e.currentTarget.style.opacity = 1}
                           onMouseOut={e => e.currentTarget.style.opacity = 0.7}
@@ -870,16 +870,16 @@ const App = () => {
               </div>
             )}
             <div style={{ display: 'flex', gap: '10px' }}>
-              <input 
-                type="file" 
-                id="file-upload" 
-                style={{ display: 'none' }} 
-                onChange={(e) => setAttachedFile(e.target.files[0])} 
+              <input
+                type="file"
+                id="file-upload"
+                style={{ display: 'none' }}
+                onChange={(e) => setAttachedFile(e.target.files[0])}
               />
               <label htmlFor="file-upload" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', cursor: 'pointer', color: 'gray', transition: 'all 0.2s' }} title="Attach Document" onMouseOver={e => e.currentTarget.style.color = 'white'} onMouseOut={e => e.currentTarget.style.color = 'gray'}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
               </label>
-              <input 
+              <input
                 type="text" value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyPress={e => e.key === 'Enter' && handleSend()}
                 placeholder="Type a query..."

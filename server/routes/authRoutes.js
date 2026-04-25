@@ -3,12 +3,14 @@ const router = express.Router();
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 
+const JWT_SECRET = process.env.JWT_SECRET || 'supersecretneuralcorekey';
+
 // Auth middleware inline for admin check
 const authenticate = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) return res.status(401).json({ error: 'Unauthorized' });
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
         next();
     } catch (e) {
@@ -27,9 +29,10 @@ router.post('/signup', async (req, res) => {
         
         await user.save();
         
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
         res.status(201).json({ token, user: { username, email, role: user.role } });
     } catch (err) {
+        console.error('Signup Error:', err);
         res.status(400).json({ error: 'Registration failed. User might already exist.' });
     }
 });
@@ -43,9 +46,10 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         
-        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ token, user: { username: user.username, email: user.email, role: user.role } });
     } catch (err) {
+        console.error('Login Error:', err);
         res.status(500).json({ error: 'Login error' });
     }
 });
