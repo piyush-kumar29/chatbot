@@ -11,50 +11,47 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// CORS FIX
+// ✅ FINAL CORS (works with Vercel + localhost)
 app.use(cors({
-    origin: [
-        "http://localhost:5173",
-        "https://voterai.vercel.app"
-    ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: true,
     credentials: true
 }));
 
+// Middleware
 app.use(express.json());
 
-// DB CONNECT
+// Database Connection
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI);
-        console.log("MongoDB Connected");
+        console.log('✅ MongoDB Connected');
     } catch (err) {
-        console.error(err.message);
+        console.error('❌ MongoDB Connection Error:', err.message);
         setTimeout(connectDB, 5000);
     }
 };
 connectDB();
 
-// ROOT
+// Root Route (important for Render check)
 app.get("/", (req, res) => {
     res.send("VoterAI Server Running 🚀");
 });
 
-// ROUTES
+// API Routes
 app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
 
-// HEALTH
+// Health Route
 app.get('/health', (req, res) => {
-    res.json({ status: "OK" });
+    res.json({ status: 'OK' });
 });
 
-// ❌ REMOVE any "*" routes
-// ✅ USE THIS INSTEAD
+// ✅ SAFE fallback (NO '*' crash)
 app.use((req, res) => {
     res.status(404).json({ message: "Route not found" });
 });
 
+// Start Server
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`🚀 Server running on port ${PORT}`);
 });
