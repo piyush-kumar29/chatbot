@@ -545,6 +545,7 @@ const App = () => {
   const [chatTheme, setChatTheme] = useState(() => localStorage.getItem('voterai-chat-theme') || 'system');
   const [chatSize, setChatSize] = useState('medium');
   const [copiedIndex, setCopiedIndex] = useState(null);
+  const [pendingQuery, setPendingQuery] = useState(null);
 
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -598,7 +599,13 @@ const App = () => {
     if (isChatOpen && user && token) {
       fetchHistory();
     }
-  }, [isChatOpen, user, token]);
+    // Send any pending query once chat is open
+    if (isChatOpen && pendingQuery) {
+      const q = pendingQuery;
+      setPendingQuery(null);
+      setTimeout(() => handleSend(q, false), 300);
+    }
+  }, [isChatOpen]);
 
   const fetchHistory = async () => {
     try {
@@ -803,10 +810,41 @@ const App = () => {
                   <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
                 </motion.div>
 
-                {/* Main Glass Panel (Map placeholder) */}
+                {/* Main Glass Panel (India Map SVG) */}
                 <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <Globe size={300} color="rgba(59,130,246,0.1)" strokeWidth={0.5} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, var(--bg-card) 100%)' }} />
+                  <svg viewBox="0 0 400 450" width="80%" height="80%" style={{ opacity: 0.6 }} xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <radialGradient id="indiaGlow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+                        <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.1" />
+                      </radialGradient>
+                    </defs>
+                    {/* India outline simplified SVG path */}
+                    <path
+                      d="M195,20 L220,30 L240,25 L260,35 L275,50 L280,70 L275,90 L285,110 L290,130 L280,150 L290,170 L295,190 L285,210 L290,230 L280,250 L270,265 L260,275 L250,290 L245,305 L240,320 L235,335 L220,345 L210,355 L200,365 L195,380 L190,365 L180,355 L170,345 L155,335 L150,320 L145,305 L140,290 L130,275 L120,265 L110,250 L100,230 L105,210 L95,190 L100,170 L110,150 L100,130 L105,110 L115,90 L110,70 L125,50 L140,35 L160,25 L180,30 Z"
+                      fill="url(#indiaGlow)"
+                      stroke="#3b82f6"
+                      strokeWidth="1.5"
+                      strokeLinejoin="round"
+                    />
+                    {/* Sri Lanka */}
+                    <ellipse cx="220" cy="395" rx="12" ry="18" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" strokeWidth="1" />
+                    {/* Andaman Islands dots */}
+                    <circle cx="310" cy="230" r="4" fill="rgba(59,130,246,0.4)" stroke="#3b82f6" strokeWidth="1" />
+                    <circle cx="315" cy="245" r="3" fill="rgba(59,130,246,0.3)" stroke="#3b82f6" strokeWidth="1" />
+                    <circle cx="318" cy="258" r="3" fill="rgba(59,130,246,0.3)" stroke="#3b82f6" strokeWidth="1" />
+                    {/* Glowing dot nodes on map */}
+                    {[[195,120],[160,180],[230,200],[190,260],[140,150],[250,140]].map(([cx,cy],i) => (
+                      <g key={i}>
+                        <circle cx={cx} cy={cy} r="6" fill="rgba(59,130,246,0.2)" />
+                        <circle cx={cx} cy={cy} r="3" fill="#60a5fa" />
+                      </g>
+                    ))}
+                    {/* Connection lines between nodes */}
+                    <polyline points="195,120 160,180 190,260" fill="none" stroke="rgba(59,130,246,0.3)" strokeWidth="1" strokeDasharray="4 4" />
+                    <polyline points="195,120 230,200 250,140" fill="none" stroke="rgba(59,130,246,0.2)" strokeWidth="1" strokeDasharray="4 4" />
+                  </svg>
+                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 30%, var(--bg-card) 100%)' }} />
                 </div>
 
                 {/* Floating Stats Cards */}
@@ -848,7 +886,7 @@ const App = () => {
               ].map((item, i) => (
                 <div 
                   key={i} 
-                  onClick={() => { setIsChatOpen(true); setTimeout(() => handleSend(item.title, false), 100); }}
+                  onClick={() => { setPendingQuery(item.title); setIsChatOpen(true); }}
                   style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', gap: '15px', padding: '16px', borderRadius: '16px', background: 'transparent', cursor: 'pointer', transition: 'all 0.2s', border: '1px solid transparent' }}
                   onMouseOver={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; e.currentTarget.style.border = '1px solid rgba(59,130,246,0.2)'; }}
                   onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.border = '1px solid transparent'; }}
