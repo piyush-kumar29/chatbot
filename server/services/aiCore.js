@@ -16,9 +16,9 @@ const processMessage = (msg) => {
         return {
             thought: "Eligibility heuristic triggered. Checking statutory requirements (Age, Citizenship, Residency).",
             response: getRandomResponse([
-                "To participate in Indian elections, you must be a citizen, at least 18 years old on the qualifying date, and a resident of the constituency. \n\nDo you meet these criteria?",
-                "The basic requirements for voting in India are: being an Indian citizen, 18+ years of age, and a resident of the polling area. \n\nAre you 18 or older?",
-                "You are eligible to vote if you are an Indian citizen, 18 years or older, and reside in the constituency where you wish to vote. \n\nDo you fit this description?"
+                "To participate in Indian elections, you must meet these criteria:\n\n1. Be an Indian citizen\n2. Be at least 18 years old\n3. Be a resident of your constituency\n\nDo you meet these requirements?",
+                "The basic requirements for voting in India are:\n\n- Indian citizenship\n- 18+ years of age\n- Resident of the polling area\n\nAre you 18 or older?",
+                "You are eligible to vote if you are:\n\n1. An Indian citizen\n2. 18 years or older\n3. A resident in the constituency\n\nDo you fit this description?"
             ]),
             quickReplies: ["I am 18+", "Under 18", "Not a citizen"]
         };
@@ -42,9 +42,9 @@ const processMessage = (msg) => {
         return {
             thought: "Document inquiry detected. Compiling list of accepted identity and address proofs.",
             response: getRandomResponse([
-                "For registration, you'll need: \n1. Age Proof (e.g., Aadhaar, Birth Cert) \n2. Address Proof (e.g., Passport, Utility Bill) \n3. A recent photo. \n\nDo you have these ready?",
-                "To register, please keep these ready: \n- Proof of Age (Aadhaar/PAN) \n- Proof of Residence (Electricity Bill/Passport) \n- A passport-size photograph. \n\nAre your documents prepared?",
-                "You will require: \n1. Valid Age Proof \n2. Valid Address Proof \n3. A recent color photo. \n\nWould you like to see the full list of accepted documents?"
+                "For registration, you'll need to keep these ready:\n\n1. Age Proof (e.g., Aadhaar, Birth Cert)\n2. Address Proof (e.g., Passport, Utility Bill)\n3. A recent photo\n\nDo you have these ready?",
+                "To register, please prepare:\n\n- Proof of Age (Aadhaar/PAN)\n- Proof of Residence (Electricity Bill/Passport)\n- A passport-size photograph\n\nAre your documents prepared?",
+                "You will require these items:\n\n1. Valid Age Proof\n2. Valid Address Proof\n3. A recent color photo\n\nWould you like to see the full list of accepted documents?"
             ]),
             quickReplies: ["Check Age Proofs", "Check Address Proofs"]
         };
@@ -68,9 +68,9 @@ const processMessage = (msg) => {
         return {
             thought: "Greeting detected. Responding in a warm, friendly tone.",
             response: getRandomResponse([
-                "Hey there! 👋 I'm VoterAI — happy to help you with anything related to voting in India. What's on your mind?",
-                "Hi! Great to see you here. 😊 Whether it's registering to vote, checking eligibility, or updating your voter ID — I've got you covered. What do you need?",
-                "Hello! Welcome. I'm here to make the whole voter registration thing easy for you. Where would you like to start?"
+                "Hey there! 👋 I'm VoterAI.\n\nI can help you with:\n1. Voter Registration\n2. Checking Eligibility\n3. Updating Voter ID\n\nWhat's on your mind?",
+                "Hi! Great to see you here. 😊\n\nI can guide you through:\n- Registering to vote\n- Checking your eligibility\n- Updating your details\n\nWhat do you need help with?",
+                "Hello! Welcome. I'm here to make the voter registration process easy for you.\n\nWould you like to:\n1. Register as a new voter?\n2. Update existing details?\n3. Check if you're eligible?"
             ]),
             quickReplies: ["Am I eligible?", "How to register?", "Update my info"]
         };
