@@ -11,8 +11,16 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
-app.use(cors());
+// ✅ FIXED CORS (IMPORTANT)
+app.use(cors({
+    origin: [
+        "http://localhost:5173",
+        "https://voterai.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
+}));
+
 app.use(express.json());
 
 // Database Connection with Retry Logic
@@ -27,7 +35,7 @@ const connectDB = async () => {
 };
 connectDB();
 
-// ROOT ROUTE (FIX)
+// ROOT ROUTE
 app.get("/", (req, res) => {
     res.send("VoterAI Server is running 🚀");
 });
