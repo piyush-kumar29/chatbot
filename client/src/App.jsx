@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
-import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap } from 'lucide-react';
+import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap, ShieldCheck, Globe, Users, FileCheck, BarChart3, MapPin, ArrowRight, Activity, Lock, Award, FileText, Landmark, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
 
@@ -737,64 +737,131 @@ const App = () => {
       {/* Main Content */}
       <div style={{ paddingTop: '100px', paddingBottom: '80px', maxWidth: '1200px', margin: '0 auto', paddingLeft: '16px', paddingRight: '16px', boxSizing: 'border-box' }}>
         {currentPage === 'home' && (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '40px', width: '100%' }}>
+            {/* Top Section */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
-              <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, var(--text-primary), var(--text-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br /><span style={{ color: 'var(--accent-blue)', WebkitTextFillColor: 'var(--accent-blue)' }}>Execute.</span></h1>
-                <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '600px', marginBottom: '40px', lineHeight: 1.6 }}>The advanced expert system for the Indian Electoral Process. Accurate, fast, and encrypted. Ask any question about voter registration, document proof, or local constituencies.</p>
-                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <button onClick={() => setIsChatOpen(true)} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'var(--accent-blue)', color: '#ffffff', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)', transition: 'all 0.3s' }}>Start Neural Session</button>
-                  <button onClick={() => setCurrentPage('features')} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>View Architecture</button>
+              
+              {/* Left Column */}
+              <div style={{ flex: '1 1 400px', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'rgba(59, 130, 246, 0.1)', border: '1px solid rgba(59, 130, 246, 0.2)', borderRadius: '20px', color: '#60a5fa', fontSize: '0.8rem', fontWeight: 'bold', letterSpacing: '1px', marginBottom: '30px' }}>
+                  <ShieldCheck size={14} /> YOUR TRUSTED ELECTION ASSISTANT
+                </div>
+                <h1 style={{ fontSize: 'clamp(50px, 8vw, 85px)', fontWeight: '900', lineHeight: 1.05, marginBottom: '20px', color: 'var(--text-primary)', letterSpacing: '-2px' }}>
+                  Verify. Register.<br />
+                  <span style={{ background: 'linear-gradient(90deg, #60a5fa, #a78bfa)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Execute.</span>
+                </h1>
+                
+                {/* Glowing line separator */}
+                <div style={{ width: '100%', maxWidth: '300px', height: '2px', background: 'linear-gradient(90deg, rgba(59,130,246,0) 0%, rgba(59,130,246,0.8) 50%, rgba(59,130,246,0) 100%)', marginBottom: '20px', position: 'relative' }}>
+                  <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: '6px', height: '6px', backgroundColor: '#60a5fa', borderRadius: '50%', boxShadow: '0 0 10px 2px #60a5fa' }} />
+                </div>
+
+                <p style={{ fontSize: '1.1rem', color: 'var(--text-secondary)', maxWidth: '500px', marginBottom: '40px', lineHeight: 1.7 }}>
+                  The most advanced AI-powered platform for the Indian Electoral Process. Get accurate, secure, and real-time information about voter registration, document verification, elections, and your local constituencies.
+                </p>
+                
+                <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '50px' }}>
+                  <button onClick={() => setIsChatOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 32px', fontSize: '1rem', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#ffffff', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)', transition: 'all 0.3s' }}>
+                    Start Neural Session <ArrowRight size={18} />
+                  </button>
+                  <button onClick={() => setCurrentPage('features')} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 32px', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>
+                    <Activity size={18} /> Explore Architecture
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+                  {[
+                    { icon: <Lock size={16} />, title: 'Secure & Encrypted', desc: 'End-to-end protection' },
+                    { icon: <Zap size={16} />, title: 'Real-time Data', desc: 'Always up to date' },
+                    { icon: <ShieldCheck size={16} />, title: 'Election Verified', desc: 'Trusted by millions' }
+                  ].map((item, i) => (
+                    <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                      <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'var(--bg-card)', border: '1px solid var(--glass-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#60a5fa' }}>
+                        {item.icon}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>{item.title}</div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{item.desc}</div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <div style={{ width: 'clamp(200px, 50vw, 320px)', height: 'clamp(200px, 50vw, 320px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(3,3,5,0) 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--glass-border)', boxShadow: '0 0 40px var(--shadow-color)' }}>
-                  <div style={{ fontSize: 'clamp(60px, 15vw, 100px)', filter: 'drop-shadow(0 10px 20px rgba(59,130,246,0.3))' }}>🛡️</div>
+
+              {/* Right Column (Hero Graphic) */}
+              <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center', position: 'relative', height: '500px' }}>
+                {/* Glowing Background Pedestal */}
+                <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', width: '300px', height: '100px', background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.3) 0%, rgba(3,3,5,0) 70%)', borderRadius: '50%', borderBottom: '2px solid rgba(59,130,246,0.5)', boxShadow: '0 20px 50px rgba(59,130,246,0.2)' }} />
+                <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '60px', background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.4) 0%, rgba(3,3,5,0) 70%)', borderRadius: '50%', borderBottom: '2px solid #3b82f6' }} />
+                
+                {/* Central Floating Shield */}
+                <motion.div 
+                  animate={{ y: [-10, 10, -10] }} 
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  style={{ position: 'absolute', bottom: '80px', left: '50%', marginLeft: '-60px', width: '120px', height: '120px', borderRadius: '30px', background: 'rgba(59,130,246,0.1)', backdropFilter: 'blur(10px)', border: '2px solid rgba(59,130,246,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(59,130,246,0.4), inset 0 0 20px rgba(59,130,246,0.2)', zIndex: 10 }}
+                >
+                  <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
+                </motion.div>
+
+                {/* Main Glass Panel (Map placeholder) */}
+                <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                  <Globe size={300} color="rgba(59,130,246,0.1)" strokeWidth={0.5} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, var(--bg-card) 100%)' }} />
+                </div>
+
+                {/* Floating Stats Cards */}
+                <div style={{ position: 'absolute', right: '0', top: '40px', display: 'flex', flexDirection: 'column', gap: '20px', zIndex: 20 }}>
+                  {[
+                    { icon: <Users size={20} />, value: '98.7M+', label: 'Voters Verified', sub: 'Across India' },
+                    { icon: <Shield size={20} />, value: '45.2M+', label: 'Documents Verified', sub: 'This Month' },
+                    { icon: <BarChart3 size={20} />, value: '8,543', label: 'Constituencies', sub: 'Active Records' }
+                  ].map((stat, i) => (
+                    <motion.div 
+                      key={i}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.2 }}
+                      style={{ padding: '16px 20px', background: 'var(--bg-chat)', backdropFilter: 'blur(20px)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 0 10px rgba(59,130,246,0.1)' }}
+                    >
+                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59,130,246,0.15)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        {stat.icon}
+                      </div>
+                      <div>
+                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>{stat.label}</div>
+                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-primary)', lineHeight: 1 }}>{stat.value}</div>
+                        <div style={{ fontSize: '0.65rem', color: '#60a5fa', marginTop: '4px' }}>{stat.sub}</div>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             </div>
 
-            {/* Suggested Queries Section */}
-            <div style={{ padding: '40px', backgroundColor: 'var(--bg-card)', border: '1px solid var(--glass-border)', borderRadius: '24px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 40px var(--shadow-color)' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: 'var(--text-primary)' }}>Suggested Queries</h2>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
-                {[
-                  "Am I eligible to vote in the upcoming Lok Sabha elections?",
-                  "What documents do I need to register as a new voter?",
-                  "How can I update my address on my Voter ID card?",
-                  "How do I find out where my polling booth is located?",
-                  "Can I vote if I am an NRI (Non-Resident Indian)?"
-                ].map((q, i) => (
-                  <button
-                    key={i}
-                    onClick={() => {
-                      setIsChatOpen(true);
-                      setTimeout(() => handleSend(q, false), 100);
-                    }}
-                    style={{
-                      padding: '15px 20px',
-                      backgroundColor: 'rgba(59,130,246,0.05)',
-                      border: '1px solid rgba(59,130,246,0.2)',
-                      borderRadius: '12px',
-                      color: '#60a5fa',
-                      fontSize: '14px',
-                      cursor: 'pointer',
-                      transition: 'all 0.2s',
-                      textAlign: 'left'
-                    }}
-                    onMouseOver={e => {
-                      e.currentTarget.style.backgroundColor = 'rgba(59,130,246,0.15)';
-                      e.currentTarget.style.transform = 'translateY(-2px)';
-                    }}
-                    onMouseOut={e => {
-                      e.currentTarget.style.backgroundColor = 'rgba(59,130,246,0.05)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
+            {/* Bottom Bar Options */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', background: 'var(--bg-card)', padding: '24px', borderRadius: '24px', border: '1px solid var(--glass-border)', boxShadow: '0 20px 40px var(--shadow-color)', backdropFilter: 'blur(20px)', marginTop: '20px' }}>
+              {[
+                { icon: <Users />, title: 'Voter Registration', desc: 'Check your eligibility' },
+                { icon: <FileText />, title: 'Document Proof', desc: 'Verify documents' },
+                { icon: <Activity />, title: 'Election Info', desc: 'Current & upcoming' },
+                { icon: <MapPin />, title: 'Booth & Location', desc: 'Find your booth' },
+                { icon: <AlertCircle />, title: 'Grievance Redressal', desc: 'Raise your concern' }
+              ].map((item, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => { setIsChatOpen(true); setTimeout(() => handleSend(item.title, false), 100); }}
+                  style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', gap: '15px', padding: '16px', borderRadius: '16px', background: 'transparent', cursor: 'pointer', transition: 'all 0.2s', border: '1px solid transparent' }}
+                  onMouseOver={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; e.currentTarget.style.border = '1px solid rgba(59,130,246,0.2)'; }}
+                  onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.border = '1px solid transparent'; }}
+                >
+                  <div style={{ width: '40px', height: '40px', borderRadius: '12px', background: 'rgba(59,130,246,0.1)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    {item.icon}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--text-primary)' }}>{item.title}</div>
+                    <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>{item.desc}</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}
