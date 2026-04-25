@@ -825,6 +825,10 @@ const App = () => {
                         <stop offset="50%" stopColor="#1e40af" stopOpacity="0.1" />
                         <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.3" />
                       </radialGradient>
+                      <radialGradient id="highlightGradient" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stopColor="white" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="white" stopOpacity="0" />
+                      </radialGradient>
                       <filter id="glow">
                         <feGaussianBlur stdDeviation="5" result="blur" />
                         <feMerge>
@@ -868,7 +872,7 @@ const App = () => {
                     />
 
                     {/* Highlights */}
-                    <circle cx="160" cy="160" r="40" fill="radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 80%)" />
+                    <circle cx="140" cy="140" r="60" fill="url(#highlightGradient)" />
                   </svg>
                   <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 30%, var(--bg-card) 100%)' }} />
                 </div>
