@@ -188,6 +188,18 @@ const AdminDashboard = ({ token, currentUser }) => {
     }
   };
 
+  const handleDeleteUser = async (userId) => {
+    if (!window.confirm("Are you sure you want to completely remove this user? This action cannot be undone.")) return;
+    try {
+      await axios.delete(`https://chatbot-0g7m.onrender.com/api/auth/users/${userId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUsersList(prev => prev.filter(u => u._id !== userId));
+    } catch (err) {
+      alert(err.response?.data?.error || "Failed to delete user");
+    }
+  };
+
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
       <h1 style={{ fontSize: 'clamp(28px, 7vw, 60px)', fontWeight: '900', marginBottom: '20px' }}>System Administration.</h1>
@@ -234,23 +246,42 @@ const AdminDashboard = ({ token, currentUser }) => {
                           {u.role.toUpperCase()}
                         </span>
                         {currentUser && currentUser.username !== u.username && (
-                          <button
-                            onClick={() => handleRoleChange(u._id, u.role)}
-                            style={{
-                              background: 'none',
-                              border: '1px solid rgba(255,255,255,0.2)',
-                              color: '#94a3b8',
-                              fontSize: '11px',
-                              padding: '4px 8px',
-                              borderRadius: '4px',
-                              cursor: 'pointer',
-                              transition: 'all 0.2s'
-                            }}
-                            onMouseOver={e => e.currentTarget.style.color = '#fff'}
-                            onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}
-                          >
-                            {u.role === 'admin' ? 'Revoke' : 'Promote'}
-                          </button>
+                          <div style={{ display: 'flex', gap: '8px' }}>
+                            <button
+                              onClick={() => handleRoleChange(u._id, u.role)}
+                              style={{
+                                background: 'none',
+                                border: '1px solid rgba(255,255,255,0.2)',
+                                color: '#94a3b8',
+                                fontSize: '11px',
+                                padding: '4px 8px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
+                              }}
+                              onMouseOver={e => e.currentTarget.style.color = '#fff'}
+                              onMouseOut={e => e.currentTarget.style.color = '#94a3b8'}
+                            >
+                              {u.role === 'admin' ? 'Revoke' : 'Promote'}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteUser(u._id)}
+                              style={{
+                                background: 'rgba(239, 68, 68, 0.1)',
+                                border: '1px solid rgba(239, 68, 68, 0.3)',
+                                color: '#ef4444',
+                                fontSize: '11px',
+                                padding: '4px 8px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                transition: 'all 0.2s'
+                              }}
+                              onMouseOver={e => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.2)'}
+                              onMouseOut={e => e.currentTarget.style.background = 'rgba(239, 68, 68, 0.1)'}
+                            >
+                              Remove
+                            </button>
+                          </div>
                         )}
                       </div>
                     </td>
