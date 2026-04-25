@@ -1,67 +1,118 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
-import { Send, X, Cpu, Zap, Activity, Trash2, Bot, Shield } from 'lucide-react';
+import { Send, X, Cpu, Zap, Activity, Trash2, Shield, ExternalLink } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
+// ── Quick-start options shown in the welcome card ──────────────────────────
+const QUICK_OPTIONS = [
+    { icon: '🗳️', label: 'Register as a Voter',  query: 'How do I register as a new voter in India?' },
+    { icon: '📋', label: 'Check Eligibility',     query: 'Am I eligible to vote in India?' },
+    { icon: '🗓️', label: 'Upcoming Elections',    query: 'What are the upcoming elections in India?' },
+    { icon: '🧾', label: 'Voting Process',         query: 'How does the voting process work in India?' },
+];
+
+// ── Standalone Welcome Card ────────────────────────────────────────────────
+const WelcomeCard = ({ onOptionClick }) => (
+    <div className="welcome-card animate-fade-in">
+        {/* Avatar + greeting */}
+        <div className="welcome-avatar">
+            <span>🗳️</span>
+        </div>
+        <h2 className="welcome-title">Hi there! 👋</h2>
+        <p className="welcome-subtitle">
+            I can help you with voting &amp; elections in India.<br />
+            What would you like to do today?
+        </p>
+
+        {/* Option buttons — 2 × 2 grid */}
+        <div className="welcome-options">
+            {QUICK_OPTIONS.map((opt) => (
+                <button
+                    key={opt.label}
+                    className="welcome-option-btn"
+                    onClick={() => onOptionClick(opt.query)}
+                >
+                    <span className="welcome-option-icon">{opt.icon}</span>
+                    <span className="welcome-option-label">{opt.label}</span>
+                </button>
+            ))}
+        </div>
+
+        {/* NVSP portal link */}
+        <a
+            href="https://www.nvsp.in"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="welcome-nvsp-btn"
+        >
+            <ExternalLink size={13} />
+            Visit NVSP Portal
+        </a>
+    </div>
+);
+
+// ── Main Chatbot Component ────────────────────────────────────────────────
 const Chatbot = ({ isOpen, onClose }) => {
+    // `showWelcome` drives whether we show the card or the message thread
+    const [showWelcome, setShowWelcome] = useState(true);
     const [messages, setMessages] = useState([]);
-    const [input, setInput] = useState('');
+    const [input, setInput]         = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [sessionId, setSessionId] = useState('');
-    
+
     const chatContainerRef = useRef(null);
 
-    // Reliable Scrolling
+    // Auto-scroll on new messages
     useLayoutEffect(() => {
         if (chatContainerRef.current) {
             chatContainerRef.current.scrollTo({
                 top: chatContainerRef.current.scrollHeight,
-                behavior: 'smooth'
+                behavior: 'smooth',
             });
         }
     }, [messages, isLoading]);
 
-    useEffect(() => {
-        if (isOpen && messages.length === 0) {
-            const sid = `sid-${Math.random().toString(36).substring(2, 11)}`;
-            setSessionId(sid);
-            handleSendMessage("Hello", sid, false);
-        }
-    }, [isOpen]);
+    // Reset to welcome card when the chat is reopened fresh
+    const handleClose = () => {
+        onClose();
+    };
 
-    const handleSendMessage = async (text, sid = sessionId, showUser = true) => {
-        const msgText = text || input;
-        if (!msgText.trim() || isLoading) return;
+    const handleClear = () => {
+        setMessages([]);
+        setShowWelcome(true);
+    };
 
-        if (showUser) {
-            setInput('');
-            setMessages(prev => [...prev, { role: 'user', content: msgText, timestamp: new Date() }]);
-        }
+    // Core send logic (called from input bar OR welcome card option click)
+    const handleSendMessage = async (text) => {
+        const msgText = (text || input).trim();
+        if (!msgText || isLoading) return;
 
+        // First message: hide welcome card, show thread
+        setShowWelcome(false);
+        setInput('');
+        setMessages(prev => [...prev, { role: 'user', content: msgText, timestamp: new Date() }]);
         setIsLoading(true);
 
         try {
             const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat', {
-                sessionId: sid,
-                message: msgText
+                message: msgText,
             });
 
             const { content, thought } = res.data;
 
             setTimeout(() => {
-                setMessages(prev => [...prev, { 
-                    role: 'bot', 
-                    content: content, 
-                    thought, 
-                    timestamp: new Date() 
+                setMessages(prev => [...prev, {
+                    role: 'bot',
+                    content: content || 'Sorry, I could not process that.',
+                    thought,
+                    timestamp: new Date(),
                 }]);
                 setIsLoading(false);
-            }, 600);
-        } catch (err) {
-            setMessages(prev => [...prev, { 
-                role: 'bot', 
-                content: "System connection failed. Please check the server status.", 
-                timestamp: new Date() 
+            }, 500);
+        } catch {
+            setMessages(prev => [...prev, {
+                role: 'bot',
+                content: 'Connection failed. Please check the server status.',
+                timestamp: new Date(),
             }]);
             setIsLoading(false);
         }
@@ -71,99 +122,102 @@ const Chatbot = ({ isOpen, onClose }) => {
 
     return (
         <div className="chat-window animate-fade-in">
-            {/* Header */}
-            <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+
+            {/* ── Header ───────────────────────────────────────────── */}
+            <div className="chat-header">
                 <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg">
-                        <Cpu size={20} color="white" />
+                    <div className="chat-header-avatar">
+                        <Cpu size={18} color="white" />
                     </div>
                     <div>
-                        <h3 className="font-bold text-white text-sm">VoterAI Core</h3>
-                        <div className="flex items-center gap-1.5 opacity-50">
-                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-[9px] uppercase font-bold tracking-widest text-blue-400">V4.0 Neural</span>
+                        <h3 className="chat-header-title">VoterAI</h3>
+                        <div className="chat-header-status">
+                            <div className="status-dot"></div>
+                            <span>Online · Electoral Assistant</span>
                         </div>
                     </div>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg transition-all text-gray-400">
-                    <X size={20} />
+                <button onClick={handleClose} className="chat-close-btn" aria-label="Close">
+                    <X size={18} />
                 </button>
             </div>
 
-            {/* Messages */}
-            <div 
+            {/* ── Body ─────────────────────────────────────────────── */}
+            <div
                 ref={chatContainerRef}
-                className="flex-1 overflow-y-auto p-6 flex flex-col gap-8 custom-scrollbar"
+                className="chat-body custom-scrollbar"
             >
-                {messages.map((msg, idx) => (
-                    <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} gap-1.5`}>
-                        {msg.role === 'bot' && msg.thought && (
-                            <div className="thought-bubble-container">
-                                <div className="flex items-center gap-2 mb-1.5 opacity-40">
-                                    <Zap size={10} />
-                                    <span className="text-[9px] uppercase font-bold tracking-widest">Heuristic Analysis</span>
+                {showWelcome ? (
+                    <WelcomeCard onOptionClick={handleSendMessage} />
+                ) : (
+                    <>
+                        {messages.map((msg, idx) => (
+                            <div
+                                key={idx}
+                                className={`msg-row ${msg.role === 'user' ? 'msg-row--user' : 'msg-row--bot'}`}
+                            >
+                                {/* Thought pill — only for bot */}
+                                {msg.role === 'bot' && msg.thought && (
+                                    <div className="thought-pill">
+                                        <Zap size={9} />
+                                        <span>{msg.thought}</span>
+                                    </div>
+                                )}
+
+                                <div className={`message-card ${msg.role} animate-fade-in`}>
+                                    {msg.role === 'bot' ? (
+                                        <div className="prose-invert">
+                                            <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                        </div>
+                                    ) : (
+                                        msg.content
+                                    )}
+                                    <div className="message-meta">
+                                        {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
                                 </div>
-                                <div className="thought-bubble">
-                                    {msg.thought}
+                            </div>
+                        ))}
+
+                        {isLoading && (
+                            <div className="msg-row msg-row--bot">
+                                <div className="typing-indicator">
+                                    <span></span><span></span><span></span>
                                 </div>
                             </div>
                         )}
-                        
-                        <div className={`message-card ${msg.role} animate-fade-in`}>
-                            {msg.role === 'bot' ? (
-                                <div className="prose prose-invert max-w-none">
-                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
-                                </div>
-                            ) : (
-                                msg.content
-                            )}
-                            <div className="message-meta">
-                                {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                            </div>
-                        </div>
-                    </div>
-                ))}
-                
-                {isLoading && (
-                    <div className="flex flex-col items-start gap-2 opacity-50">
-                        <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest text-blue-400">
-                            <Activity size={10} className="animate-spin" /> Processing...
-                        </div>
-                        <div className="message-card bot" style={{ width: '60px' }}>
-                            <div className="flex gap-1">
-                                <div className="w-1 h-1 bg-white rounded-full animate-bounce"></div>
-                                <div className="w-1 h-1 bg-white rounded-full animate-bounce [animation-delay:0.2s]"></div>
-                                <div className="w-1 h-1 bg-white rounded-full animate-bounce [animation-delay:0.4s]"></div>
-                            </div>
-                        </div>
-                    </div>
+                    </>
                 )}
             </div>
 
-            {/* Input Area */}
-            <div className="p-6 bg-black/20 border-t border-white/10">
-                <div className="flex items-center gap-3">
-                    <input 
-                        type="text" value={input}
+            {/* ── Input Bar ────────────────────────────────────────── */}
+            <div className="chat-footer">
+                <div className="chat-input-row">
+                    <input
+                        type="text"
+                        value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && !isLoading && handleSendMessage()}
-                        placeholder="Message the core..."
-                        className="flex-1 bg-white/5 border border-white/10 rounded-2xl py-3.5 px-5 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-all placeholder:text-gray-600"
+                        placeholder="Ask about voting, registration…"
+                        className="chat-input"
+                        disabled={isLoading}
                     />
-                    <button 
+                    <button
                         onClick={() => handleSendMessage()}
                         disabled={isLoading || !input.trim()}
-                        className="w-11 h-11 flex items-center justify-center bg-blue-600 rounded-xl text-white shadow-lg disabled:opacity-30 hover:bg-blue-500 transition-all"
+                        className="chat-send-btn"
+                        aria-label="Send"
                     >
-                        <Send size={18} />
+                        <Send size={16} />
                     </button>
                 </div>
-                <div className="mt-4 flex justify-between items-center opacity-40">
-                    <p className="text-[9px] font-bold uppercase tracking-widest flex items-center gap-1.5">
-                        <Shield size={10} /> Encrypted Session
-                    </p>
-                    <button onClick={() => setMessages([])} className="text-[9px] hover:text-red-400 font-bold uppercase tracking-widest transition-colors flex items-center gap-1">
-                        <Trash2 size={10} /> Clear
+
+                <div className="chat-footer-meta">
+                    <span className="flex items-center gap-1">
+                        <Shield size={9} /> Secure session
+                    </span>
+                    <button onClick={handleClear} className="chat-clear-btn">
+                        <Trash2 size={9} /> New chat
                     </button>
                 </div>
             </div>
