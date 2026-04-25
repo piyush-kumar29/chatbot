@@ -9,61 +9,52 @@ const chatRoutes = require('./routes/chatRoutes');
 const authRoutes = require('./routes/authRoutes');
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 10000;
 
-// ✅ Robust CORS (handles Vercel + local + preview URLs)
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://voterai.vercel.app"
-];
-
+// CORS FIX
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
-      return callback(null, true);
-    } else {
-      return callback(new Error("Not allowed by CORS"));
-    }
-  },
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  credentials: true
+    origin: [
+        "http://localhost:5173",
+        "https://voterai.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true
 }));
-
-// handle preflight requests explicitly
-app.options('*', cors());
 
 app.use(express.json());
 
-// Database Connection with Retry Logic
+// DB CONNECT
 const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/voter_assistant');
-    console.log('◇ MongoDB Connected: Neural Core Sync Complete');
-  } catch (err) {
-    console.error('◇ Neural Core Connection Failed:', err.message);
-    setTimeout(connectDB, 5000);
-  }
+    try {
+        await mongoose.connect(process.env.MONGO_URI);
+        console.log("MongoDB Connected");
+    } catch (err) {
+        console.error(err.message);
+        setTimeout(connectDB, 5000);
+    }
 };
 connectDB();
 
-// ROOT ROUTE
+// ROOT
 app.get("/", (req, res) => {
-  res.send("VoterAI Server is running 🚀");
+    res.send("VoterAI Server Running 🚀");
 });
 
-// API Routes
+// ROUTES
 app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
 
-// Health Check
+// HEALTH
 app.get('/health', (req, res) => {
-  res.json({ status: 'Neural Core Active', latency: '12ms' });
+    res.json({ status: "OK" });
+});
+
+// ❌ REMOVE any "*" routes
+// ✅ USE THIS INSTEAD
+app.use((req, res) => {
+    res.status(404).json({ message: "Route not found" });
 });
 
 app.listen(PORT, () => {
-  console.log(`◇ VoterAI Server running on port ${PORT}`);
-  console.log(`◇ Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`Server running on port ${PORT}`);
 });
