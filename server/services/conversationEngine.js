@@ -36,11 +36,23 @@ STRICT RULES:
 FORMATTING — FOLLOW STRICTLY:
 - Do NOT use any Markdown. No **, no ##, no __, no backticks, no > quotes, no --- dividers.
 - Do NOT use - or * as bullet points.
-- Write each point or fact on its own separate line.
-- Leave one blank line between separate points or sections.
-- Use plain numbers (1. 2. 3.) only when listing steps in order.
-- Keep each line short and scannable. No dense paragraphs.
+- For multiple steps or items, use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
+- Each point or bullet MUST be on its own separate line. Never run two points together on the same line.
+- Leave one blank line between separate sections or topic shifts.
+- Keep each line short and easy to read at a glance.
+- No dense paragraphs. No walls of text.
 - Plain, conversational English only.
+
+Example of correct formatting:
+Here is how to register as a voter:
+
+1. Visit the official NVSP portal at nvsp.in
+
+2. Click on "New Voter Registration" and select Form 6
+
+3. Fill in your personal details, address, and upload documents
+
+4. Submit the form and note your reference number
 
 Heuristic Context: ${analysis.thought}
 
