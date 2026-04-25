@@ -11,14 +11,14 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Optimized Middleware
+// Middleware
 app.use(cors());
 app.use(express.json());
 
 // Database Connection with Retry Logic
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/voter_assistant');
+        await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/voter_assistant');
         console.log('◇ MongoDB Connected: Neural Core Sync Complete');
     } catch (err) {
         console.error('◇ Neural Core Connection Failed:', err.message);
@@ -27,12 +27,19 @@ const connectDB = async () => {
 };
 connectDB();
 
+// ROOT ROUTE (FIX)
+app.get("/", (req, res) => {
+    res.send("VoterAI Server is running 🚀");
+});
+
 // API Routes
 app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
 
 // Health Check
-app.get('/health', (req, res) => res.json({ status: 'Neural Core Active', latency: '12ms' }));
+app.get('/health', (req, res) => {
+    res.json({ status: 'Neural Core Active', latency: '12ms' });
+});
 
 app.listen(PORT, () => {
     console.log(`◇ VoterAI Server running on port ${PORT}`);
