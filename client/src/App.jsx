@@ -541,21 +541,20 @@ const App = () => {
   const [historyList, setHistoryList] = useState([]);
   const [activeConvId, setActiveConvId] = useState(null);
   const [showSettings, setShowSettings] = useState(false);
-  const [theme, setTheme] = useState('system');
+  const [appTheme, setAppTheme] = useState(() => localStorage.getItem('voterai-app-theme') || 'system');
+  const [chatTheme, setChatTheme] = useState(() => localStorage.getItem('voterai-chat-theme') || 'system');
   const [chatSize, setChatSize] = useState('medium');
   const [copiedIndex, setCopiedIndex] = useState(null);
 
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
 
-  // Initialize Theme
+  // Initialize App Theme
   useEffect(() => {
-    const savedTheme = localStorage.getItem('voterai-theme') || 'system';
-    setTheme(savedTheme);
-    applyTheme(savedTheme);
-  }, []);
+    applyAppTheme(appTheme);
+  }, [appTheme]);
 
-  const applyTheme = (t) => {
+  const applyAppTheme = (t) => {
     if (t === 'dark') {
       document.documentElement.removeAttribute('data-theme');
     } else if (t === 'light') {
@@ -567,11 +566,19 @@ const App = () => {
     }
   };
 
-  const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-    localStorage.setItem('voterai-theme', newTheme);
-    applyTheme(newTheme);
+  const handleAppThemeChange = (newTheme) => {
+    setAppTheme(newTheme);
+    localStorage.setItem('voterai-app-theme', newTheme);
   };
+
+  const handleChatThemeChange = (newTheme) => {
+    setChatTheme(newTheme);
+    localStorage.setItem('voterai-chat-theme', newTheme);
+  };
+
+  const resolvedChatTheme = chatTheme === 'system' 
+    ? (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark') 
+    : chatTheme;
 
   const handleInputText = (e) => {
     setInput(e.target.value);
@@ -697,6 +704,14 @@ const App = () => {
       <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-chat)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid var(--glass-border)', boxSizing: 'border-box', transition: 'background-color 0.3s' }}>
         <div style={{ fontSize: '1.5rem', fontWeight: '900', letterSpacing: '-1px' }}>VOTER AI</div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          {/* App Theme Toggle */}
+          <button 
+            onClick={() => handleAppThemeChange(appTheme === 'dark' ? 'light' : (appTheme === 'light' ? 'system' : 'dark'))}
+            style={{ background: 'var(--bg-input)', border: '1px solid var(--glass-border)', color: 'var(--text-primary)', width: '36px', height: '36px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', marginRight: '8px', transition: 'all 0.3s' }}
+            title={`Site Theme: ${appTheme.charAt(0).toUpperCase() + appTheme.slice(1)}`}
+          >
+            {appTheme === 'light' ? <Sun size={16} /> : (appTheme === 'dark' ? <Moon size={16} /> : <Monitor size={16} />)}
+          </button>
           <button onClick={() => setCurrentPage('home')} style={{ background: 'none', border: 'none', color: currentPage === 'home' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>CORE</button>
           <button onClick={() => setCurrentPage('features')} style={{ background: 'none', border: 'none', color: currentPage === 'features' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>FEATURES</button>
           <button onClick={() => setCurrentPage('simulation')} style={{ background: 'none', border: 'none', color: currentPage === 'simulation' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>SIMULATION</button>
@@ -878,6 +893,7 @@ const App = () => {
         >
           <motion.div 
             className="chat-window"
+            data-theme={resolvedChatTheme}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.95 }}
@@ -917,11 +933,11 @@ const App = () => {
                       className="chat-settings-panel"
                   >
                       <div className="setting-item">
-                          <span className="setting-label">Theme</span>
+                          <span className="setting-label">Chat Theme</span>
                           <div className="setting-btn-group">
-                              <button className={`setting-btn ${theme === 'light' ? 'active' : ''}`} onClick={() => handleThemeChange('light')}><Sun size={14} /></button>
-                              <button className={`setting-btn ${theme === 'dark' ? 'active' : ''}`} onClick={() => handleThemeChange('dark')}><Moon size={14} /></button>
-                              <button className={`setting-btn ${theme === 'system' ? 'active' : ''}`} onClick={() => handleThemeChange('system')}><Monitor size={14} /></button>
+                              <button className={`setting-btn ${chatTheme === 'light' ? 'active' : ''}`} onClick={() => handleChatThemeChange('light')}><Sun size={14} /></button>
+                              <button className={`setting-btn ${chatTheme === 'dark' ? 'active' : ''}`} onClick={() => handleChatThemeChange('dark')}><Moon size={14} /></button>
+                              <button className={`setting-btn ${chatTheme === 'system' ? 'active' : ''}`} onClick={() => handleChatThemeChange('system')}><Monitor size={14} /></button>
                           </div>
                       </div>
                       <div className="setting-item">
