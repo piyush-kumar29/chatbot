@@ -691,31 +691,30 @@ const App = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#030305', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif', position: 'relative', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: 'var(--bg-main)', color: 'var(--text-primary)', minHeight: '100vh', fontFamily: 'sans-serif', position: 'relative', overflowX: 'hidden', transition: 'background-color 0.3s, color 0.3s' }}>
       {/* Navigation */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.05)', boxSizing: 'border-box' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-chat)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid var(--glass-border)', boxSizing: 'border-box', transition: 'background-color 0.3s' }}>
         <div style={{ fontSize: '1.5rem', fontWeight: '900', letterSpacing: '-1px' }}>VOTER AI</div>
         <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-          <button onClick={() => setCurrentPage('home')} style={{ background: 'none', border: 'none', color: currentPage === 'home' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>CORE</button>
-          <button onClick={() => setCurrentPage('features')} style={{ background: 'none', border: 'none', color: currentPage === 'features' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>FEATURES</button>
-          <button onClick={() => setCurrentPage('simulation')} style={{ background: 'none', border: 'none', color: currentPage === 'simulation' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>SIMULATION</button>
-          <button onClick={() => setCurrentPage('portal')} style={{ background: 'none', border: 'none', color: currentPage === 'portal' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>ECI PORTAL</button>
+          <button onClick={() => setCurrentPage('home')} style={{ background: 'none', border: 'none', color: currentPage === 'home' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>CORE</button>
+          <button onClick={() => setCurrentPage('features')} style={{ background: 'none', border: 'none', color: currentPage === 'features' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>FEATURES</button>
+          <button onClick={() => setCurrentPage('simulation')} style={{ background: 'none', border: 'none', color: currentPage === 'simulation' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>SIMULATION</button>
+          <button onClick={() => setCurrentPage('portal')} style={{ background: 'none', border: 'none', color: currentPage === 'portal' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>ECI PORTAL</button>
           {user?.role === 'admin' && (
-            <button onClick={() => setCurrentPage('admin')} style={{ background: 'none', border: 'none', color: currentPage === 'admin' ? '#ef4444' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>ADMIN</button>
+            <button onClick={() => setCurrentPage('admin')} style={{ background: 'none', border: 'none', color: currentPage === 'admin' ? '#ef4444' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>ADMIN</button>
           )}
           {user ? (
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-              <span style={{ color: '#3b82f6', fontWeight: 'bold' }}>@{user.username}</span>
+              <span style={{ color: 'var(--accent-blue)', fontWeight: 'bold' }}>@{user.username}</span>
               <button onClick={handleLogout} style={{ background: 'none', border: '1px solid #ef4444', color: '#ef4444', padding: '5px 12px', borderRadius: '8px', cursor: 'pointer' }}>EXIT</button>
             </div>
           ) : (
             <>
-              <button onClick={() => setCurrentPage('login')} style={{ background: 'none', border: 'none', color: 'gray', cursor: 'pointer', fontWeight: 'bold' }}>LOGIN</button>
-              <button onClick={() => setCurrentPage('signup')} style={{ backgroundColor: '#3b82f6', color: 'white', padding: '10px 20px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SIGN UP</button>
+              <button onClick={() => setCurrentPage('login')} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>LOGIN</button>
+              <button onClick={() => setCurrentPage('signup')} style={{ backgroundColor: 'var(--accent-blue)', color: '#ffffff', padding: '10px 20px', borderRadius: '12px', border: 'none', fontWeight: 'bold', cursor: 'pointer' }}>SIGN UP</button>
             </>
           )}
-          <button onClick={() => setIsChatOpen(true)} style={{ backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', padding: '10px 20px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', fontWeight: 'bold', cursor: 'pointer' }}>CHAT</button>
-
+          <button onClick={() => setIsChatOpen(true)} style={{ backgroundColor: 'var(--bg-input)', color: 'var(--text-primary)', padding: '10px 20px', borderRadius: '12px', border: '1px solid var(--glass-border)', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 4px 10px rgba(0,0,0,0.1)' }}>CHAT</button>
         </div>
       </nav>
 
@@ -725,23 +724,23 @@ const App = () => {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br /><span style={{ color: '#3b82f6', WebkitTextFillColor: '#3b82f6' }}>Execute.</span></h1>
-                <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '600px', marginBottom: '40px', lineHeight: 1.6 }}>The advanced expert system for the Indian Electoral Process. Accurate, fast, and encrypted. Ask any question about voter registration, document proof, or local constituencies.</p>
+                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, var(--text-primary), var(--text-secondary))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br /><span style={{ color: 'var(--accent-blue)', WebkitTextFillColor: 'var(--accent-blue)' }}>Execute.</span></h1>
+                <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)', maxWidth: '600px', marginBottom: '40px', lineHeight: 1.6 }}>The advanced expert system for the Indian Electoral Process. Accurate, fast, and encrypted. Ask any question about voter registration, document proof, or local constituencies.</p>
                 <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                  <button onClick={() => setIsChatOpen(true)} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.5)', transition: 'all 0.3s' }}>Start Neural Session</button>
-                  <button onClick={() => setCurrentPage('features')} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>View Architecture</button>
+                  <button onClick={() => setIsChatOpen(true)} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'var(--accent-blue)', color: '#ffffff', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)', transition: 'all 0.3s' }}>Start Neural Session</button>
+                  <button onClick={() => setCurrentPage('features')} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>View Architecture</button>
                 </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-                <div style={{ width: 'clamp(200px, 50vw, 320px)', height: 'clamp(200px, 50vw, 320px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(3,3,5,0) 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59,130,246,0.1)' }}>
-                  <div style={{ fontSize: 'clamp(60px, 15vw, 100px)' }}>🛡️</div>
+                <div style={{ width: 'clamp(200px, 50vw, 320px)', height: 'clamp(200px, 50vw, 320px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.15) 0%, rgba(3,3,5,0) 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid var(--glass-border)', boxShadow: '0 0 40px var(--shadow-color)' }}>
+                  <div style={{ fontSize: 'clamp(60px, 15vw, 100px)', filter: 'drop-shadow(0 10px 20px rgba(59,130,246,0.3))' }}>🛡️</div>
                 </div>
               </div>
             </div>
 
             {/* Suggested Queries Section */}
-            <div style={{ padding: '40px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px' }}>
-              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: '#e2e8f0' }}>Suggested Queries</h2>
+            <div style={{ padding: '40px', backgroundColor: 'var(--bg-card)', border: '1px solid var(--glass-border)', borderRadius: '24px', backdropFilter: 'blur(20px)', boxShadow: '0 20px 40px var(--shadow-color)' }}>
+              <h2 style={{ fontSize: '24px', fontWeight: 'bold', marginBottom: '20px', color: 'var(--text-primary)' }}>Suggested Queries</h2>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
                 {[
                   "Am I eligible to vote in the upcoming Lok Sabha elections?",
