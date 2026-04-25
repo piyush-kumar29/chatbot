@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Rnd } from 'react-rnd';
 
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
@@ -847,20 +848,42 @@ const App = () => {
         )}
       </div>
 
+      {/* Chat Overlay Backdrop to hide homepage */}
+      <AnimatePresence>
+        {isChatOpen && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--bg-main)', zIndex: 999 }} 
+          />
+        )}
+      </AnimatePresence>
+
       {/* Chat Overlay */}
       {isChatOpen && (
-        <motion.div 
-          className={`chat-window size-${chatSize}`}
-          drag={chatSize !== 'fullscreen'}
-          dragConstraints={{ left: -500, right: 0, top: -500, bottom: 0 }}
-          dragElastic={0.1}
-          dragMomentum={false}
-          initial={{ opacity: 0, y: 20, scale: 0.95 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20, scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          style={{ zIndex: 1000 }}
+        <Rnd
+          default={{
+            x: window.innerWidth > 480 ? window.innerWidth / 2 - 210 : 0,
+            y: window.innerWidth > 480 ? window.innerHeight / 2 - 330 : 0,
+            width: window.innerWidth > 480 ? 420 : '100vw',
+            height: window.innerWidth > 480 ? 660 : '92dvh',
+          }}
+          minWidth={320}
+          minHeight={450}
+          bounds="window"
+          dragHandleClassName="chat-header"
+          style={{ zIndex: 1000, position: 'fixed' }}
         >
+          <motion.div 
+            className="chat-window"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            style={{ width: '100%', height: '100%', position: 'relative', bottom: 'auto', right: 'auto', resize: 'none' }}
+          >
           <div className="chat-header">
             <span style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
               <div className="chat-header-avatar" style={{ width: '28px', height: '28px' }}>🤖</div>
@@ -899,14 +922,6 @@ const App = () => {
                               <button className={`setting-btn ${theme === 'light' ? 'active' : ''}`} onClick={() => handleThemeChange('light')}><Sun size={14} /></button>
                               <button className={`setting-btn ${theme === 'dark' ? 'active' : ''}`} onClick={() => handleThemeChange('dark')}><Moon size={14} /></button>
                               <button className={`setting-btn ${theme === 'system' ? 'active' : ''}`} onClick={() => handleThemeChange('system')}><Monitor size={14} /></button>
-                          </div>
-                      </div>
-                      <div className="setting-item">
-                          <span className="setting-label">Window Size</span>
-                          <div className="setting-btn-group">
-                              <button className={`setting-btn ${chatSize === 'small' ? 'active' : ''}`} onClick={() => setChatSize('small')}>S</button>
-                              <button className={`setting-btn ${chatSize === 'medium' ? 'active' : ''}`} onClick={() => setChatSize('medium')}>M</button>
-                              <button className={`setting-btn ${chatSize === 'fullscreen' ? 'active' : ''}`} onClick={() => setChatSize('fullscreen')}><Maximize size={14} /></button>
                           </div>
                       </div>
                       <div className="setting-item">
@@ -1106,7 +1121,8 @@ const App = () => {
                 </span>
             </div>
           </div>
-        </motion.div>
+          </motion.div>
+        </Rnd>
       )}
     </div>
   );
