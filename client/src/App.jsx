@@ -816,84 +816,45 @@ const App = () => {
                   <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
                 </motion.div>
 
-                {/* Main Glass Panel (India Map SVG) */}
+                {/* Main Glass Panel (Inked Finger SVG) */}
                 <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <svg viewBox="0 0 600 700" width="90%" height="90%" xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="0 0 200 240" width="60%" height="60%" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                      <radialGradient id="indiaGlow" cx="50%" cy="45%" r="50%">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.05" />
-                      </radialGradient>
-                      <filter id="glow">
-                        <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
-                        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
-                      </filter>
-                      <filter id="softGlow">
-                        <feGaussianBlur stdDeviation="4" result="blur" />
-                        <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                      <linearGradient id="fingerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
+                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.1" />
+                      </linearGradient>
+                      <filter id="inkGlow">
+                        <feGaussianBlur stdDeviation="3" result="blur" />
+                        <feMerge>
+                          <feMergeNode in="blur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
                       </filter>
                     </defs>
-                    {/* Grid lines for futuristic feel */}
-                    {[100,200,300,400,500].map(x => (
-                      <line key={`vl${x}`} x1={x} y1="0" x2={x} y2="700" stroke="rgba(59,130,246,0.06)" strokeWidth="1" />
-                    ))}
-                    {[100,200,300,400,500,600].map(y => (
-                      <line key={`hl${y}`} x1="0" y1={y} x2="600" y2={y} stroke="rgba(59,130,246,0.06)" strokeWidth="1" />
-                    ))}
-                    {/* Detailed India outline */}
+                    {/* Stylized Index Finger */}
                     <path
-                      d="M270,30 L285,35 L300,28 L320,32 L335,40 L340,55 L330,68 L345,72 L360,65 L375,70 L380,58 L395,62 L405,75 L400,88 L410,95 L420,88 L435,92 L440,105 L430,115 L442,128 L448,145 L440,158 L448,170 L455,185 L448,200 L455,218 L450,235 L442,250 L448,265 L440,278 L435,295 L425,308 L418,322 L408,335 L400,348 L392,358 L385,370 L378,385 L370,400 L360,415 L348,428 L335,438 L322,448 L310,455 L300,462 L295,475 L285,488 L280,500 L275,512 L270,525 L265,538 L258,548 L250,555 L242,548 L235,535 L228,520 L222,508 L215,498 L208,488 L200,478 L192,470 L185,458 L178,448 L172,438 L165,425 L158,412 L150,405 L142,395 L138,382 L132,368 L128,355 L135,342 L130,330 L125,318 L130,305 L128,292 L135,278 L130,265 L125,250 L130,238 L128,222 L132,208 L128,195 L135,180 L130,168 L138,155 L142,140 L148,128 L155,118 L158,105 L165,92 L178,82 L190,75 L205,68 L218,60 L230,48 L245,38 L258,32 Z"
-                      fill="url(#indiaGlow)"
+                      d="M80,220 L80,80 C80,60 120,60 120,80 L120,220"
+                      fill="url(#fingerGradient)"
                       stroke="#3b82f6"
-                      strokeWidth="1.8"
-                      strokeLinejoin="round"
-                      filter="url(#softGlow)"
-                    />
-                    {/* Gujarat peninsula */}
-                    <path
-                      d="M130,265 L115,275 L105,290 L100,305 L108,315 L120,310 L128,298 L130,285"
-                      fill="rgba(59,130,246,0.15)"
-                      stroke="#3b82f6"
-                      strokeWidth="1.2"
+                      strokeWidth="2"
                       strokeLinejoin="round"
                     />
-                    {/* Sri Lanka */}
+                    {/* Fingernail */}
                     <path
-                      d="M282,560 L295,555 L300,568 L295,580 L282,585 L275,575 L278,562 Z"
-                      fill="rgba(59,130,246,0.15)"
-                      stroke="#60a5fa"
+                      d="M85,85 C85,75 115,75 115,85 L115,105 L85,105 Z"
+                      fill="rgba(59,130,246,0.1)"
+                      stroke="#3b82f6"
                       strokeWidth="1"
                     />
-                    {/* Andaman & Nicobar chain */}
-                    {[[505,350],[510,370],[512,388],[515,405],[518,420]].map(([cx,cy],i) => (
-                      <circle key={`an${i}`} cx={cx} cy={cy} r={3.5-i*0.3} fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="0.8" />
-                    ))}
-                    {/* Lakshadweep */}
-                    {[[95,380],[90,395],[88,410]].map(([cx,cy],i) => (
-                      <circle key={`lk${i}`} cx={cx} cy={cy} r={2.5} fill="rgba(59,130,246,0.25)" stroke="#60a5fa" strokeWidth="0.8" />
-                    ))}
-                    {/* Glowing city nodes */}
-                    {[
-                      [290, 130, 'Delhi'],
-                      [195, 305, 'Mumbai'],
-                      [400, 250, 'Kolkata'],
-                      [265, 475, 'Bangalore'],
-                      [345, 155, 'Lucknow'],
-                      [210, 165, 'Jaipur'],
-                      [305, 375, 'Hyderabad'],
-                      [250, 545, 'Kanyakumari'],
-                      [340, 85, 'Srinagar'],
-                    ].map(([cx, cy, name], i) => (
-                      <g key={i}>
-                        <circle cx={cx} cy={cy} r="8" fill="rgba(59,130,246,0.08)" />
-                        <circle cx={cx} cy={cy} r="4" fill="#60a5fa" filter="url(#glow)" />
-                      </g>
-                    ))}
-                    {/* Network lines connecting cities */}
-                    <polyline points="340,85 290,130 210,165 195,305 305,375 265,475 250,545" fill="none" stroke="rgba(96,165,250,0.3)" strokeWidth="1" strokeDasharray="6 5" />
-                    <polyline points="290,130 345,155 400,250 305,375" fill="none" stroke="rgba(96,165,250,0.2)" strokeWidth="1" strokeDasharray="6 5" />
-                    <line x1="195" y1="305" x2="400" y2="250" stroke="rgba(96,165,250,0.15)" strokeWidth="1" strokeDasharray="5 5" />
-                    <line x1="210" y1="165" x2="345" y2="155" stroke="rgba(96,165,250,0.15)" strokeWidth="1" strokeDasharray="5 5" />
+                    {/* Voting Ink Mark */}
+                    <path
+                      d="M98,75 L102,75 L102,110 L98,110 Z"
+                      fill="#8b5cf6"
+                      filter="url(#inkGlow)"
+                    />
+                    {/* Radial background glow */}
+                    <circle cx="100" cy="90" r="40" fill="radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)" />
                   </svg>
                   <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 45%, transparent 40%, var(--bg-card) 100%)' }} />
                 </div>
@@ -901,7 +862,7 @@ const App = () => {
                 {/* Floating Stats Cards */}
                 <div style={{ position: 'absolute', right: '0', top: '40px', display: 'flex', flexDirection: 'column', gap: '20px', zIndex: 20 }}>
                   {[
-                    { icon: <Users size={20} />, value: '98.7M+', label: 'Voters Verified', sub: 'Across India' },
+                    { icon: <Users size={20} />, value: '96.8Cr+', label: 'Voters Verified', sub: 'Across India' },
                     { icon: <Shield size={20} />, value: '45.2M+', label: 'Documents Verified', sub: 'This Month' },
                     { icon: <BarChart3 size={20} />, value: '8,543', label: 'Constituencies', sub: 'Active Records' }
                   ].map((stat, i) => (
