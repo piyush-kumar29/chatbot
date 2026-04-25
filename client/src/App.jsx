@@ -816,10 +816,61 @@ const App = () => {
                   <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
                 </motion.div>
 
-                {/* Main Glass Panel (Globe) */}
+                {/* Main Glass Panel (Custom Realistic Globe) */}
                 <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <Globe size={300} color="rgba(59,130,246,0.15)" strokeWidth={0.5} />
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, var(--bg-card) 100%)' }} />
+                  <svg viewBox="0 0 400 400" width="85%" height="85%" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <radialGradient id="sphereGradient" cx="30%" cy="30%" r="70%">
+                        <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4" />
+                        <stop offset="50%" stopColor="#1e40af" stopOpacity="0.1" />
+                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.3" />
+                      </radialGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="5" result="blur" />
+                        <feMerge>
+                          <feMergeNode in="blur" />
+                          <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    {/* Outer Atmosphere Glow */}
+                    <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(59,130,246,0.1)" strokeWidth="1" filter="url(#glow)" />
+                    
+                    {/* Main Sphere */}
+                    <circle cx="200" cy="200" r="150" fill="url(#sphereGradient)" stroke="rgba(59,130,246,0.3)" strokeWidth="0.5" />
+                    
+                    {/* Grid Lines (Latitude) */}
+                    {[100, 150, 200, 250, 300].map((y, i) => {
+                      const r = 150;
+                      const dy = Math.abs(200 - y);
+                      const width = Math.sqrt(r * r - dy * dy) * 2;
+                      return (
+                        <ellipse key={`lat-${i}`} cx="200" cy={y} rx={width/2} ry={width/10} fill="none" stroke="rgba(59,130,246,0.15)" strokeWidth="0.5" />
+                      );
+                    })}
+                    
+                    {/* Grid Lines (Longitude) */}
+                    {[100, 150, 200, 250, 300].map((x, i) => {
+                      const r = 150;
+                      const dx = Math.abs(200 - x);
+                      const height = Math.sqrt(r * r - dx * dx) * 2;
+                      return (
+                        <ellipse key={`long-${i}`} cx={x} cy="200" rx={height/10} ry={height/2} fill="none" stroke="rgba(59,130,246,0.15)" strokeWidth="0.5" />
+                      );
+                    })}
+
+                    {/* Animated Orbital Ring */}
+                    <motion.ellipse 
+                      cx="200" cy="200" rx="170" ry="60" 
+                      fill="none" stroke="rgba(96,165,250,0.4)" strokeWidth="1" strokeDasharray="10 20"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                    />
+
+                    {/* Highlights */}
+                    <circle cx="160" cy="160" r="40" fill="radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 80%)" />
+                  </svg>
+                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 30%, var(--bg-card) 100%)' }} />
                 </div>
 
                 {/* Floating Stats Cards */}
