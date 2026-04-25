@@ -163,7 +163,7 @@ const AdminDashboard = ({ token, currentUser }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('https://chatbot-og7m.onrender.com/api/auth/users', {
+        const res = await axios.get('https://chatbot-0g7m.onrender.com/api/auth/users', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsersList(res.data);
@@ -179,7 +179,7 @@ const AdminDashboard = ({ token, currentUser }) => {
   const handleRoleChange = async (userId, currentRole) => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
     try {
-      await axios.put(`https://chatbot-og7m.onrender.com/api/auth/users/${userId}/role`, { role: newRole }, {
+      await axios.put(`https://chatbot-0g7m.onrender.com/api/auth/users/${userId}/role`, { role: newRole }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsersList(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
@@ -518,7 +518,7 @@ const App = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('https://chatbot-og7m.onrender.com/api/chat/history', {
+      const res = await axios.get('https://chatbot-0g7m.onrender.com/api/chat/history', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistoryList(res.data);
@@ -539,7 +539,7 @@ const App = () => {
   const deleteConversation = async (e, convId) => {
     e.stopPropagation();
     try {
-      await axios.delete(`https://chatbot-og7m.onrender.com/api/chat/${convId}`, {
+      await axios.delete(`https://chatbot-0g7m.onrender.com/api/chat/${convId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistoryList(prev => prev.filter(c => c._id !== convId));
@@ -558,7 +558,7 @@ const App = () => {
     setIsLoading(true);
     try {
       const endpoint = type === 'login' ? '/api/auth/login' : '/api/auth/signup';
-      const res = await axios.post(`https://chatbot-og7m.onrender.com${endpoint}`, authData);
+      const res = await axios.post(`https://chatbot-0g7m.onrender.com${endpoint}`, authData);
       setToken(res.data.token);
       setUser(res.data.user);
       localStorage.setItem('voter_token', res.data.token);
@@ -601,7 +601,7 @@ const App = () => {
 
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.post('https://chatbot-og7m.onrender.com/api/chat', 
+      const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat', 
         { message: payloadMessage, conversationId: activeConvId },
         { headers }
       );
