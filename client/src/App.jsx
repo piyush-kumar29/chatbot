@@ -546,6 +546,7 @@ const App = () => {
   const [chatSize, setChatSize] = useState('medium');
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [pendingQuery, setPendingQuery] = useState(null);
+  const [chatRndKey, setChatRndKey] = useState(0);
 
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -669,6 +670,11 @@ const App = () => {
     setCurrentPage('home');
   };
 
+  const openChat = () => {
+    setChatRndKey(k => k + 1); // force Rnd to reset position to center
+    setIsChatOpen(true);
+  };
+
   const handleSend = async (text, isInitial = false) => {
     const msg = text || input;
     if (!msg.trim() && !attachedFile && !isInitial) return;
@@ -768,7 +774,7 @@ const App = () => {
                 </p>
                 
                 <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginBottom: '50px' }}>
-                  <button onClick={() => setIsChatOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 32px', fontSize: '1rem', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#ffffff', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)', transition: 'all 0.3s' }}>
+                  <button onClick={openChat} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 32px', fontSize: '1rem', background: 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)', color: '#ffffff', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.4)', transition: 'all 0.3s' }}>
                     Start Neural Session <ArrowRight size={18} />
                   </button>
                   <button onClick={() => setCurrentPage('features')} style={{ display: 'flex', alignItems: 'center', gap: '10px', padding: '16px 32px', fontSize: '1rem', backgroundColor: 'transparent', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>
@@ -812,39 +818,56 @@ const App = () => {
 
                 {/* Main Glass Panel (India Map SVG) */}
                 <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <svg viewBox="0 0 400 450" width="80%" height="80%" style={{ opacity: 0.6 }} xmlns="http://www.w3.org/2000/svg">
+                  <svg viewBox="60 0 340 480" width="85%" height="85%" xmlns="http://www.w3.org/2000/svg">
                     <defs>
                       <radialGradient id="indiaGlow" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                        <stop offset="100%" stopColor="#1d4ed8" stopOpacity="0.1" />
+                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.35" />
+                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.08" />
                       </radialGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                        <feMerge><feMergeNode in="coloredBlur" /><feMergeNode in="SourceGraphic" /></feMerge>
+                      </filter>
                     </defs>
-                    {/* India outline simplified SVG path */}
+                    {/* Detailed India outline */}
                     <path
-                      d="M195,20 L220,30 L240,25 L260,35 L275,50 L280,70 L275,90 L285,110 L290,130 L280,150 L290,170 L295,190 L285,210 L290,230 L280,250 L270,265 L260,275 L250,290 L245,305 L240,320 L235,335 L220,345 L210,355 L200,365 L195,380 L190,365 L180,355 L170,345 L155,335 L150,320 L145,305 L140,290 L130,275 L120,265 L110,250 L100,230 L105,210 L95,190 L100,170 L110,150 L100,130 L105,110 L115,90 L110,70 L125,50 L140,35 L160,25 L180,30 Z"
+                      d="M230,18 L238,22 L248,20 L258,25 L268,22 L278,28 L285,35 L290,44 L295,55 L298,65 L295,75 L300,85 L305,95 L308,108 L305,118 L310,128 L315,140 L318,152 L315,162 L320,172 L322,185 L318,196 L322,208 L318,220 L312,232 L305,242 L298,252 L292,260 L285,270 L278,280 L272,292 L268,305 L264,318 L260,330 L255,342 L248,352 L240,362 L232,370 L225,378 L220,386 L215,394 L212,400 L210,392 L206,382 L200,372 L193,362 L185,352 L178,342 L172,330 L168,318 L164,305 L160,292 L154,280 L147,270 L140,260 L133,250 L126,240 L118,228 L114,215 L118,203 L114,192 L110,180 L114,168 L118,156 L122,144 L118,132 L122,120 L128,108 L132,96 L128,85 L132,74 L140,63 L148,52 L158,43 L168,36 L178,30 L188,25 L198,22 L210,20 L220,18 Z"
                       fill="url(#indiaGlow)"
                       stroke="#3b82f6"
-                      strokeWidth="1.5"
+                      strokeWidth="1.8"
                       strokeLinejoin="round"
+                      filter="url(#glow)"
                     />
                     {/* Sri Lanka */}
-                    <ellipse cx="220" cy="395" rx="12" ry="18" fill="rgba(59,130,246,0.2)" stroke="#3b82f6" strokeWidth="1" />
-                    {/* Andaman Islands dots */}
-                    <circle cx="310" cy="230" r="4" fill="rgba(59,130,246,0.4)" stroke="#3b82f6" strokeWidth="1" />
-                    <circle cx="315" cy="245" r="3" fill="rgba(59,130,246,0.3)" stroke="#3b82f6" strokeWidth="1" />
-                    <circle cx="318" cy="258" r="3" fill="rgba(59,130,246,0.3)" stroke="#3b82f6" strokeWidth="1" />
-                    {/* Glowing dot nodes on map */}
-                    {[[195,120],[160,180],[230,200],[190,260],[140,150],[250,140]].map(([cx,cy],i) => (
+                    <ellipse cx="230" cy="420" rx="11" ry="16" fill="rgba(59,130,246,0.18)" stroke="#60a5fa" strokeWidth="1" />
+                    {/* Andaman & Nicobar */}
+                    <circle cx="340" cy="265" r="4.5" fill="rgba(59,130,246,0.35)" stroke="#60a5fa" strokeWidth="1" />
+                    <circle cx="344" cy="280" r="3.5" fill="rgba(59,130,246,0.28)" stroke="#60a5fa" strokeWidth="1" />
+                    <circle cx="347" cy="293" r="3" fill="rgba(59,130,246,0.22)" stroke="#60a5fa" strokeWidth="1" />
+                    {/* Lakshadweep */}
+                    <circle cx="130" cy="310" r="3" fill="rgba(59,130,246,0.3)" stroke="#60a5fa" strokeWidth="1" />
+                    <circle cx="124" cy="295" r="2.5" fill="rgba(59,130,246,0.25)" stroke="#60a5fa" strokeWidth="1" />
+                    {/* Glowing city nodes */}
+                    {[
+                      [217, 85],  // Delhi
+                      [160, 200], // Mumbai
+                      [235, 175], // Kolkata
+                      [210, 310], // Bangalore
+                      [250, 130], // Lucknow
+                      [175, 130], // Jaipur
+                      [220, 240], // Hyderabad
+                    ].map(([cx, cy], i) => (
                       <g key={i}>
-                        <circle cx={cx} cy={cy} r="6" fill="rgba(59,130,246,0.2)" />
-                        <circle cx={cx} cy={cy} r="3" fill="#60a5fa" />
+                        <circle cx={cx} cy={cy} r="7" fill="rgba(59,130,246,0.12)" />
+                        <circle cx={cx} cy={cy} r="3.5" fill="#60a5fa" filter="url(#glow)" />
                       </g>
                     ))}
-                    {/* Connection lines between nodes */}
-                    <polyline points="195,120 160,180 190,260" fill="none" stroke="rgba(59,130,246,0.3)" strokeWidth="1" strokeDasharray="4 4" />
-                    <polyline points="195,120 230,200 250,140" fill="none" stroke="rgba(59,130,246,0.2)" strokeWidth="1" strokeDasharray="4 4" />
+                    {/* Network lines */}
+                    <polyline points="217,85 175,130 160,200 210,310" fill="none" stroke="rgba(96,165,250,0.35)" strokeWidth="1" strokeDasharray="5 4" />
+                    <polyline points="217,85 250,130 235,175 220,240 210,310" fill="none" stroke="rgba(96,165,250,0.25)" strokeWidth="1" strokeDasharray="5 4" />
+                    <line x1="160" y1="200" x2="235" y2="175" stroke="rgba(96,165,250,0.2)" strokeWidth="1" strokeDasharray="4 4" />
                   </svg>
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 30%, var(--bg-card) 100%)' }} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 35%, var(--bg-card) 100%)' }} />
                 </div>
 
                 {/* Floating Stats Cards */}
@@ -886,7 +909,7 @@ const App = () => {
               ].map((item, i) => (
                 <div 
                   key={i} 
-                  onClick={() => { setPendingQuery(item.title); setIsChatOpen(true); }}
+                  onClick={() => { setPendingQuery(item.title); openChat(); }}
                   style={{ flex: '1 1 200px', display: 'flex', alignItems: 'center', gap: '15px', padding: '16px', borderRadius: '16px', background: 'transparent', cursor: 'pointer', transition: 'all 0.2s', border: '1px solid transparent' }}
                   onMouseOver={e => { e.currentTarget.style.background = 'rgba(59,130,246,0.05)'; e.currentTarget.style.border = '1px solid rgba(59,130,246,0.2)'; }}
                   onMouseOut={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.border = '1px solid transparent'; }}
@@ -984,11 +1007,12 @@ const App = () => {
       {/* Chat Overlay */}
       {isChatOpen && (
         <Rnd
+          key={chatRndKey}
           default={{
-            x: window.innerWidth > 480 ? window.innerWidth / 2 - 210 : 0,
-            y: window.innerWidth > 480 ? window.innerHeight / 2 - 330 : 0,
-            width: window.innerWidth > 480 ? 420 : '100vw',
-            height: window.innerWidth > 480 ? 660 : '92dvh',
+            x: Math.max(0, window.innerWidth / 2 - 270),
+            y: Math.max(0, window.innerHeight / 2 - 350),
+            width: Math.min(540, window.innerWidth - 32),
+            height: Math.min(700, window.innerHeight - 40),
           }}
           minWidth={320}
           minHeight={450}
