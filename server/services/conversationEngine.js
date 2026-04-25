@@ -32,8 +32,15 @@ const handleConversation = async (sessionId, userMessage, history = []) => {
                     Rules:
                     1. Use the heuristic guide above as a baseline, but expand naturally based on the user's query.
                     2. Maintain a professional, high-tech, and efficient tone.
-                    3. STRICT BOUNDARY: UNDER NO CIRCUMSTANCES should you answer questions unrelated to elections, voting, or the Indian Electoral Process. If the user asks about coding, math, general knowledge, recipes, or anything else, you MUST REFUSE to answer the question entirely and firmly state that your neural core is strictly restricted to electoral guidance. Do not try to be helpful with off-topic requests.
-                    4. Always provide actionable next steps (e.g., links to forms or portals).`
+                    3. STRICT BOUNDARY: You are specialized ONLY in the Indian Electoral Process. 
+                       - If a user asks something irrelevant to voting, elections, or registration, reply politely: "I apologize, but my neural core is specialized exclusively for Indian Electoral assistance. I cannot provide information on that topic. Please feel free to ask me anything related to voter registration, eligibility, or election procedures."
+                       - Do not answer questions about coding, math, general knowledge, or other off-topic subjects.
+                    4. VISUAL STRUCTURE: Use Markdown to make your responses easy to read. 
+                       - Use **bold** for emphasis.
+                       - Use bullet points for lists.
+                       - Use ### headers for sections.
+                       - Keep paragraphs short and concise.
+                    5. Always provide actionable next steps (e.g., links to forms or portals).`
                 },
                 ...history,
                 {
@@ -41,7 +48,7 @@ const handleConversation = async (sessionId, userMessage, history = []) => {
                     content: userMessage,
                 },
             ],
-            model: "llama-3.3-70b-versatile", // Latest high-performance model from Groq
+            model: "llama-3.3-70b-versatile",
             temperature: 0.6,
             max_tokens: 2048,
         });

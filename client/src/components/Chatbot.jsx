@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
 import { Send, X, Cpu, Zap, Activity, Trash2, Bot, Shield } from 'lucide-react';
+import ReactMarkdown from 'react-markdown';
 
 const Chatbot = ({ isOpen, onClose }) => {
     const [messages, setMessages] = useState([]);
@@ -45,12 +46,12 @@ const Chatbot = ({ isOpen, onClose }) => {
                 message: msgText
             });
 
-            const { response, thought } = res.data;
+            const { content, thought } = res.data;
 
             setTimeout(() => {
                 setMessages(prev => [...prev, { 
                     role: 'bot', 
-                    content: response, 
+                    content: content, 
                     thought, 
                     timestamp: new Date() 
                 }]);
@@ -80,7 +81,7 @@ const Chatbot = ({ isOpen, onClose }) => {
                         <h3 className="font-bold text-white text-sm">VoterAI Core</h3>
                         <div className="flex items-center gap-1.5 opacity-50">
                             <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
-                            <span className="text-[9px] uppercase font-bold tracking-widest text-blue-400">V3.5 Neural</span>
+                            <span className="text-[9px] uppercase font-bold tracking-widest text-blue-400">V4.0 Neural</span>
                         </div>
                     </div>
                 </div>
@@ -92,18 +93,31 @@ const Chatbot = ({ isOpen, onClose }) => {
             {/* Messages */}
             <div 
                 ref={chatContainerRef}
-                className="flex-1 overflow-y-auto p-6 flex flex-col gap-6 custom-scrollbar"
+                className="flex-1 overflow-y-auto p-6 flex flex-col gap-8 custom-scrollbar"
             >
                 {messages.map((msg, idx) => (
-                    <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} gap-1`}>
+                    <div key={idx} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} gap-1.5`}>
                         {msg.role === 'bot' && msg.thought && (
-                            <div className="thought-bubble">
-                                {msg.thought}
+                            <div className="thought-bubble-container">
+                                <div className="flex items-center gap-2 mb-1.5 opacity-40">
+                                    <Zap size={10} />
+                                    <span className="text-[9px] uppercase font-bold tracking-widest">Heuristic Analysis</span>
+                                </div>
+                                <div className="thought-bubble">
+                                    {msg.thought}
+                                </div>
                             </div>
                         )}
-                        <div className={`message-card ${msg.role}`}>
-                            {msg.content}
-                            <div style={{ fontSize: '9px', marginTop: '6px', opacity: 0.4, textAlign: 'right' }}>
+                        
+                        <div className={`message-card ${msg.role} animate-fade-in`}>
+                            {msg.role === 'bot' ? (
+                                <div className="prose prose-invert max-w-none">
+                                    <ReactMarkdown>{msg.content}</ReactMarkdown>
+                                </div>
+                            ) : (
+                                msg.content
+                            )}
+                            <div className="message-meta">
                                 {msg.timestamp?.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </div>
                         </div>

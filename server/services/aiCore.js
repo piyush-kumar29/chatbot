@@ -80,9 +80,9 @@ const processMessage = (msg) => {
     return {
         thought: "No specific intent match. Generating contextualized clarifying response.",
         response: getRandomResponse([
-            "I've analyzed your input but couldn't map it to a specific electoral procedure. Are you asking about registration, eligibility, or updating your voter ID?",
-            "I didn't quite catch which electoral process you're referring to. Could you clarify if you need help with a new voter ID, corrections, or checking eligibility?",
-            "My heuristic engine didn't find a direct match. Are you looking for information on how to vote, how to register, or something else?"
+            "I couldn't find a direct match for your query in my electoral database. I am specialized specifically in **Indian Electoral procedures**. \n\nCould you please ask about registration, eligibility, or voter ID updates?",
+            "I apologize, but I am only trained to assist with **voting and election-related matters**. \n\nIf you have questions about Form 6, Form 8, or your eligibility, I'd be happy to help!",
+            "My neural core is restricted to **Indian Electoral assistance**. For other topics, I cannot provide accurate information. \n\nHow can I help you with your voter registration today?"
         ]),
         quickReplies: ["Registration", "Eligibility", "ID Update"]
     };

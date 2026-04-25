@@ -87,26 +87,83 @@ body {
   padding: 16px 20px;
   border-radius: 20px;
   font-size: 0.95rem;
+  line-height: 1.6;
+  position: relative;
 }
 
 .message-card.bot {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-bottom-left-radius: 4px;
+  color: #e2e8f0;
 }
 
 .message-card.user {
-  background: #3b82f6;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   border-bottom-right-radius: 4px;
   align-self: flex-end;
+  color: white;
+  box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+}
+
+.message-meta {
+  font-size: 9px;
+  margin-top: 10px;
+  opacity: 0.4;
+  text-align: right;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.thought-bubble-container {
+  margin-bottom: 8px;
+  width: 100%;
 }
 
 .thought-bubble {
   font-size: 0.75rem;
   color: #a78bfa;
-  margin-bottom: 6px;
   font-style: italic;
-  padding-left: 4px;
+  padding: 8px 12px;
+  background: rgba(139, 92, 246, 0.05);
   border-left: 2px solid #8b5cf6;
+  border-radius: 0 12px 12px 0;
+  line-height: 1.4;
+}
+
+/* Markdown Styling in Bot Messages */
+.prose-invert {
+  color: #e2e8f0;
+}
+
+.prose-invert strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.prose-invert ul, .prose-invert ol {
+  margin: 10px 0;
+  padding-left: 20px;
+}
+
+.prose-invert li {
+  margin: 4px 0;
+}
+
+.prose-invert h3 {
+  color: #60a5fa;
+  font-size: 1rem;
+  margin: 12px 0 8px 0;
+  font-weight: 700;
+}
+
+.prose-invert p {
+  margin-bottom: 8px;
+}
+
+.prose-invert p:last-child {
+  margin-bottom: 0;
 }
 
 /* Scrollbar */
