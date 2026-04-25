@@ -1033,30 +1033,30 @@ const App = () => {
       </AnimatePresence>
 
       {/* Chat Overlay */}
-      {isChatOpen && (
-        <Rnd
-          key={chatRndKey}
-          default={{
-            x: Math.max(0, window.innerWidth / 2 - 270),
-            y: Math.max(0, window.innerHeight / 2 - 350),
-            width: Math.min(540, window.innerWidth - 32),
-            height: Math.min(700, window.innerHeight - 40),
-          }}
-          minWidth={320}
-          minHeight={450}
-          bounds="window"
-          dragHandleClassName="chat-header"
-          style={{ zIndex: 1000, position: 'fixed' }}
-        >
-          <motion.div 
-            className="chat-window"
-            data-theme={resolvedChatTheme}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.3 }}
-            style={{ width: '100%', height: '100%', position: 'relative', bottom: 'auto', right: 'auto', resize: 'none' }}
+      {isChatOpen && (() => {
+        const chatW = Math.min(500, window.innerWidth - 40);
+        const chatH = Math.min(600, window.innerHeight - 80);
+        return (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, pointerEvents: 'none' }}>
+          <Rnd
+            key={chatRndKey}
+            default={{
+              x: Math.round((window.innerWidth - chatW) / 2),
+              y: Math.round((window.innerHeight - chatH) / 2),
+              width: chatW,
+              height: chatH,
+            }}
+            minWidth={320}
+            minHeight={400}
+            bounds="parent"
+            dragHandleClassName="chat-header"
+            style={{ pointerEvents: 'auto' }}
           >
+            <div
+              className="chat-window"
+              data-theme={resolvedChatTheme}
+              style={{ width: '100%', height: '100%' }}
+            >
           <div className="chat-header">
             <span style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
               <div className="chat-header-avatar" style={{ width: '28px', height: '28px' }}>🤖</div>
@@ -1294,9 +1294,11 @@ const App = () => {
                 </span>
             </div>
           </div>
-          </motion.div>
-        </Rnd>
-      )}
+            </div>
+          </Rnd>
+        </div>
+        );
+      })()}
     </div>
   );
 };
