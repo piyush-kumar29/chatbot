@@ -40,12 +40,12 @@ const SimulationPage = () => {
 
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      <h1 style={{ fontSize: '60px', fontWeight: '900', marginBottom: '20px' }}>Live Voting Simulation.</h1>
+      <h1 style={{ fontSize: 'clamp(32px, 8vw, 60px)', fontWeight: '900', marginBottom: '20px' }}>Live Voting Simulation.</h1>
       <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginBottom: '40px' }}>Experience a secure, real-time cryptographic voting terminal with live analytics.</p>
       
-      <div style={{ display: 'flex', gap: '40px', flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {/* Voting Terminal */}
-        <div style={{ flex: 1, minWidth: '300px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+        <div style={{ flex: 1, minWidth: 'min(300px, 100%)', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
           <h2 style={{ fontSize: '24px', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '10px' }}><span style={{ color: '#ef4444', animation: 'pulse 2s infinite' }}>●</span> Cast Your Vote</h2>
           
           {hasVoted ? (
@@ -97,7 +97,7 @@ const SimulationPage = () => {
         </div>
 
         {/* Analytics Engine */}
-        <div style={{ flex: 1.5, minWidth: '400px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '30px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+        <div style={{ flex: 1.5, minWidth: 'min(300px, 100%)', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
             <h2 style={{ fontSize: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>📊 Live Analytics Hub</h2>
             <div style={{ color: '#3b82f6', fontWeight: 'bold', backgroundColor: 'rgba(59,130,246,0.1)', padding: '5px 15px', borderRadius: '20px' }}>
@@ -190,7 +190,7 @@ const AdminDashboard = ({ token, currentUser }) => {
 
   return (
     <div style={{ animation: 'fadeIn 0.5s ease-out' }}>
-      <h1 style={{ fontSize: '60px', fontWeight: '900', marginBottom: '20px' }}>System Administration.</h1>
+      <h1 style={{ fontSize: 'clamp(28px, 7vw, 60px)', fontWeight: '900', marginBottom: '20px' }}>System Administration.</h1>
       <p style={{ color: '#94a3b8', fontSize: '1.2rem', marginBottom: '40px' }}>Global registry of all verified neural link users.</p>
 
       {loading ? (
@@ -294,9 +294,9 @@ const ECIPortal = () => {
   };
 
   return (
-    <div style={{ animation: 'fadeIn 0.5s ease-out', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ animation: 'fadeIn 0.5s ease-out', maxWidth: '800px', margin: '0 auto', padding: '0 4px' }}>
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-        <h1 style={{ fontSize: '48px', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>
+        <h1 style={{ fontSize: 'clamp(26px, 6vw, 48px)', fontWeight: '900', color: '#fff', marginBottom: '10px' }}>
           <span style={{ color: '#3b82f6' }}>ECI</span> National Voter Portal
         </h1>
         <p style={{ color: '#94a3b8', fontSize: '1.2rem' }}>Official Simulation for Elector Registration & Verification</p>
@@ -615,11 +615,11 @@ const App = () => {
   };
 
   return (
-    <div style={{ backgroundColor: '#030305', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif', position: 'relative' }}>
+    <div style={{ backgroundColor: '#030305', color: 'white', minHeight: '100vh', fontFamily: 'sans-serif', position: 'relative', overflowX: 'hidden' }}>
       {/* Navigation */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '20px 60px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid rgba(255,255,255,0.05)', boxSizing: 'border-box' }}>
         <div style={{ fontSize: '1.5rem', fontWeight: '900', letterSpacing: '-1px' }}>VOTER AI</div>
-        <div style={{ display: 'flex', gap: '30px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button onClick={() => setCurrentPage('home')} style={{ background: 'none', border: 'none', color: currentPage === 'home' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>CORE</button>
           <button onClick={() => setCurrentPage('features')} style={{ background: 'none', border: 'none', color: currentPage === 'features' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>FEATURES</button>
           <button onClick={() => setCurrentPage('simulation')} style={{ background: 'none', border: 'none', color: currentPage === 'simulation' ? '#3b82f6' : 'gray', cursor: 'pointer', fontWeight: 'bold' }}>SIMULATION</button>
@@ -644,21 +644,21 @@ const App = () => {
       </nav>
 
       {/* Main Content */}
-      <div style={{ paddingTop: '150px', paddingBottom: '100px', maxWidth: '1200px', margin: '0 auto', paddingLeft: '40px', paddingRight: '40px' }}>
+      <div style={{ paddingTop: '100px', paddingBottom: '80px', maxWidth: '1200px', margin: '0 auto', paddingLeft: '16px', paddingRight: '16px', boxSizing: 'border-box' }}>
         {currentPage === 'home' && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '60px' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '40px' }}>
               <div style={{ flex: 1 }}>
-                <h1 style={{ fontSize: '90px', fontWeight: '900', lineHeight: 0.9, marginBottom: '40px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br/><span style={{ color: '#3b82f6', WebkitTextFillColor: '#3b82f6' }}>Execute.</span></h1>
+                <h1 style={{ fontSize: 'clamp(40px, 10vw, 90px)', fontWeight: '900', lineHeight: 0.9, marginBottom: '30px', background: 'linear-gradient(to right, #ffffff, #94a3b8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Verify. Register. <br/><span style={{ color: '#3b82f6', WebkitTextFillColor: '#3b82f6' }}>Execute.</span></h1>
                 <p style={{ fontSize: '1.2rem', color: '#94a3b8', maxWidth: '600px', marginBottom: '40px', lineHeight: 1.6 }}>The advanced expert system for the Indian Electoral Process. Accurate, fast, and encrypted. Ask any question about voter registration, document proof, or local constituencies.</p>
-                <div style={{ display: 'flex', gap: '20px' }}>
-                  <button onClick={() => setIsChatOpen(true)} style={{ padding: '20px 40px', fontSize: '1.1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.5)', transition: 'all 0.3s' }}>Start Neural Session</button>
-                  <button onClick={() => setCurrentPage('features')} style={{ padding: '20px 40px', fontSize: '1.1rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>View Architecture</button>
+                <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                  <button onClick={() => setIsChatOpen(true)} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: '#3b82f6', color: 'white', border: 'none', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', boxShadow: '0 10px 25px rgba(59, 130, 246, 0.5)', transition: 'all 0.3s' }}>Start Neural Session</button>
+                  <button onClick={() => setCurrentPage('features')} style={{ padding: '14px 28px', fontSize: '1rem', backgroundColor: 'transparent', color: 'white', border: '1px solid rgba(255,255,255,0.2)', borderRadius: '16px', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.3s' }}>View Architecture</button>
                 </div>
               </div>
-              <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                <div style={{ width: '400px', height: '400px', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(3,3,5,0) 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59,130,246,0.1)' }}>
-                  <div style={{ fontSize: '100px' }}>🛡️</div>
+              <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                <div style={{ width: 'clamp(200px, 50vw, 320px)', height: 'clamp(200px, 50vw, 320px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(59,130,246,0.2) 0%, rgba(3,3,5,0) 70%)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px solid rgba(59,130,246,0.1)' }}>
+                  <div style={{ fontSize: 'clamp(60px, 15vw, 100px)' }}>🛡️</div>
                 </div>
               </div>
             </div>
@@ -712,7 +712,7 @@ const App = () => {
         {currentPage === 'portal' && <ECIPortal />}
         {currentPage === 'features' && (
           <div>
-            <h1 style={{ fontSize: '60px', fontWeight: '900', marginBottom: '40px' }}>System Architecture.</h1>
+            <h1 style={{ fontSize: 'clamp(30px, 8vw, 60px)', fontWeight: '900', marginBottom: '30px' }}>System Architecture.</h1>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px' }}>
               {[
                 { title: 'Neural Heuristics', desc: 'Advanced AI-driven expert system providing legally accurate electoral guidance.', icon: '🧠' },
@@ -732,25 +732,25 @@ const App = () => {
           </div>
         )}
         {(currentPage === 'login' || currentPage === 'signup') && (
-          <div style={{ maxWidth: '400px', margin: '0 auto', padding: '40px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '32px' }}>
+          <div style={{ maxWidth: '400px', margin: '0 auto', padding: '24px', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', boxSizing: 'border-box' }}>
             <h2 style={{ fontSize: '2rem', marginBottom: '30px', textAlign: 'center' }}>{currentPage.toUpperCase()}</h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {currentPage === 'signup' && (
                 <input 
                   type="text" placeholder="Username" 
                   value={authData.username} onChange={e => setAuthData({...authData, username: e.target.value})}
-                  style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                  style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
                 />
               )}
               <input 
                 type="email" placeholder="Email" 
                 value={authData.email} onChange={e => setAuthData({...authData, email: e.target.value})}
-                style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
               />
               <input 
                 type="password" placeholder="Password" 
                 value={authData.password} onChange={e => setAuthData({...authData, password: e.target.value})}
-                style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box', fontSize: '16px' }}
               />
               <button 
                 onClick={() => handleAuth(currentPage)}
@@ -774,7 +774,7 @@ const App = () => {
 
       {/* Chat Overlay */}
       {isChatOpen && (
-        <div style={{ position: 'fixed', bottom: '24px', right: '24px', width: isExpanded ? '800px' : '400px', height: isExpanded ? '80vh' : '600px', maxWidth: '95vw', maxHeight: '95vh', backgroundColor: '#0a0a0c', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '24px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.5)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
+        <div style={{ position: 'fixed', bottom: 0, right: 0, width: window.innerWidth < 480 ? '100vw' : (isExpanded ? '800px' : '420px'), height: window.innerWidth < 480 ? '92dvh' : (isExpanded ? '85vh' : '620px'), maxWidth: '100vw', maxHeight: '100dvh', backgroundColor: '#0a0a0c', border: '1px solid rgba(255,255,255,0.1)', borderRadius: window.innerWidth < 480 ? '20px 20px 0 0' : '24px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.5)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
           <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <span style={{ fontWeight: 'bold' }}>Neural Core V4.0</span>
             <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
@@ -882,8 +882,8 @@ const App = () => {
               <input 
                 type="text" value={input} onChange={(e) => setInput(e.target.value)}
                 onKeyPress={e => e.key === 'Enter' && handleSend()}
-                placeholder="Type a query or upload document..."
-                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white' }}
+                placeholder="Type a query..."
+                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '16px', minWidth: 0 }}
               />
               <button onClick={() => handleSend()} style={{ padding: '0 20px', backgroundColor: '#3b82f6', border: 'none', borderRadius: '10px', color: 'white', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>Send</button>
             </div>
