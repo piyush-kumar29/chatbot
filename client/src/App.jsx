@@ -816,47 +816,10 @@ const App = () => {
                   <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
                 </motion.div>
 
-                {/* Main Glass Panel (Inked Finger SVG) */}
+                {/* Main Glass Panel (Globe) */}
                 <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <svg viewBox="0 0 200 240" width="60%" height="60%" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <linearGradient id="fingerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.1" />
-                      </linearGradient>
-                      <filter id="inkGlow">
-                        <feGaussianBlur stdDeviation="3" result="blur" />
-                        <feMerge>
-                          <feMergeNode in="blur" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    {/* Stylized Index Finger */}
-                    <path
-                      d="M80,220 L80,80 C80,60 120,60 120,80 L120,220"
-                      fill="url(#fingerGradient)"
-                      stroke="#3b82f6"
-                      strokeWidth="2"
-                      strokeLinejoin="round"
-                    />
-                    {/* Fingernail */}
-                    <path
-                      d="M85,85 C85,75 115,75 115,85 L115,105 L85,105 Z"
-                      fill="rgba(59,130,246,0.1)"
-                      stroke="#3b82f6"
-                      strokeWidth="1"
-                    />
-                    {/* Voting Ink Mark */}
-                    <path
-                      d="M98,75 L102,75 L102,110 L98,110 Z"
-                      fill="#8b5cf6"
-                      filter="url(#inkGlow)"
-                    />
-                    {/* Radial background glow */}
-                    <circle cx="100" cy="90" r="40" fill="radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)" />
-                  </svg>
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at 50% 45%, transparent 40%, var(--bg-card) 100%)' }} />
+                  <Globe size={300} color="rgba(59,130,246,0.15)" strokeWidth={0.5} />
+                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 0%, var(--bg-card) 100%)' }} />
                 </div>
 
                 {/* Floating Stats Cards */}
