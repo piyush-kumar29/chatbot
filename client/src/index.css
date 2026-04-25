@@ -349,7 +349,6 @@ button, a, [role="button"] { min-height: 44px; }
   font-size: 0.875rem;
   line-height: 1.65;
   position: relative;
-  group;
 }
 .message-card.bot {
   background: var(--bg-bot-msg);
