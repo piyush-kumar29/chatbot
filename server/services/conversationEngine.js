@@ -41,7 +41,8 @@ FORMATTING — FOLLOW STRICTLY:
 - Leave one blank line between separate sections or topic shifts.
 - Keep each line short and easy to read at a glance.
 - No dense paragraphs. No walls of text.
-- Plain, conversational English only.
+- Respond in the EXACT SAME LANGUAGE as the user's input (e.g., if input is in Hindi, respond in Hindi).
+- Keep formatting plain and conversational.
 
 Example of correct formatting:
 Here is how to register as a voter:
