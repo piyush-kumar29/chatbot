@@ -64,13 +64,13 @@ const processMessage = (msg) => {
     }
 
     // 5. GREETINGS
-    if (matches(['hello', 'hi', 'hey', 'start', 'help'])) {
+    if (matches(['hello', 'hi', 'hii', 'hey', 'helo', 'howdy', 'namaste', 'start', 'help'])) {
         return {
-            thought: "Greeting detected. Initializing context-aware welcome sequence.",
+            thought: "Greeting detected. Responding in a warm, friendly tone.",
             response: getRandomResponse([
-                "Neural link established. I am VoterAI, your expert system for electoral laws. How can I assist your registration or verification today?",
-                "Greetings! I am VoterAI, an intelligent assistant designed to help you navigate the Indian Electoral Process. What do you need help with?",
-                "Hello there. Welcome to the VoterAI expert system. Are you looking to register as a new voter, or update your existing details?"
+                "Hey there! 👋 I'm VoterAI — happy to help you with anything related to voting in India. What's on your mind?",
+                "Hi! Great to see you here. 😊 Whether it's registering to vote, checking eligibility, or updating your voter ID — I've got you covered. What do you need?",
+                "Hello! Welcome. I'm here to make the whole voter registration thing easy for you. Where would you like to start?"
             ]),
             quickReplies: ["Am I eligible?", "How to register?", "Update my info"]
         };
