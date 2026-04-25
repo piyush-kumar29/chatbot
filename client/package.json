@@ -13,7 +13,7 @@
     "@rolldown/pluginutils": "^1.0.0-rc.7",
     "axios": "^1.15.1",
     "framer-motion": "^12.38.0",
-    "lucide-react": "^1.8.0",
+    "lucide-react": "^1.11.0",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-markdown": "^10.1.0",

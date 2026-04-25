@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
+import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
@@ -537,9 +539,52 @@ const App = () => {
   const [authData, setAuthData] = useState({ username: '', email: '', password: '' });
   const [historyList, setHistoryList] = useState([]);
   const [activeConvId, setActiveConvId] = useState(null);
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
+  const [theme, setTheme] = useState('system');
+  const [chatSize, setChatSize] = useState('medium');
+  const [copiedIndex, setCopiedIndex] = useState(null);
 
   const chatEndRef = useRef(null);
+  const textareaRef = useRef(null);
+
+  // Initialize Theme
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('voterai-theme') || 'system';
+    setTheme(savedTheme);
+    applyTheme(savedTheme);
+  }, []);
+
+  const applyTheme = (t) => {
+    if (t === 'dark') {
+      document.documentElement.removeAttribute('data-theme');
+    } else if (t === 'light') {
+      document.documentElement.setAttribute('data-theme', 'light');
+    } else {
+      const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+      if (prefersLight) document.documentElement.setAttribute('data-theme', 'light');
+      else document.documentElement.removeAttribute('data-theme');
+    }
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('voterai-theme', newTheme);
+    applyTheme(newTheme);
+  };
+
+  const handleInputText = (e) => {
+    setInput(e.target.value);
+    if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto';
+        textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`;
+    }
+  };
+
+  const handleCopy = (text, idx) => {
+      navigator.clipboard.writeText(text);
+      setCopiedIndex(idx);
+      setTimeout(() => setCopiedIndex(null), 2000);
+  };
 
   useEffect(() => {
     if (isChatOpen && user && token) {
@@ -805,121 +850,264 @@ const App = () => {
 
       {/* Chat Overlay */}
       {isChatOpen && (
-        <div style={{ position: 'fixed', bottom: 0, right: 0, width: window.innerWidth < 480 ? '100vw' : (isExpanded ? '800px' : '420px'), height: window.innerWidth < 480 ? '92dvh' : (isExpanded ? '85vh' : '620px'), maxWidth: '100vw', maxHeight: '100dvh', backgroundColor: '#0a0a0c', border: '1px solid rgba(255,255,255,0.1)', borderRadius: window.innerWidth < 480 ? '20px 20px 0 0' : '24px', zIndex: 1000, display: 'flex', flexDirection: 'column', overflow: 'hidden', boxShadow: '0 30px 60px rgba(0,0,0,0.5)', transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)' }}>
-          <div style={{ padding: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <span style={{ fontWeight: 'bold' }}>Neural Core V4.0</span>
-            <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+        <motion.div 
+          className={`chat-window size-${chatSize}`}
+          drag={chatSize !== 'fullscreen'}
+          dragConstraints={{ left: -500, right: 0, top: -500, bottom: 0 }}
+          dragElastic={0.1}
+          dragMomentum={false}
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: 20, scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          style={{ zIndex: 1000 }}
+        >
+          <div className="chat-header">
+            <span style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: '10px', color: 'var(--text-primary)' }}>
+              <div className="chat-header-avatar" style={{ width: '28px', height: '28px' }}>🤖</div>
+              Neural Core V4.0
+            </span>
+            <div className="chat-header-actions">
               {user && (
                 <button
                   onClick={() => { setActiveConvId(null); setMessages([]); }}
-                  style={{ background: 'none', border: '1px solid #3b82f6', color: '#3b82f6', fontSize: '12px', borderRadius: '4px', cursor: 'pointer', padding: '2px 8px' }}
+                  style={{ background: 'none', border: '1px solid var(--accent-blue)', color: 'var(--accent-blue)', fontSize: '11px', borderRadius: '4px', cursor: 'pointer', padding: '2px 8px', fontWeight: 'bold' }}
                 >
                   NEW
                 </button>
               )}
-              <button onClick={() => setIsExpanded(!isExpanded)} style={{ background: 'none', border: 'none', color: 'gray', cursor: 'pointer', display: 'flex', padding: 0 }} title={isExpanded ? "Collapse" : "Expand"}>
-                {isExpanded ? (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" /></svg>
-                ) : (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7" /></svg>
-                )}
+              <button onClick={() => setShowSettings(!showSettings)} className="chat-settings-btn" aria-label="Settings" style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Settings size={16} />
               </button>
-              <button onClick={() => setIsChatOpen(false)} style={{ background: 'none', border: 'none', color: 'gray', fontSize: '24px', cursor: 'pointer', lineHeight: '18px', padding: 0 }}>×</button>
+              <button onClick={() => setIsChatOpen(false)} className="chat-close-btn" aria-label="Close" style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
             </div>
           </div>
 
+          <AnimatePresence>
+              {showSettings && (
+                  <motion.div 
+                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
+                      transition={{ duration: 0.15 }}
+                      className="chat-settings-panel"
+                  >
+                      <div className="setting-item">
+                          <span className="setting-label">Theme</span>
+                          <div className="setting-btn-group">
+                              <button className={`setting-btn ${theme === 'light' ? 'active' : ''}`} onClick={() => handleThemeChange('light')}><Sun size={14} /></button>
+                              <button className={`setting-btn ${theme === 'dark' ? 'active' : ''}`} onClick={() => handleThemeChange('dark')}><Moon size={14} /></button>
+                              <button className={`setting-btn ${theme === 'system' ? 'active' : ''}`} onClick={() => handleThemeChange('system')}><Monitor size={14} /></button>
+                          </div>
+                      </div>
+                      <div className="setting-item">
+                          <span className="setting-label">Window Size</span>
+                          <div className="setting-btn-group">
+                              <button className={`setting-btn ${chatSize === 'small' ? 'active' : ''}`} onClick={() => setChatSize('small')}>S</button>
+                              <button className={`setting-btn ${chatSize === 'medium' ? 'active' : ''}`} onClick={() => setChatSize('medium')}>M</button>
+                              <button className={`setting-btn ${chatSize === 'fullscreen' ? 'active' : ''}`} onClick={() => setChatSize('fullscreen')}><Maximize size={14} /></button>
+                          </div>
+                      </div>
+                      <div className="setting-item">
+                          <span className="setting-label">Language</span>
+                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>Auto-detect ✨</span>
+                      </div>
+                  </motion.div>
+              )}
+          </AnimatePresence>
+
           {!activeConvId && messages.length === 0 && (
-            <div style={{ padding: '20px', flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+            <div className="chat-body custom-scrollbar" style={{ padding: '20px' }}>
               {user ? (
                 historyList.length > 0 ? (
                   <>
-                    <div style={{ color: 'gray', fontSize: '12px', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '1px' }}>YOUR PAST SESSIONS</div>
+                    <div style={{ color: 'var(--text-secondary)', fontSize: '11px', marginBottom: '15px', fontWeight: 'bold', letterSpacing: '1px' }}>YOUR PAST SESSIONS</div>
                     {historyList.map(h => (
                       <div
                         key={h._id}
                         onClick={() => loadConversation(h)}
-                        style={{ padding: '15px', backgroundColor: 'rgba(59,130,246,0.05)', borderRadius: '12px', marginBottom: '10px', cursor: 'pointer', border: '1px solid rgba(59,130,246,0.2)', transition: 'background 0.2s', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-                        onMouseOver={e => e.currentTarget.style.backgroundColor = 'rgba(59,130,246,0.1)'}
-                        onMouseOut={e => e.currentTarget.style.backgroundColor = 'rgba(59,130,246,0.05)'}
+                        style={{ padding: '12px', backgroundColor: 'var(--bg-input)', borderRadius: '12px', marginBottom: '8px', cursor: 'pointer', border: '1px solid var(--glass-border)', transition: 'background 0.2s', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                        onMouseOver={e => e.currentTarget.style.backgroundColor = 'var(--bg-hover)'}
+                        onMouseOut={e => e.currentTarget.style.backgroundColor = 'var(--bg-input)'}
                       >
                         <div style={{ flex: 1, overflow: 'hidden' }}>
-                          <div style={{ fontSize: '14px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'white', fontWeight: '500' }}>{h.title}</div>
-                          <div style={{ fontSize: '11px', color: '#64748b', marginTop: '5px' }}>{new Date(h.updatedAt).toLocaleString()}</div>
+                          <div style={{ fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', color: 'var(--text-primary)', fontWeight: '600' }}>{h.title}</div>
+                          <div style={{ fontSize: '10px', color: 'var(--text-secondary)', marginTop: '4px' }}>{new Date(h.updatedAt).toLocaleString()}</div>
                         </div>
                         <button
                           onClick={(e) => deleteConversation(e, h._id)}
-                          style={{ background: 'none', border: 'none', color: '#ef4444', fontSize: '16px', cursor: 'pointer', padding: '5px', opacity: 0.7, transition: 'opacity 0.2s' }}
+                          style={{ background: 'none', border: 'none', color: '#ef4444', fontSize: '14px', cursor: 'pointer', padding: '5px', opacity: 0.7, transition: 'opacity 0.2s' }}
                           onMouseOver={e => e.currentTarget.style.opacity = 1}
                           onMouseOut={e => e.currentTarget.style.opacity = 0.7}
-                          title="Delete Session"
                         >
-                          🗑️
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     ))}
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', marginTop: '30px', borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: '30px' }}>
-                      <div style={{ fontSize: '30px', marginBottom: '10px' }}>✨</div>
-                      <h4 style={{ color: '#e2e8f0', marginBottom: '5px' }}>Need something else?</h4>
-                      <p style={{ color: '#64748b', fontSize: '13px', textAlign: 'center' }}>Type a message below to start a brand new conversation.</p>
+                    
+                    {/* New Chat Suggestions */}
+                    <div style={{ marginTop: '30px', borderTop: '1px dashed var(--glass-border)', paddingTop: '20px' }}>
+                      <div style={{ color: 'var(--text-secondary)', fontSize: '11px', marginBottom: '12px', fontWeight: 'bold', letterSpacing: '1px' }}>START NEW SESSION</div>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {[
+                              { icon: '📝', label: 'How do I register to vote?' },
+                              { icon: '📄', label: 'Documents required for voting' },
+                              { icon: '🗓️', label: 'Upcoming elections' },
+                          ].map((opt) => (
+                              <button
+                                  key={opt.label}
+                                  className="welcome-option-btn"
+                                  onClick={() => { setActiveConvId(null); setMessages([]); handleSend(opt.label, false); }}
+                              >
+                                  <span className="welcome-option-icon">{opt.icon}</span>
+                                  <span className="welcome-option-label">{opt.label}</span>
+                              </button>
+                          ))}
+                      </div>
                     </div>
                   </>
                 ) : (
                   <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
                     <div style={{ fontSize: '50px', marginBottom: '20px' }}>🤖</div>
-                    <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Welcome to VoterAI</h3>
-                    <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '80%', lineHeight: '1.6' }}>You have no past sessions. Type a query below to initiate a secure neural link and start your first conversation!</p>
+                    <h3 style={{ marginBottom: '10px', fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>Welcome to VoterAI</h3>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '13px', maxWidth: '90%', lineHeight: '1.6', marginBottom: '30px' }}>You have no past sessions. Select a query to start!</p>
+                    
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                        {[
+                            { icon: '📝', label: 'How do I register to vote?' },
+                            { icon: '📄', label: 'Documents required for voting' },
+                            { icon: '🗓️', label: 'Upcoming elections' },
+                        ].map((opt) => (
+                            <button
+                                key={opt.label}
+                                className="welcome-option-btn"
+                                onClick={() => handleSend(opt.label, false)}
+                            >
+                                <span className="welcome-option-icon">{opt.icon}</span>
+                                <span className="welcome-option-label">{opt.label}</span>
+                            </button>
+                        ))}
+                    </div>
                   </div>
                 )
               ) : (
                 <div style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
                   <div style={{ fontSize: '50px', marginBottom: '20px' }}>🛡️</div>
-                  <h3 style={{ marginBottom: '10px', fontSize: '1.5rem' }}>Guest Session</h3>
-                  <p style={{ color: '#94a3b8', fontSize: '14px', maxWidth: '80%', lineHeight: '1.6' }}>You are currently unauthenticated. Your session history will not be saved. Type below to begin!</p>
+                  <h3 style={{ marginBottom: '10px', fontSize: '1.2rem', color: 'var(--text-primary)', fontWeight: 'bold' }}>Guest Session</h3>
+                  <p style={{ color: 'var(--text-secondary)', fontSize: '13px', maxWidth: '90%', lineHeight: '1.6', marginBottom: '30px' }}>You are unauthenticated. Your session won't be saved.</p>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%' }}>
+                      {[
+                          { icon: '📝', label: 'How do I register to vote?' },
+                          { icon: '📄', label: 'Documents required for voting' },
+                          { icon: '🗓️', label: 'Upcoming elections' },
+                      ].map((opt) => (
+                          <button
+                              key={opt.label}
+                              className="welcome-option-btn"
+                              onClick={() => handleSend(opt.label, false)}
+                          >
+                              <span className="welcome-option-icon">{opt.icon}</span>
+                              <span className="welcome-option-label">{opt.label}</span>
+                          </button>
+                      ))}
+                  </div>
                 </div>
               )}
             </div>
           )}
 
-          <div style={{ flex: 1, overflowY: 'auto', padding: '20px', display: (!activeConvId && messages.length === 0) ? 'none' : 'flex', flexDirection: 'column', gap: '15px' }}>
-
+          <div className="chat-body custom-scrollbar" style={{ display: (!activeConvId && messages.length === 0) ? 'none' : 'flex' }}>
             {messages.map((m, i) => (
-              <div key={i} style={{ alignSelf: m.role === 'user' ? 'flex-end' : 'flex-start', maxWidth: '80%' }}>
-                {m.thought && <div style={{ fontSize: '10px', color: '#8b5cf6', marginBottom: '4px', fontStyle: 'italic' }}>{m.thought}</div>}
-                <div style={{ padding: '12px 16px', borderRadius: '16px', backgroundColor: m.role === 'user' ? '#3b82f6' : 'rgba(255,255,255,0.05)', color: 'white' }}>
-                  {m.content}
+              <div key={i} className={`msg-row ${m.role === 'user' ? 'msg-row--user' : 'msg-row--bot'}`}>
+                {m.role === 'bot' && m.thought && (
+                    <div className="thought-pill">
+                        <Zap size={9} />
+                        <span>{m.thought}</span>
+                    </div>
+                )}
+                <div className={`message-card ${m.role} animate-fade-in`}>
+                  {m.role === 'bot' ? (
+                      <>
+                          <span className="bot-text" style={{ whiteSpace: 'pre-wrap' }}>{m.content}</span>
+                          <button className="copy-btn" onClick={() => handleCopy(m.content, i)}>
+                              {copiedIndex === i ? <Check size={12} color="#10b981" /> : <Copy size={12} />}
+                          </button>
+                      </>
+                  ) : (
+                      m.content
+                  )}
                 </div>
               </div>
             ))}
-            {isLoading && <div style={{ fontSize: '12px', color: '#3b82f6' }}>Core is thinking...</div>}
-            <div ref={chatEndRef} />
-          </div>
-          <div style={{ padding: '20px', borderTop: '1px solid rgba(255,255,255,0.1)' }}>
-            {attachedFile && (
-              <div style={{ marginBottom: '10px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', backgroundColor: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '12px', fontSize: '13px', color: '#60a5fa' }}>
-                📄 {attachedFile.name}
-                <button onClick={() => setAttachedFile(null)} style={{ background: 'none', border: 'none', color: '#60a5fa', cursor: 'pointer', marginLeft: '5px', fontSize: '16px', lineHeight: '10px' }}>×</button>
+            {isLoading && (
+              <div className="msg-row msg-row--bot">
+                  <div className="typing-indicator">
+                      <span></span><span></span><span></span>
+                  </div>
               </div>
             )}
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div ref={chatEndRef} />
+          </div>
+
+          <div className="chat-footer">
+            {attachedFile && (
+              <div style={{ marginBottom: '10px', display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '6px 14px', backgroundColor: 'var(--bg-input)', border: '1px solid var(--glass-border)', borderRadius: '12px', fontSize: '12px', color: 'var(--accent-blue)', fontWeight: '600' }}>
+                📄 {attachedFile.name}
+                <button onClick={() => setAttachedFile(null)} style={{ background: 'none', border: 'none', color: 'var(--accent-blue)', cursor: 'pointer', marginLeft: '5px', fontSize: '16px', lineHeight: '10px' }}>×</button>
+              </div>
+            )}
+            <div className="chat-input-row" style={{ alignItems: 'flex-end' }}>
               <input
                 type="file"
                 id="file-upload"
                 style={{ display: 'none' }}
                 onChange={(e) => setAttachedFile(e.target.files[0])}
               />
-              <label htmlFor="file-upload" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '45px', backgroundColor: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '10px', cursor: 'pointer', color: 'gray', transition: 'all 0.2s' }} title="Attach Document" onMouseOver={e => e.currentTarget.style.color = 'white'} onMouseOut={e => e.currentTarget.style.color = 'gray'}>
+              <label htmlFor="file-upload" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '36px', height: '36px', backgroundColor: 'transparent', borderRadius: '10px', cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s', marginBottom: '4px' }} title="Attach Document" onMouseOver={e => e.currentTarget.style.color = 'var(--text-primary)'} onMouseOut={e => e.currentTarget.style.color = 'var(--text-secondary)'}>
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" /></svg>
               </label>
-              <input
-                type="text" value={input} onChange={(e) => setInput(e.target.value)}
-                onKeyPress={e => e.key === 'Enter' && handleSend()}
-                placeholder="Type a query..."
-                style={{ flex: 1, padding: '12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', fontSize: '16px', minWidth: 0 }}
+              <textarea
+                  ref={textareaRef}
+                  value={input}
+                  onChange={handleInputText}
+                  onKeyDown={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                          e.preventDefault();
+                          if (!isLoading) {
+                              handleSend();
+                              if (textareaRef.current) textareaRef.current.style.height = 'auto';
+                          }
+                      }
+                  }}
+                  placeholder="Ask about voting, registration…"
+                  className="chat-input custom-scrollbar"
+                  disabled={isLoading}
+                  rows={1}
               />
-              <button onClick={() => handleSend()} style={{ padding: '0 20px', backgroundColor: '#3b82f6', border: 'none', borderRadius: '10px', color: 'white', fontWeight: 'bold', cursor: 'pointer', transition: 'all 0.2s' }} onMouseOver={e => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={e => e.currentTarget.style.transform = 'scale(1)'}>Send</button>
+              <button
+                  onClick={() => {
+                      handleSend();
+                      if (textareaRef.current) textareaRef.current.style.height = 'auto';
+                  }}
+                  disabled={isLoading || (!input.trim() && !attachedFile)}
+                  className="chat-send-btn"
+                  aria-label="Send"
+                  style={{ marginBottom: '4px' }}
+              >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              </button>
+            </div>
+            
+            <div className="chat-footer-meta" style={{ marginTop: '8px' }}>
+                <span className="flex items-center gap-1" style={{ fontSize: '10px', color: 'var(--text-secondary)' }}>
+                    <Shield size={10} /> Secure session
+                </span>
             </div>
           </div>
-        </div>
+        </motion.div>
       )}
     </div>
   );
