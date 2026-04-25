@@ -11,47 +11,50 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ FINAL CORS (works with Vercel + localhost)
+// CORS (allow frontend + local)
 app.use(cors({
-    origin: true,
+    origin: [
+        "http://localhost:5173",
+        "https://voterai.vercel.app"
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true
 }));
 
-// Middleware
 app.use(express.json());
 
-// Database Connection
+// MongoDB Connection (clean + stable)
 const connectDB = async () => {
     try {
-        await mongoose.connect(process.env.MONGO_URI);
-        console.log('✅ MongoDB Connected');
+        await mongoose.connect(process.env.MONGO_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+        });
+        console.log("MongoDB Connected");
     } catch (err) {
-        console.error('❌ MongoDB Connection Error:', err.message);
-        setTimeout(connectDB, 5000);
+        console.error("MongoDB Connection Error:", err.message);
+        process.exit(1);
     }
 };
+
 connectDB();
 
-// Root Route (important for Render check)
+// Root route
 app.get("/", (req, res) => {
-    res.send("VoterAI Server Running 🚀");
+    res.send("VoterAI Server is running 🚀");
 });
 
-// API Routes
+// API routes
 app.use('/api/chat', chatRoutes);
 app.use('/api/auth', authRoutes);
 
-// Health Route
+// Health check
 app.get('/health', (req, res) => {
-    res.json({ status: 'OK' });
+    res.json({ status: 'OK', message: 'Neural Core Active' });
 });
 
-// ✅ SAFE fallback (NO '*' crash)
-app.use((req, res) => {
-    res.status(404).json({ message: "Route not found" });
-});
-
-// Start Server
+// Start server
 app.listen(PORT, () => {
-    console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`Server running on port ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
