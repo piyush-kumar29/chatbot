@@ -803,10 +803,21 @@ const App = () => {
       };
       const res = await axios.post(`${API_BASE_URL}/api/chat`, payload, { headers });
       const data = res.data;
-      setMessages(prev => [...prev, { role: 'bot', content: data.content, thought: data.thought }]);
-      // Only speak if voice is enabled
+      
+      let finalContent = data.content || "";
+      let ttsContent = finalContent;
+      
+      // Extract the hidden TTS tag if it exists (for dual-language output)
+      const ttsMatch = finalContent.match(/\[\[TTS:\s*(.*?)\]\]/is);
+      if (ttsMatch) {
+          ttsContent = ttsMatch[1];
+          finalContent = finalContent.replace(/\[\[TTS:\s*(.*?)\]\]/is, "").trim();
+      }
+
+      setMessages(prev => [...prev, { role: 'bot', content: finalContent, thought: data.thought }]);
+      
       if (voiceEnabledRef.current) {
-        speakText(data.content || "Sorry, I could not process that.");
+        speakText(ttsContent || "Sorry, I could not process that.");
       }
       if (data.conversationId) setActiveConvId(data.conversationId);
     } catch (e) {
