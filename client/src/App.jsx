@@ -550,9 +550,13 @@ const App = () => {
   const [pendingQuery, setPendingQuery] = useState(null);
   const [chatRndKey, setChatRndKey] = useState(0);
   const [agentMode, setAgentMode] = useState(false);
+  const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [sourcesExpanded, setSourcesExpanded] = useState(false);
   const [speechLang, setSpeechLang] = useState('en-US');
+
+  const voiceEnabledRef = useRef(false);
+  useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
 
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
@@ -713,6 +717,9 @@ const App = () => {
   };
 
   const handleSend = async (text, isInitial = false) => {
+    // Stop any ongoing speech before sending
+    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+
     const msg = text || input;
     if (!msg.trim() && !attachedFile && !isInitial) return;
 
@@ -741,7 +748,10 @@ const App = () => {
       );
       const data = res.data;
       setMessages(prev => [...prev, { role: 'bot', content: data.content, thought: data.thought }]);
-      speakText(data.content || "Sorry, I could not process that.");
+      // Only speak if voice is enabled
+      if (voiceEnabledRef.current) {
+        speakText(data.content || "Sorry, I could not process that.");
+      }
       if (data.conversationId) setActiveConvId(data.conversationId);
     } catch (e) {
       setMessages(prev => [...prev, { role: 'bot', content: "Neural Core Offline. Please check your connection." }]);
@@ -1091,7 +1101,7 @@ const App = () => {
               <button onClick={() => setShowSettings(!showSettings)} className="chat-settings-btn" aria-label="Settings" style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <Settings size={16} />
               </button>
-              <button onClick={() => setIsChatOpen(false)} className="chat-close-btn" aria-label="Close" style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <button onClick={() => { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setIsChatOpen(false); }} className="chat-close-btn" aria-label="Close" style={{ width: '28px', height: '28px', borderRadius: '8px', background: 'transparent', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
               </button>
             </div>
@@ -1114,6 +1124,23 @@ const App = () => {
                               style={{ width: 'auto', padding: '4px 12px' }}
                           >
                               {agentMode ? 'On' : 'Off'}
+                          </button>
+                      </div>
+                      <div className="setting-item">
+                          <span className="setting-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                              🔊 Voice Response
+                          </span>
+                          <button 
+                              className={`setting-btn ${voiceEnabled ? 'active' : ''}`} 
+                              onClick={() => {
+                                  setVoiceEnabled(v => {
+                                      if (v && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+                                      return !v;
+                                  });
+                              }}
+                              style={{ width: 'auto', padding: '4px 12px' }}
+                          >
+                              {voiceEnabled ? 'On' : 'Off'}
                           </button>
                       </div>
                       <div className="setting-item">
@@ -1352,6 +1379,36 @@ const App = () => {
                   disabled={isLoading}
                   rows={1}
               />
+              <button
+                  onClick={() => {
+                      setVoiceEnabled(v => {
+                          if (v && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+                          return !v;
+                      });
+                  }}
+                  className="chat-mic-btn"
+                  aria-label="Toggle Voice Response"
+                  title={voiceEnabled ? 'Voice Response: ON — click to turn off' : 'Voice Response: OFF — click to turn on'}
+                  style={{
+                      marginBottom: '4px',
+                      marginRight: '4px',
+                      color: voiceEnabled ? '#ffffff' : 'var(--text-secondary)',
+                      background: voiceEnabled ? 'var(--accent-blue)' : 'transparent',
+                      border: voiceEnabled ? '1.5px solid var(--accent-blue)' : '1.5px solid transparent',
+                      borderRadius: '10px',
+                      padding: '4px 8px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '4px',
+                      fontSize: '11px',
+                      fontWeight: '600',
+                      transition: 'all 0.2s ease',
+                      cursor: 'pointer',
+                  }}
+              >
+                  <span style={{ fontSize: '13px' }}>{voiceEnabled ? '🔊' : '🔇'}</span>
+                  <span>{voiceEnabled ? 'Voice ON' : 'Voice'}</span>
+              </button>
               <button
                   onClick={isListening ? stopListening : startListening}
                   className={`chat-mic-btn ${isListening ? 'listening' : ''}`}
