@@ -805,19 +805,24 @@ const App = () => {
       const data = res.data;
       
       let finalContent = data.content || "";
-      let ttsContent = finalContent;
+      let ttsContent = "";
       
-      // Extract the hidden TTS tag if it exists (for dual-language output)
-      const ttsMatch = finalContent.match(/\[\[TTS:\s*(.*?)\]\]/is);
+      // Flexible regex to catch [[TTS: ...]], [[ tts: ... ]], etc.
+      const ttsMatch = finalContent.match(/\[\[\s*TTS\s*:\s*([\s\S]*?)\s*\]\]/i);
+      
       if (ttsMatch) {
-          ttsContent = ttsMatch[1];
-          finalContent = finalContent.replace(/\[\[TTS:\s*(.*?)\]\]/is, "").trim();
+          ttsContent = ttsMatch[1].trim();
+          // Remove the tag from the displayed text
+          finalContent = finalContent.replace(/\[\[\s*TTS\s*:\s*[\s\S]*?\s*\]\]/i, "").trim();
       }
+
+      // Final fallback: if no TTS tag was found, speak the main content
+      const textToSpeak = ttsContent || finalContent;
 
       setMessages(prev => [...prev, { role: 'bot', content: finalContent, thought: data.thought }]);
       
-      if (voiceEnabledRef.current) {
-        speakText(ttsContent || "Sorry, I could not process that.");
+      if (voiceEnabledRef.current && textToSpeak) {
+        speakText(textToSpeak);
       }
       if (data.conversationId) setActiveConvId(data.conversationId);
     } catch (e) {
