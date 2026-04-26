@@ -590,7 +590,24 @@ const App = () => {
   const speakText = (text) => {
       if ('speechSynthesis' in window) {
           const utterance = new SpeechSynthesisUtterance(text);
-          utterance.lang = speechLang;
+          const currentLang = speechLangRef.current;
+          utterance.lang = currentLang;
+          
+          // The browser doesn't always auto-switch voices just by setting .lang
+          // We must explicitly find a matching voice and set utterance.voice
+          const voices = window.speechSynthesis.getVoices();
+          let targetVoice = voices.find(v => v.lang === currentLang);
+          
+          // Fallback to base language if exact region match isn't found
+          if (!targetVoice) {
+              const baseLang = currentLang.split('-')[0];
+              targetVoice = voices.find(v => v.lang.startsWith(baseLang));
+          }
+          
+          if (targetVoice) {
+              utterance.voice = targetVoice;
+          }
+
           window.speechSynthesis.speak(utterance);
       }
   };
