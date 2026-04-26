@@ -591,13 +591,16 @@ const App = () => {
   useEffect(() => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.getVoices();
+      // Chrome requires this event listener to populate voices
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
     }
   }, []);
 
   const speakText = (text) => {
       if (!text || !('speechSynthesis' in window)) return;
 
-      // Cancel any current speech to ensure the new one starts immediately
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(text);
@@ -606,18 +609,24 @@ const App = () => {
       
       const voices = window.speechSynthesis.getVoices();
       
-      // Try to find the best matching voice
-      let targetVoice = voices.find(v => v.lang === currentLang);
+      // Robust matching: 
+      // 1. Exact lang match (hi-IN)
+      // 2. Normalized lang match (hi_IN -> hi-IN)
+      // 3. Base language match (hi)
+      // 4. Name-based match (e.g. voice named "Hindi")
+      let targetVoice = voices.find(v => v.lang === currentLang || v.lang.replace('_', '-') === currentLang);
+      
       if (!targetVoice) {
-          const baseLang = currentLang.split('-')[0];
-          targetVoice = voices.find(v => v.lang.startsWith(baseLang));
+          const baseLang = currentLang.split('-')[0]; // "hi"
+          targetVoice = voices.find(v => v.lang.startsWith(baseLang) || 
+                                     v.name.toLowerCase().includes(baseLang) ||
+                                     v.lang.includes(baseLang));
       }
       
       if (targetVoice) {
           utterance.voice = targetVoice;
       }
 
-      // Voice settings
       utterance.rate = 1.0;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
