@@ -18,13 +18,7 @@ const handleConversation = async (sessionId, userMessage, history = [], agentMod
     
     const languageMap = {
         'en-US': 'English',
-        'hi-IN': 'Hindi',
-        'bn-IN': 'Bengali',
-        'ta-IN': 'Tamil',
-        'te-IN': 'Telugu',
-        'mr-IN': 'Marathi',
-        'gu-IN': 'Gujarati',
-        'kn-IN': 'Kannada'
+        'hi-IN': 'Hindi'
     };
 
     const targetLanguage = voiceEnabled && languageMap[speechLang] && speechLang !== 'en-US' ? languageMap[speechLang] : null;

@@ -1239,12 +1239,6 @@ const App = () => {
                           >
                               <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="en-US">English</option>
                               <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="hi-IN">Hindi</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="bn-IN">Bengali</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="ta-IN">Tamil</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="te-IN">Telugu</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="mr-IN">Marathi</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="gu-IN">Gujarati</option>
-                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="kn-IN">Kannada</option>
                           </select>
                       </div>
                   </motion.div>
