@@ -28,7 +28,7 @@ const handleConversation = async (sessionId, userMessage, history = [], agentMod
     };
     const targetLanguage = voiceEnabled && languageMap[speechLang] ? languageMap[speechLang] : null;
     const langRule = targetLanguage 
-        ? `- You MUST respond entirely in ${targetLanguage}, regardless of the language the user asked in.`
+        ? `- TRANSLATION MANDATE: You MUST write your ENTIRE response in ${targetLanguage}. Do NOT write in English. If the user asks in English, reply entirely in ${targetLanguage}.`
         : `- Respond in the EXACT SAME LANGUAGE as the user's input.`;
     
     try {
