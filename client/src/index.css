@@ -495,7 +495,7 @@ button, a, [role="button"] { min-height: 44px; }
   top: 70px;
   right: 16px;
   width: 240px;
-  background: var(--bg-chat);
+  background: var(--bg-main);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);

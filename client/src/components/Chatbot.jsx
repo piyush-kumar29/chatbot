@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import axios from 'axios';
-import { Send, X, Cpu, Zap, Trash2, Shield, ExternalLink, Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Mic, MicOff, ChevronDown, ChevronUp } from 'lucide-react';
+import { Send, X, Cpu, Zap, Trash2, Shield, ExternalLink, Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Mic, MicOff, ChevronDown, ChevronUp, Volume2, VolumeX } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Quick-start options shown in the welcome card ──────────────────────────
@@ -58,6 +58,7 @@ const Chatbot = ({ isOpen, onClose }) => {
     const [chatSize, setChatSize] = useState('medium');
     const [copiedIndex, setCopiedIndex] = useState(null);
     const [agentMode, setAgentMode] = useState(false);
+    const [voiceEnabled, setVoiceEnabled] = useState(false);
     const [isListening, setIsListening] = useState(false);
     const [sourcesExpanded, setSourcesExpanded] = useState(false);
 
@@ -199,8 +200,9 @@ const Chatbot = ({ isOpen, onClose }) => {
                     timestamp: new Date(),
                 }]);
                 setIsLoading(false);
-                // Speak the response if voice is enabled (for now, always speak if supported)
-                speakText(content || 'Sorry, I could not process that.');
+                if (voiceEnabled) {
+                    speakText(content || 'Sorry, I could not process that.');
+                }
             }, 500);
         } catch {
             setMessages(prev => [...prev, {
@@ -275,6 +277,7 @@ const Chatbot = ({ isOpen, onClose }) => {
                                 {agentMode ? 'On' : 'Off'}
                             </button>
                         </div>
+
                         <div className="setting-item">
                             <span className="setting-label">Theme</span>
                             <div className="setting-btn-group">
@@ -430,6 +433,20 @@ const Chatbot = ({ isOpen, onClose }) => {
                         disabled={isLoading}
                         rows={1}
                     />
+                    <button
+                        onClick={() => {
+                            setVoiceEnabled(!voiceEnabled);
+                            if (voiceEnabled && 'speechSynthesis' in window) {
+                                window.speechSynthesis.cancel();
+                            }
+                        }}
+                        className="chat-mic-btn"
+                        aria-label="Toggle Voice Response"
+                        style={{ marginBottom: '4px', marginRight: '4px', color: voiceEnabled ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
+                        title={voiceEnabled ? "Voice Output On" : "Voice Output Off"}
+                    >
+                        {voiceEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                    </button>
                     <button
                         onClick={isListening ? stopListening : startListening}
                         className={`chat-mic-btn ${isListening ? 'listening' : ''}`}
