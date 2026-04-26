@@ -1,11 +1,13 @@
 import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import axios from 'axios';
-import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap, ShieldCheck, Globe, Users, FileCheck, BarChart3, MapPin, ArrowRight, Activity, Lock, Award, FileText, Landmark, AlertCircle } from 'lucide-react';
+import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap, ShieldCheck, Globe, Users, FileCheck, BarChart3, MapPin, ArrowRight, Activity, Lock, Award, FileText, Landmark, AlertCircle, ChevronDown, ChevronUp, Mic, MicOff, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
 
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
+
+const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000' : 'https://chatbot-0g7m.onrender.com';
 
 const SimulationPage = () => {
   const [votes, setVotes] = useState({
@@ -166,7 +168,7 @@ const AdminDashboard = ({ token, currentUser }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get('https://chatbot-0g7m.onrender.com/api/auth/users', {
+        const res = await axios.get(`${API_BASE_URL}/api/auth/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUsersList(res.data);
@@ -182,7 +184,7 @@ const AdminDashboard = ({ token, currentUser }) => {
   const handleRoleChange = async (userId, currentRole) => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin';
     try {
-      await axios.put(`https://chatbot-0g7m.onrender.com/api/auth/users/${userId}/role`, { role: newRole }, {
+      await axios.put(`${API_BASE_URL}/api/auth/users/${userId}/role`, { role: newRole }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsersList(prev => prev.map(u => u._id === userId ? { ...u, role: newRole } : u));
@@ -194,7 +196,7 @@ const AdminDashboard = ({ token, currentUser }) => {
   const handleDeleteUser = async (userId) => {
     if (!window.confirm("Are you sure you want to completely remove this user? This action cannot be undone.")) return;
     try {
-      await axios.delete(`https://chatbot-0g7m.onrender.com/api/auth/users/${userId}`, {
+      await axios.delete(`${API_BASE_URL}/api/auth/users/${userId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUsersList(prev => prev.filter(u => u._id !== userId));
@@ -547,9 +549,44 @@ const App = () => {
   const [copiedIndex, setCopiedIndex] = useState(null);
   const [pendingQuery, setPendingQuery] = useState(null);
   const [chatRndKey, setChatRndKey] = useState(0);
+  const [agentMode, setAgentMode] = useState(false);
+  const [isListening, setIsListening] = useState(false);
+  const [sourcesExpanded, setSourcesExpanded] = useState(false);
+  const [speechLang, setSpeechLang] = useState('en-US');
 
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
+  const recognitionRef = useRef(null);
+
+  // Voice Assistant Functions
+  const startListening = () => {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+          alert('Speech recognition not supported in this browser.');
+          return;
+      }
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognitionRef.current = new SpeechRecognition();
+      recognitionRef.current.continuous = false;
+      recognitionRef.current.interimResults = false;
+      recognitionRef.current.lang = speechLang;
+
+      recognitionRef.current.onstart = () => setIsListening(true);
+      recognitionRef.current.onresult = (event) => setInput(event.results[0][0].transcript);
+      recognitionRef.current.onend = () => setIsListening(false);
+      recognitionRef.current.start();
+  };
+
+  const stopListening = () => {
+      if (recognitionRef.current) recognitionRef.current.stop();
+  };
+
+  const speakText = (text) => {
+      if ('speechSynthesis' in window) {
+          const utterance = new SpeechSynthesisUtterance(text);
+          utterance.lang = speechLang;
+          window.speechSynthesis.speak(utterance);
+      }
+  };
 
   // Initialize App Theme
   useEffect(() => {
@@ -610,7 +647,7 @@ const App = () => {
 
   const fetchHistory = async () => {
     try {
-      const res = await axios.get('https://chatbot-0g7m.onrender.com/api/chat/history', {
+      const res = await axios.get(`${API_BASE_URL}/api/chat/history`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistoryList(res.data);
@@ -631,7 +668,7 @@ const App = () => {
   const deleteConversation = async (e, convId) => {
     e.stopPropagation();
     try {
-      await axios.delete(`https://chatbot-0g7m.onrender.com/api/chat/${convId}`, {
+      await axios.delete(`${API_BASE_URL}/api/chat/${convId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setHistoryList(prev => prev.filter(c => c._id !== convId));
@@ -650,7 +687,7 @@ const App = () => {
     setIsLoading(true);
     try {
       const endpoint = type === 'login' ? '/api/auth/login' : '/api/auth/signup';
-      const res = await axios.post(`https://chatbot-0g7m.onrender.com${endpoint}`, authData);
+      const res = await axios.post(`${API_BASE_URL}${endpoint}`, authData);
       setToken(res.data.token);
       setUser(res.data.user);
       localStorage.setItem('voter_token', res.data.token);
@@ -698,12 +735,13 @@ const App = () => {
 
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat',
-        { message: payloadMessage, conversationId: activeConvId },
+      const res = await axios.post(`${API_BASE_URL}/api/chat`,
+        { message: payloadMessage, conversationId: activeConvId, agentMode: agentMode },
         { headers }
       );
       const data = res.data;
       setMessages(prev => [...prev, { role: 'bot', content: data.content, thought: data.thought }]);
+      speakText(data.content || "Sorry, I could not process that.");
       if (data.conversationId) setActiveConvId(data.conversationId);
     } catch (e) {
       setMessages(prev => [...prev, { role: 'bot', content: "Neural Core Offline. Please check your connection." }]);
@@ -1069,6 +1107,16 @@ const App = () => {
                       className="chat-settings-panel"
                   >
                       <div className="setting-item">
+                          <span className="setting-label">Agent Mode</span>
+                          <button 
+                              className={`setting-btn ${agentMode ? 'active' : ''}`} 
+                              onClick={() => setAgentMode(!agentMode)}
+                              style={{ width: 'auto', padding: '4px 12px' }}
+                          >
+                              {agentMode ? 'On' : 'Off'}
+                          </button>
+                      </div>
+                      <div className="setting-item">
                           <span className="setting-label">Chat Theme</span>
                           <div className="setting-btn-group">
                               <button className={`setting-btn ${chatTheme === 'light' ? 'active' : ''}`} onClick={() => handleChatThemeChange('light')}><Sun size={14} /></button>
@@ -1077,8 +1125,21 @@ const App = () => {
                           </div>
                       </div>
                       <div className="setting-item">
-                          <span className="setting-label">Language</span>
-                          <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', fontWeight: '600' }}>Auto-detect ✨</span>
+                          <span className="setting-label">Voice Language</span>
+                          <select 
+                              value={speechLang} 
+                              onChange={(e) => setSpeechLang(e.target.value)}
+                              style={{ padding: '4px 8px', borderRadius: '8px', background: 'var(--bg-input)', color: 'var(--text-primary)', border: '1px solid var(--glass-border)', fontSize: '0.75rem', outline: 'none', cursor: 'pointer' }}
+                          >
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="en-US">English</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="hi-IN">Hindi</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="bn-IN">Bengali</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="ta-IN">Tamil</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="te-IN">Telugu</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="mr-IN">Marathi</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="gu-IN">Gujarati</option>
+                              <option style={{ background: 'var(--bg-main)', color: 'var(--text-primary)' }} value="kn-IN">Kannada</option>
+                          </select>
                       </div>
                   </motion.div>
               )}
@@ -1215,6 +1276,44 @@ const App = () => {
                   </div>
               </div>
             )}
+
+            {/* Official Sources Section */}
+            <div className="official-sources-section">
+                <button 
+                    className="sources-toggle-btn"
+                    onClick={() => setSourcesExpanded(!sourcesExpanded)}
+                >
+                    <span>Official Sources</span>
+                    {sourcesExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                </button>
+                <AnimatePresence>
+                    {sourcesExpanded && (
+                        <motion.div 
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: 'auto' }}
+                            exit={{ opacity: 0, height: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="sources-content"
+                        >
+                            <div className="sources-grid">
+                                <a href="https://www.nvsp.in" target="_blank" rel="noopener noreferrer" className="source-link" onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <ExternalLink size={14} /><span>NVSP Portal</span>
+                                </a>
+                                <a href="https://eci.gov.in" target="_blank" rel="noopener noreferrer" className="source-link" onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <ExternalLink size={14} /><span>ECI Portal</span>
+                                </a>
+                                <a href="https://www.eci.gov.in/voter/voter" target="_blank" rel="noopener noreferrer" className="source-link" onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <ExternalLink size={14} /><span>Voter Helpline</span>
+                                </a>
+                                <a href="https://www.aadhaar.gov.in" target="_blank" rel="noopener noreferrer" className="source-link" onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}>
+                                    <ExternalLink size={14} /><span>Aadhaar Portal</span>
+                                </a>
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+            </div>
+
             <div ref={chatEndRef} />
           </div>
 
@@ -1253,6 +1352,14 @@ const App = () => {
                   disabled={isLoading}
                   rows={1}
               />
+              <button
+                  onClick={isListening ? stopListening : startListening}
+                  className={`chat-mic-btn ${isListening ? 'listening' : ''}`}
+                  aria-label="Voice Input"
+                  style={{ marginBottom: '4px', marginRight: '8px' }}
+              >
+                  {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+              </button>
               <button
                   onClick={() => {
                       handleSend();

@@ -1,6 +1,6 @@
 import React, { useState, useRef, useLayoutEffect, useEffect } from 'react';
 import axios from 'axios';
-import { Send, X, Cpu, Zap, Trash2, Shield, ExternalLink, Settings, Moon, Sun, Monitor, Maximize, Copy, Check } from 'lucide-react';
+import { Send, X, Cpu, Zap, Trash2, Shield, ExternalLink, Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Mic, MicOff, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ── Quick-start options shown in the welcome card ──────────────────────────
@@ -57,9 +57,13 @@ const Chatbot = ({ isOpen, onClose }) => {
     const [theme, setTheme] = useState('system');
     const [chatSize, setChatSize] = useState('medium');
     const [copiedIndex, setCopiedIndex] = useState(null);
+    const [agentMode, setAgentMode] = useState(false);
+    const [isListening, setIsListening] = useState(false);
+    const [sourcesExpanded, setSourcesExpanded] = useState(false);
 
     const chatContainerRef = useRef(null);
     const textareaRef = useRef(null);
+    const recognitionRef = useRef(null);
 
     // Initialize Theme
     useEffect(() => {
@@ -88,6 +92,49 @@ const Chatbot = ({ isOpen, onClose }) => {
         setTheme(newTheme);
         localStorage.setItem('voterai-theme', newTheme);
         applyTheme(newTheme);
+    };
+
+    // Voice Assistant Functions
+    const startListening = () => {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert('Speech recognition not supported in this browser.');
+            return;
+        }
+
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognitionRef.current = new SpeechRecognition();
+        recognitionRef.current.continuous = false;
+        recognitionRef.current.interimResults = false;
+        recognitionRef.current.lang = 'en-US';
+
+        recognitionRef.current.onstart = () => {
+            setIsListening(true);
+        };
+
+        recognitionRef.current.onresult = (event) => {
+            const transcript = event.results[0][0].transcript;
+            setInput(transcript);
+        };
+
+        recognitionRef.current.onend = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current.start();
+    };
+
+    const stopListening = () => {
+        if (recognitionRef.current) {
+            recognitionRef.current.stop();
+        }
+    };
+
+    // Text-to-Speech for bot responses
+    const speakText = (text) => {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
     };
 
     // Auto-scroll on new messages
@@ -139,6 +186,7 @@ const Chatbot = ({ isOpen, onClose }) => {
         try {
             const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat', {
                 message: msgText,
+                agentMode: agentMode,
             });
 
             const { content, thought } = res.data;
@@ -151,6 +199,8 @@ const Chatbot = ({ isOpen, onClose }) => {
                     timestamp: new Date(),
                 }]);
                 setIsLoading(false);
+                // Speak the response if voice is enabled (for now, always speak if supported)
+                speakText(content || 'Sorry, I could not process that.');
             }, 500);
         } catch {
             setMessages(prev => [...prev, {
@@ -215,6 +265,16 @@ const Chatbot = ({ isOpen, onClose }) => {
                         transition={{ duration: 0.15 }}
                         className="chat-settings-panel"
                     >
+                        <div className="setting-item">
+                            <span className="setting-label">Agent Mode</span>
+                            <button 
+                                className={`setting-btn ${agentMode ? 'active' : ''}`} 
+                                onClick={() => setAgentMode(!agentMode)}
+                                style={{ width: 'auto', padding: '4px 12px' }}
+                            >
+                                {agentMode ? 'On' : 'Off'}
+                            </button>
+                        </div>
                         <div className="setting-item">
                             <span className="setting-label">Theme</span>
                             <div className="setting-btn-group">
@@ -281,6 +341,75 @@ const Chatbot = ({ isOpen, onClose }) => {
                         )}
                     </>
                 )}
+
+                {/* Official Sources Section */}
+                <div className="official-sources-section">
+                    <button 
+                        className="sources-toggle-btn"
+                        onClick={() => setSourcesExpanded(!sourcesExpanded)}
+                    >
+                        <span>Official Sources</span>
+                        {sourcesExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    <AnimatePresence>
+                        {sourcesExpanded && (
+                            <motion.div 
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                transition={{ duration: 0.3 }}
+                                className="sources-content"
+                            >
+                                <div className="sources-grid">
+                                    <a 
+                                        href="https://www.nvsp.in" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="source-link"
+                                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                                    >
+                                        <ExternalLink size={14} />
+                                        <span>National Voter Service Portal</span>
+                                    </a>
+                                    <a 
+                                        href="https://eci.gov.in" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="source-link"
+                                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                                    >
+                                        <ExternalLink size={14} />
+                                        <span>Election Commission of India</span>
+                                    </a>
+                                    <a 
+                                        href="https://www.eci.gov.in/voter/voter" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="source-link"
+                                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                                    >
+                                        <ExternalLink size={14} />
+                                        <span>Voter Helpline</span>
+                                    </a>
+                                    <a 
+                                        href="https://www.aadhaar.gov.in" 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="source-link"
+                                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
+                                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                                    >
+                                        <ExternalLink size={14} />
+                                        <span>Aadhaar Portal</span>
+                                    </a>
+                                </div>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
+                </div>
             </div>
 
             {/* ── Input Bar ────────────────────────────────────────── */}
@@ -301,6 +430,14 @@ const Chatbot = ({ isOpen, onClose }) => {
                         disabled={isLoading}
                         rows={1}
                     />
+                    <button
+                        onClick={isListening ? stopListening : startListening}
+                        className={`chat-mic-btn ${isListening ? 'listening' : ''}`}
+                        aria-label="Voice Input"
+                        style={{ marginBottom: '4px', marginRight: '8px' }}
+                    >
+                        {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                    </button>
                     <button
                         onClick={() => handleSendMessage()}
                         disabled={isLoading || !input.trim()}

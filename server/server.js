@@ -27,15 +27,24 @@ app.use(express.json());
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGODB_URI || process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 5000,
             useNewUrlParser: true,
             useUnifiedTopology: true
         });
         console.log("MongoDB Connected");
     } catch (err) {
         console.error("MongoDB Connection Error:", err.message);
-        process.exit(1);
+        console.warn("Continuing without MongoDB connection. Some features may be unavailable.");
     }
 };
+
+mongoose.connection.on('disconnected', () => {
+    console.warn('MongoDB disconnected. Reconnection will be attempted automatically.');
+});
+
+mongoose.connection.on('error', (err) => {
+    console.error('MongoDB error:', err);
+});
 
 connectDB();
 

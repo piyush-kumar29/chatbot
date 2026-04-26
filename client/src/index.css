@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-:root {
+[data-theme="dark"], :root {
   --bg-main: #030305;
   --bg-card: rgba(255, 255, 255, 0.02);
   --bg-chat: rgba(9, 9, 14, 0.85);
@@ -492,16 +492,17 @@ button, a, [role="button"] { min-height: 44px; }
 /* Settings Panel */
 .chat-settings-panel {
   position: absolute;
-  top: 60px;
+  top: 70px;
   right: 16px;
-  width: 280px;
-  background: var(--bg-card);
-  backdrop-filter: blur(30px);
+  width: 240px;
+  background: var(--bg-chat);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px;
   z-index: 100;
-  box-shadow: 0 10px 40px var(--shadow-color);
+  box-shadow: 0 10px 40px var(--shadow-color), 0 0 0 1px var(--glass-border);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -527,17 +528,23 @@ button, a, [role="button"] { min-height: 44px; }
   background: transparent;
   border: none;
   color: var(--text-secondary);
-  padding: 6px 10px;
+  width: 36px;
+  height: 32px;
   border-radius: 8px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   transition: all 0.2s;
 }
 .setting-btn.active {
-  background: var(--bg-card);
+  background: var(--accent-blue);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+.setting-btn:hover:not(.active) {
+  background: var(--bg-hover);
   color: var(--text-primary);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 .copy-btn {
   position: absolute;
@@ -585,6 +592,84 @@ button, a, [role="button"] { min-height: 44px; }
     height: 92dvh;
     border-radius: 20px 20px 0 0;
   }
+}
+
+/* ─── Official Sources Section ────────────────────────── */
+.official-sources-section {
+  margin-top: 16px;
+  border-top: 1px solid var(--glass-border);
+  padding-top: 12px;
+}
+.sources-toggle-btn {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 10px 16px;
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: background 0.2s;
+}
+.sources-toggle-btn:hover {
+  background: var(--bg-hover);
+}
+.sources-content {
+  margin-top: 12px;
+  overflow: hidden;
+}
+.sources-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.source-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--glass-border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  text-decoration: none;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  transform: scale(1);
+}
+.source-link:hover {
+  background: var(--bg-hover);
+  border-color: rgba(99,102,241,0.3);
+}
+
+/* ─── Mic Button ─────────────────────────────────────── */
+.chat-mic-btn {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.chat-mic-btn:hover:not(.listening) {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+.chat-mic-btn.listening {
+  background: #ef4444;
+  color: white;
+  animation: pulse 1s infinite;
 }
 
 

@@ -38,7 +38,7 @@ router.delete('/:id', auth, async (req, res) => {
 // New or continue conversation
 router.post('/', async (req, res) => {
     try {
-        const { message, conversationId } = req.body;
+        const { message, conversationId, agentMode } = req.body;
         const authHeader = req.headers.authorization;
         let userId = null;
         let conversation = null;
@@ -63,7 +63,7 @@ router.post('/', async (req, res) => {
             }
         }
 
-        const result = await handleConversation(null, message, history);
+        const result = await handleConversation(null, message, history, agentMode);
 
         if (userId) {
             if (!conversation) {
