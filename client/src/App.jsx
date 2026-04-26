@@ -609,22 +609,27 @@ const App = () => {
       
       const voices = window.speechSynthesis.getVoices();
       
-      // Robust matching: 
-      // 1. Exact lang match (hi-IN)
-      // 2. Normalized lang match (hi_IN -> hi-IN)
-      // 3. Base language match (hi)
-      // 4. Name-based match (e.g. voice named "Hindi")
-      let targetVoice = voices.find(v => v.lang === currentLang || v.lang.replace('_', '-') === currentLang);
+      // Case-insensitive and normalized matching
+      const targetLangLower = currentLang.toLowerCase().replace('_', '-');
       
+      let targetVoice = voices.find(v => {
+          const vLang = v.lang.toLowerCase().replace('_', '-');
+          return vLang === targetLangLower || vLang === targetLangLower.split('-')[0];
+      });
+      
+      // If no exact match, search by name or partial lang
       if (!targetVoice) {
-          const baseLang = currentLang.split('-')[0]; // "hi"
-          targetVoice = voices.find(v => v.lang.startsWith(baseLang) || 
-                                     v.name.toLowerCase().includes(baseLang) ||
-                                     v.lang.includes(baseLang));
+          const baseLang = targetLangLower.split('-')[0];
+          targetVoice = voices.find(v => 
+              v.lang.toLowerCase().includes(baseLang) || 
+              v.name.toLowerCase().includes(baseLang)
+          );
       }
       
       if (targetVoice) {
           utterance.voice = targetVoice;
+          // Ensure lang matches the voice we actually found
+          utterance.lang = targetVoice.lang;
       }
 
       utterance.rate = 1.0;
