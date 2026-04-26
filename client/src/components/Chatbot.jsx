@@ -301,6 +301,25 @@ const Chatbot = ({ isOpen, onClose }) => {
                         </div>
 
                         <div className="setting-item">
+                            <span className="setting-label" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                                Voice Response
+                            </span>
+                            <button 
+                                className={`setting-btn ${voiceEnabled ? 'active' : ''}`} 
+                                onClick={() => {
+                                    setVoiceEnabled(v => {
+                                        if (v && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+                                        return !v;
+                                    });
+                                }}
+                                style={{ width: 'auto', padding: '4px 12px' }}
+                            >
+                                {voiceEnabled ? 'On' : 'Off'}
+                            </button>
+                        </div>
+
+                        <div className="setting-item">
                             <span className="setting-label">Theme</span>
                             <div className="setting-btn-group">
                                 <button className={`setting-btn ${theme === 'light' ? 'active' : ''}`} onClick={() => handleThemeChange('light')}><Sun size={14} /></button>
@@ -457,17 +476,32 @@ const Chatbot = ({ isOpen, onClose }) => {
                     />
                     <button
                         onClick={() => {
-                            setVoiceEnabled(!voiceEnabled);
-                            if (voiceEnabled && 'speechSynthesis' in window) {
-                                window.speechSynthesis.cancel();
-                            }
+                            setVoiceEnabled(v => {
+                                if (v && 'speechSynthesis' in window) window.speechSynthesis.cancel();
+                                return !v;
+                            });
                         }}
                         className="chat-mic-btn"
                         aria-label="Toggle Voice Response"
-                        style={{ marginBottom: '4px', marginRight: '4px', color: voiceEnabled ? 'var(--accent-blue)' : 'var(--text-secondary)' }}
-                        title={voiceEnabled ? "Voice Output On" : "Voice Output Off"}
+                        title={voiceEnabled ? 'Voice Response: ON — click to turn off' : 'Voice Response: OFF — click to turn on'}
+                        style={{
+                            marginBottom: '4px',
+                            marginRight: '4px',
+                            color: voiceEnabled ? '#ffffff' : 'var(--text-secondary)',
+                            background: voiceEnabled ? 'var(--accent-blue)' : 'transparent',
+                            border: voiceEnabled ? '1.5px solid var(--accent-blue)' : '1.5px solid transparent',
+                            borderRadius: '10px',
+                            padding: '4px 8px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '11px',
+                            fontWeight: '600',
+                            transition: 'all 0.2s ease',
+                        }}
                     >
-                        {voiceEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
+                        {voiceEnabled ? <Volume2 size={14} /> : <VolumeX size={14} />}
+                        <span>{voiceEnabled ? 'Voice ON' : 'Voice'}</span>
                     </button>
                     <button
                         onClick={isListening ? stopListening : startListening}
