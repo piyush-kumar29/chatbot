@@ -13,8 +13,23 @@ if (!process.env.GROQ_API_KEY) {
  * Advanced Conversation Engine
  * Orchestrates the flow between raw input, expert system, and Groq LLM.
  */
-const handleConversation = async (sessionId, userMessage, history = [], agentMode = false) => {
+const handleConversation = async (sessionId, userMessage, history = [], agentMode = false, voiceEnabled = false, speechLang = 'en-US') => {
     const analysis = processMessage(userMessage);
+    
+    const languageMap = {
+        'en-US': 'English',
+        'hi-IN': 'Hindi',
+        'bn-IN': 'Bengali',
+        'ta-IN': 'Tamil',
+        'te-IN': 'Telugu',
+        'mr-IN': 'Marathi',
+        'gu-IN': 'Gujarati',
+        'kn-IN': 'Kannada'
+    };
+    const targetLanguage = voiceEnabled && languageMap[speechLang] ? languageMap[speechLang] : null;
+    const langRule = targetLanguage 
+        ? `- You MUST respond entirely in ${targetLanguage}, regardless of the language the user asked in.`
+        : `- Respond in the EXACT SAME LANGUAGE as the user's input.`;
     
     try {
         const systemPrompt = agentMode ? 
@@ -32,7 +47,7 @@ FORMATTING — FOLLOW STRICTLY:
 - For multiple steps or items, use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
 - Each point or bullet MUST be on its own separate line. Never run two points together on the same line.
 - Leave one blank line between separate sections or topic shifts.
-- Respond in the EXACT SAME LANGUAGE as the user's input.
+${langRule}
 
 AGENT MODE EXCLUSIVES (YOU MUST DO THIS):
 - Always provide an extremely detailed, exhaustive response.
@@ -60,7 +75,7 @@ NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
 FORMATTING — FOLLOW STRICTLY:
 - Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
 - Keep formatting plain text.
-- Respond in the EXACT SAME LANGUAGE as the user's input.
+${langRule}
 
 Heuristic Context: ${analysis.thought}
 

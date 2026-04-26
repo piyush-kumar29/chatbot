@@ -49,7 +49,7 @@ router.delete('/:id', auth, async (req, res) => {
 // New or continue conversation
 router.post('/', async (req, res) => {
     try {
-        const { message, conversationId, agentMode } = req.body;
+        const { message, conversationId, agentMode, voiceEnabled, speechLang } = req.body;
 
         if (!message || !message.trim()) {
             return res.status(400).json({ error: 'Message is required' });
@@ -83,7 +83,7 @@ router.post('/', async (req, res) => {
             }
         }
 
-        const result = await handleConversation(null, message, history, agentMode);
+        const result = await handleConversation(null, message, history, agentMode, voiceEnabled, speechLang);
 
         // Save to DB only if user is authenticated and DB is connected
         if (userId && isDbConnected()) {

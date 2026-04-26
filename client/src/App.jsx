@@ -558,6 +558,9 @@ const App = () => {
   const voiceEnabledRef = useRef(false);
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
 
+  const speechLangRef = useRef('en-US');
+  useEffect(() => { speechLangRef.current = speechLang; }, [speechLang]);
+
   const chatEndRef = useRef(null);
   const textareaRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -742,10 +745,14 @@ const App = () => {
 
     try {
       const headers = token ? { Authorization: `Bearer ${token}` } : {};
-      const res = await axios.post(`${API_BASE_URL}/api/chat`,
-        { message: payloadMessage, conversationId: activeConvId, agentMode: agentMode },
-        { headers }
-      );
+      const payload = { 
+          message: payloadMessage, 
+          conversationId: activeConvId, 
+          agentMode: agentMode,
+          voiceEnabled: voiceEnabledRef.current,
+          speechLang: speechLangRef.current
+      };
+      const res = await axios.post(`${API_BASE_URL}/api/chat`, payload, { headers });
       const data = res.data;
       setMessages(prev => [...prev, { role: 'bot', content: data.content, thought: data.thought }]);
       // Only speak if voice is enabled
