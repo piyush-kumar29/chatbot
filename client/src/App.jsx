@@ -7,7 +7,7 @@ import { Rnd } from 'react-rnd';
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
 
-const API_BASE_URL = import.meta.env.DEV ? 'http://localhost:5000' : 'https://chatbot-0g7m.onrender.com';
+const API_BASE_URL = 'https://chatbot-0g7m.onrender.com';
 
 const SimulationPage = () => {
   const [votes, setVotes] = useState({
