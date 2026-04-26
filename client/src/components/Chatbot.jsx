@@ -59,6 +59,12 @@ const Chatbot = ({ isOpen, onClose }) => {
     const [copiedIndex, setCopiedIndex] = useState(null);
     const [agentMode, setAgentMode] = useState(false);
     const [voiceEnabled, setVoiceEnabled] = useState(false);
+    const voiceEnabledRef = useRef(voiceEnabled);
+
+    useEffect(() => {
+        voiceEnabledRef.current = voiceEnabled;
+    }, [voiceEnabled]);
+
     const [isListening, setIsListening] = useState(false);
     const [sourcesExpanded, setSourcesExpanded] = useState(false);
 
@@ -71,6 +77,12 @@ const Chatbot = ({ isOpen, onClose }) => {
         const savedTheme = localStorage.getItem('voterai-theme') || 'system';
         setTheme(savedTheme);
         applyTheme(savedTheme);
+
+        return () => {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+            }
+        };
     }, []);
 
     const applyTheme = (t) => {
@@ -158,10 +170,16 @@ const Chatbot = ({ isOpen, onClose }) => {
     };
 
     const handleClose = () => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
         onClose();
     };
 
     const handleClear = () => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
         setMessages([]);
         setShowWelcome(true);
         if (textareaRef.current) textareaRef.current.style.height = 'auto';
@@ -175,6 +193,10 @@ const Chatbot = ({ isOpen, onClose }) => {
 
     // Core send logic
     const handleSendMessage = async (text) => {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+        }
+
         const msgText = (text || input).trim();
         if (!msgText || isLoading) return;
 
@@ -200,7 +222,7 @@ const Chatbot = ({ isOpen, onClose }) => {
                     timestamp: new Date(),
                 }]);
                 setIsLoading(false);
-                if (voiceEnabled) {
+                if (voiceEnabledRef.current) {
                     speakText(content || 'Sorry, I could not process that.');
                 }
             }, 500);
