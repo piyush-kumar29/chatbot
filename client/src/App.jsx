@@ -587,29 +587,42 @@ const App = () => {
       if (recognitionRef.current) recognitionRef.current.stop();
   };
 
-  const speakText = (text) => {
-      if ('speechSynthesis' in window) {
-          const utterance = new SpeechSynthesisUtterance(text);
-          const currentLang = speechLangRef.current;
-          utterance.lang = currentLang;
-          
-          // The browser doesn't always auto-switch voices just by setting .lang
-          // We must explicitly find a matching voice and set utterance.voice
-          const voices = window.speechSynthesis.getVoices();
-          let targetVoice = voices.find(v => v.lang === currentLang);
-          
-          // Fallback to base language if exact region match isn't found
-          if (!targetVoice) {
-              const baseLang = currentLang.split('-')[0];
-              targetVoice = voices.find(v => v.lang.startsWith(baseLang));
-          }
-          
-          if (targetVoice) {
-              utterance.voice = targetVoice;
-          }
+  // Pre-warm voices for Chrome/Edge
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+    }
+  }, []);
 
-          window.speechSynthesis.speak(utterance);
+  const speakText = (text) => {
+      if (!text || !('speechSynthesis' in window)) return;
+
+      // Cancel any current speech to ensure the new one starts immediately
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      const currentLang = speechLangRef.current;
+      utterance.lang = currentLang;
+      
+      const voices = window.speechSynthesis.getVoices();
+      
+      // Try to find the best matching voice
+      let targetVoice = voices.find(v => v.lang === currentLang);
+      if (!targetVoice) {
+          const baseLang = currentLang.split('-')[0];
+          targetVoice = voices.find(v => v.lang.startsWith(baseLang));
       }
+      
+      if (targetVoice) {
+          utterance.voice = targetVoice;
+      }
+
+      // Voice settings
+      utterance.rate = 1.0;
+      utterance.pitch = 1.0;
+      utterance.volume = 1.0;
+
+      window.speechSynthesis.speak(utterance);
   };
 
   // Initialize App Theme
@@ -738,7 +751,12 @@ const App = () => {
 
   const handleSend = async (text, isInitial = false) => {
     // Stop any ongoing speech before sending
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        // Warm up / Unlock audio context for browsers that require it
+        const warmUp = new SpeechSynthesisUtterance("");
+        window.speechSynthesis.speak(warmUp);
+    }
 
     const msg = text || input;
     if (!msg.trim() && !attachedFile && !isInitial) return;
