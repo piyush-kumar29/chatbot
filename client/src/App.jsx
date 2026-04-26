@@ -608,28 +608,35 @@ const App = () => {
       utterance.lang = currentLang;
       
       const voices = window.speechSynthesis.getVoices();
-      
-      // Case-insensitive and normalized matching
       const targetLangLower = currentLang.toLowerCase().replace('_', '-');
+      const baseLang = targetLangLower.split('-')[0];
       
-      let targetVoice = voices.find(v => {
-          const vLang = v.lang.toLowerCase().replace('_', '-');
-          return vLang === targetLangLower || vLang === targetLangLower.split('-')[0];
-      });
-      
-      // If no exact match, search by name or partial lang
+      // 1. Prioritize "Google" or "Online" voices as they are high quality and support more languages
+      let targetVoice = voices.find(v => 
+          (v.lang.toLowerCase().replace('_', '-') === targetLangLower) && 
+          (v.name.includes('Google') || v.name.includes('Online') || v.name.includes('Natural'))
+      );
+
+      // 2. Fallback to any exact language match
       if (!targetVoice) {
-          const baseLang = targetLangLower.split('-')[0];
+          targetVoice = voices.find(v => v.lang.toLowerCase().replace('_', '-') === targetLangLower);
+      }
+
+      // 3. Fallback to base language match (e.g. "ta" for "ta-IN")
+      if (!targetVoice) {
           targetVoice = voices.find(v => 
-              v.lang.toLowerCase().includes(baseLang) || 
+              v.lang.toLowerCase().startsWith(baseLang) || 
               v.name.toLowerCase().includes(baseLang)
           );
       }
       
       if (targetVoice) {
           utterance.voice = targetVoice;
-          // Ensure lang matches the voice we actually found
           utterance.lang = targetVoice.lang;
+      } else {
+          // If absolutely no voice object is found, we still set the lang attribute 
+          // to help the browser try its best with the default engine
+          utterance.lang = currentLang;
       }
 
       utterance.rate = 1.0;
