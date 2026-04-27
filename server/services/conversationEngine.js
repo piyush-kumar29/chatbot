@@ -16,18 +16,11 @@ if (!process.env.GROQ_API_KEY) {
 const handleConversation = async (sessionId, userMessage, history = [], agentMode = false, voiceEnabled = false, speechLang = 'en-US') => {
     const analysis = processMessage(userMessage);
     
-    const languageMap = {
-        'en-US': 'English',
-        'hi-IN': 'Hindi'
-    };
-
-    const targetLanguage = voiceEnabled && languageMap[speechLang] && speechLang !== 'en-US' ? languageMap[speechLang] : null;
-    
-    const langRule = targetLanguage 
-        ? `- IMPORTANT: The user wants to READ in English but HEAR in ${targetLanguage}. 
-- You MUST write your main response in English text.
-- At the very end of your message, you MUST include a translation of your response into ${targetLanguage} inside double brackets like this: [[TTS: your ${targetLanguage} translation here]].`
-        : `- Respond in the EXACT SAME LANGUAGE as the user's input.`;
+    // Updated language rule: Always match user's language and tag it for the frontend
+    const langRule = `- Respond in the EXACT SAME LANGUAGE as the user's input (e.g., if the user writes in Hindi, you respond in Hindi).
+- IMPORTANT: At the very end of your response, you MUST add a language tag in this format: [[LANG:language-code]].
+- Use 'hi-IN' for Hindi, 'en-US' for English, 'bn-IN' for Bengali, etc.
+- Example: "नमस्ते! [[LANG:hi-IN]]" or "Hello! [[LANG:en-US]]"`;
 
     try {
         const systemPrompt = agentMode ? 
@@ -36,24 +29,22 @@ Provide exhaustive, step-by-step guidance, official resources, legal context, an
 
 STRICT RULES:
 1. Only answer questions about elections, voting, voter registration, candidates (neutral), or government policies.
-2. If the user asks anything unrelated to these topics, you MUST politely refuse. Example: "I'm sorry, but my expertise is limited to voting and election-related matters. I cannot assist with [topic]. How can I help you with your voting queries today?"
+2. If the user asks anything unrelated to these topics, you MUST politely refuse.
 3. Stay neutral, factual, and non-opinionated.
 4. Never discuss sports, entertainment, coding, math, or any general knowledge unrelated to elections.
-5. TOPIC CHECK: Before generating any response, evaluate if the query is voting-related. If not, trigger Rule 2 immediately.
+5. TOPIC CHECK: Before generating any response, evaluate if the query is voting-related.
 
 FORMATTING — FOLLOW STRICTLY:
-- Do NOT use any Markdown. No **, no ##, no __, no backticks, no > quotes, no --- dividers.
-- Do NOT use - or * as bullet points.
+- Do NOT use any Markdown. No **, no ##, no __, no backticks, no --- dividers.
 - For multiple steps or items, use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
-- Each point or bullet MUST be on its own separate line. Never run two points together on the same line.
+- Each point or bullet MUST be on its own separate line.
 - Leave one blank line between separate sections or topic shifts.
 ${langRule}
 
 AGENT MODE EXCLUSIVES (YOU MUST DO THIS):
 - Always provide an extremely detailed, exhaustive response.
 - Always break down the answer into chronological Steps (Step 1, Step 2).
-- Always provide exactly which official forms are needed (e.g., Form 6, Form 8) and exact website URLs (e.g., https://voters.eci.gov.in).
-- Anticipate the user's next logical question and answer it proactively at the end of your response.
+- Always provide exactly which official forms are needed (e.g., Form 6, Form 8) and exact website URLs.
 - Your response should be a comprehensive guide, not just a simple answer.
 
 Heuristic Context: ${analysis.thought}
@@ -76,7 +67,6 @@ FORMATTING — FOLLOW STRICTLY:
 - Each point or bullet MUST be on its own separate line.
 - Leave one blank line between the introduction and your list/points.
 - IMPORTANT: Leave one blank line between each numbered or bulleted point for proper spacing.
-- Keep the overall response around 7 to 8 lines to accommodate the extra spacing.
 ${langRule}
 
 Heuristic Context: ${analysis.thought}
@@ -100,12 +90,21 @@ Tone: Professional, Friendly, Clear.`;
             max_tokens: 1024,
         });
 
-        const botResponse = chatCompletion.choices[0]?.message?.content || analysis.response;
+        let botResponse = chatCompletion.choices[0]?.message?.content || analysis.response;
+        
+        // Extract language tag
+        let detectedLang = 'en-US';
+        const langMatch = botResponse.match(/\[\[LANG:\s*(.*?)\s*\]\]/i);
+        if (langMatch) {
+            detectedLang = langMatch[1];
+            botResponse = botResponse.replace(/\[\[LANG:.*?\]\]/gi, '').trim();
+        }
 
         return {
             role: 'assistant',
             content: botResponse,
             thought: analysis.thought,
+            lang: detectedLang,
             timestamp: new Date(),
         };
     } catch (error) {
@@ -114,6 +113,7 @@ Tone: Professional, Friendly, Clear.`;
             role: 'assistant',
             content: analysis.response,
             thought: analysis.thought + " (Fallback Active)",
+            lang: 'en-US',
             timestamp: new Date(),
         };
     }

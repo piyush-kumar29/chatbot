@@ -72,17 +72,22 @@ const Chatbot = ({ isOpen, onClose }) => {
     const textareaRef = useRef(null);
     const recognitionRef = useRef(null);
 
-    // Initialize Theme
+    // Initialize Theme and Voices
     useEffect(() => {
         const savedTheme = localStorage.getItem('voterai-theme') || 'system';
         setTheme(savedTheme);
         applyTheme(savedTheme);
 
-        return () => {
-            if ('speechSynthesis' in window) {
+        // Pre-load voices for TTS
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.getVoices();
+            const handleVoicesChanged = () => window.speechSynthesis.getVoices();
+            window.speechSynthesis.addEventListener('voiceschanged', handleVoicesChanged);
+            return () => {
+                window.speechSynthesis.removeEventListener('voiceschanged', handleVoicesChanged);
                 window.speechSynthesis.cancel();
-            }
-        };
+            };
+        }
     }, []);
 
     const applyTheme = (t) => {
@@ -143,9 +148,30 @@ const Chatbot = ({ isOpen, onClose }) => {
     };
 
     // Text-to-Speech for bot responses
-    const speakText = (text) => {
+    const speakText = (text, lang = 'en-US') => {
         if ('speechSynthesis' in window) {
+            // Cancel any ongoing speech
+            window.speechSynthesis.cancel();
+
             const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+
+            // Try to find a matching voice for the language
+            const voices = window.speechSynthesis.getVoices();
+            // Look for an exact match first, then a prefix match
+            let voice = voices.find(v => v.lang === lang);
+            if (!voice) {
+                voice = voices.find(v => v.lang.startsWith(lang.split('-')[0]));
+            }
+            
+            if (voice) {
+                utterance.voice = voice;
+            }
+
+            // Optional: Adjust rate/pitch for better naturalness
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+
             window.speechSynthesis.speak(utterance);
         }
     };
@@ -210,9 +236,10 @@ const Chatbot = ({ isOpen, onClose }) => {
             const res = await axios.post('https://chatbot-0g7m.onrender.com/api/chat', {
                 message: msgText,
                 agentMode: agentMode,
+                voiceEnabled: voiceEnabledRef.current,
             });
 
-            const { content, thought } = res.data;
+            const { content, thought, lang } = res.data;
 
             setTimeout(() => {
                 setMessages(prev => [...prev, {
@@ -223,7 +250,7 @@ const Chatbot = ({ isOpen, onClose }) => {
                 }]);
                 setIsLoading(false);
                 if (voiceEnabledRef.current) {
-                    speakText(content || 'Sorry, I could not process that.');
+                    speakText(content || 'Sorry, I could not process that.', lang || 'en-US');
                 }
             }, 500);
         } catch {

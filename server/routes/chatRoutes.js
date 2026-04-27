@@ -96,8 +96,8 @@ router.post('/', async (req, res) => {
                     });
                 }
                 conversation.messages.push({ role: 'user', content: message });
-                // Clean the content of hidden TTS tags before saving to Atlas
-                const cleanContent = result.content.replace(/\[\[TTS:\s*(.*?)\]\]/is, "").trim();
+                // Clean the content of ANY hidden tags before saving to Atlas
+                const cleanContent = result.content.replace(/\[\[(TTS|LANG):\s*(.*?)\]\]/gis, "").trim();
                 
                 conversation.messages.push({
                     role: 'assistant',
