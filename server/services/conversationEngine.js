@@ -66,14 +66,13 @@ STRICT RULES:
 
 NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
 - Provide a clear and helpful response.
-- Your response MUST be EXACTLY 5 lines long.
-- While you should be informative, keep it concise compared to Agent Mode.
+- Your response MUST be EXACTLY 4 lines long.
 
 FORMATTING — FOLLOW STRICTLY (LIKE AGENT MODE):
-- Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
-- Do NOT use - or * as bullet points. Use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
+- Do NOT use any Markdown (**, ##, __, etc.).
+- Use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
 - Each point or bullet MUST be on its own separate line.
-- Use line breaks to ensure the response is exactly 5 lines.
+- Ensure the entire message is exactly 4 lines including the intro.
 ${langRule}
 
 Heuristic Context: ${analysis.thought}
