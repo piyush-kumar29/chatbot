@@ -66,19 +66,19 @@ STRICT RULES:
 
 NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
 - Provide a clear and helpful response.
-- Your response MUST be EXACTLY 4 lines long.
+- Focus on the most important points.
 
 FORMATTING — FOLLOW STRICTLY:
-- Do NOT use any Markdown. No **, no ##, no __, no backticks, no > quotes, no --- dividers.
-- Do NOT use - or * as bullet points.
-- For multiple steps or items, use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
-- Each point or bullet MUST be on its own separate line. Never run two points together on the same line.
-- The entire response (including any intro and list items) MUST be exactly 4 lines total.
+- Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
+- Use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
+- Each point or bullet MUST be on its own separate line.
+- Leave one blank line between the introduction and your list/points.
+- Keep the overall response around 5 to 6 lines to maintain clarity and spacing.
 ${langRule}
 
 Heuristic Context: ${analysis.thought}
 
-Tone: Professional, Expert, Clear.`;
+Tone: Professional, Friendly, Clear.`;
 
         const chatCompletion = await groq.chat.completions.create({
             messages: [
