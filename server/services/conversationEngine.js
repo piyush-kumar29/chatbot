@@ -65,16 +65,15 @@ STRICT RULES:
 3. Stay neutral, factual, and non-opinionated.
 
 NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
-- Provide a clear, helpful, and informative answer.
-- Your response MUST be substantial and span at least 6 to 7 lines of text.
-- Include a brief explanation of the topic and mention key points or requirements.
-- While you should be informative, keep the most exhaustive technical details and proactive suggestions for Agent Mode.
-- If the user needs a deep-dive comprehensive guide, remind them they can "turn on Agent Mode" for more features.
+- Provide a clear and helpful response.
+- Your response MUST be EXACTLY 5 lines long.
+- While you should be informative, keep it concise compared to Agent Mode.
 
-FORMATTING — FOLLOW STRICTLY:
+FORMATTING — FOLLOW STRICTLY (LIKE AGENT MODE):
 - Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
-- Use plain text only.
-- Use line breaks to make the 6-7 lines readable and well-structured.
+- Do NOT use - or * as bullet points. Use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
+- Each point or bullet MUST be on its own separate line.
+- Use line breaks to ensure the response is exactly 5 lines.
 ${langRule}
 
 Heuristic Context: ${analysis.thought}

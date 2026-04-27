@@ -16,9 +16,9 @@ const processMessage = (msg) => {
         return {
             thought: "Eligibility heuristic triggered. Checking statutory requirements (Age, Citizenship, Residency).",
             response: getRandomResponse([
-                "To participate in Indian elections, you must meet these criteria:\n\n1. Be an Indian citizen of sound mind.\n2. Be at least 18 years old on the qualifying date.\n3. Be a resident of the constituency where you want to register.\n4. Not be disqualified under any law for voting.\n\nDo you meet these requirements? If you do, I can help you with the registration process!",
-                "The basic requirements for voting in India are as follows:\n\n- You must be a citizen of India.\n- You must be 18 years or older on January 1st of the election year.\n- You must be an ordinary resident of the polling area.\n- You should not have any disqualifications related to criminal offenses or unsound mind.\n\nAre you 18 or older and ready to enroll?",
-                "You are eligible to vote in Indian elections if you are:\n\n1. An Indian citizen residing in India.\n2. 18 years of age or older as of the qualifying date.\n3. A resident in the specific constituency for more than 6 months.\n4. Free from any legal disqualifications for voting.\n\nDo you fit this description? I can guide you to the right forms if you are ready."
+                "To participate in Indian elections, you must meet these criteria:\n1. Be an Indian citizen of sound mind.\n2. Be at least 18 years old on the qualifying date.\n3. Be a resident of the constituency where you want to register.\n4. Not be disqualified under any law for voting.",
+                "The basic requirements for voting in India are as follows:\n• You must be a citizen of India.\n• You must be 18 years or older on January 1st.\n• You must be an ordinary resident of the polling area.\n• You should not have any criminal or legal disqualifications.",
+                "You are eligible to vote in Indian elections if you are:\n1. An Indian citizen residing in India.\n2. 18 years of age or older as of the qualifying date.\n3. A resident in the specific constituency for more than 6 months.\n4. Free from any legal disqualifications for voting."
             ]),
             quickReplies: ["I am 18+", "Under 18", "Not a citizen"]
         };
@@ -29,9 +29,9 @@ const processMessage = (msg) => {
         return {
             thought: "Registration intent detected. Directing to Form 6 / VSP portal.",
             response: getRandomResponse([
-                "New voter registration is done via Form 6. This is the primary application for inclusion in the electoral roll.\nYou can submit this online through the Voters' Service Portal (VSP) or the Voter Helpline App.\nOffline submissions can also be made at the Electoral Registration Office (ERO) in your area.\n\nWould you like the step-by-step guide for filling out Form 6 online?\nIt's a quick process that requires a few basic documents.",
-                "To enroll as a new voter, you'll need to fill out and submit Form 6.\nThis form can be filed digitally via the Voter Helpline App or the national VSP portal.\nYou will need to upload proof of age, proof of residence, and a recent photograph.\n\nDo you want me to guide you through the digital submission process?\nI can explain each section of the form for you.",
-                "Form 6 is the official form used for new voter registration in India.\nYou can file it online on the Voters' Service Portal or via the Voter Helpline mobile application.\nYou should have your Aadhaar card or other age proof ready before starting.\n\nShould I provide the direct link to the portal or help with the requirements?\nRegistering early ensures you don't miss out on upcoming elections."
+                "New voter registration is done via Form 6:\n1. Apply online through the Voters Service Portal or Helpline App.\n2. Upload proof of age, residence, and a recent photograph.\n3. Submit the form to your local Electoral Registration Office.\n4. Track your application status using the reference number provided.",
+                "To enroll as a new voter, you need to follow these steps:\n• Fill out and submit Form 6 on the national VSP portal.\n• Keep your Aadhaar card and address proof ready for upload.\n• Ensure your photograph meets the specified digital requirements.\n• Your name will be added to the roll after due verification.",
+                "Form 6 is the official form for new voter registration in India:\n1. Accessible via the Voter Helpline mobile application or portal.\n2. Requires basic personal details and supporting documents.\n3. Essential for all citizens who have turned 18 years old.\n4. Ensures your inclusion in the electoral roll for future voting."
             ]),
             quickReplies: ["Form 6 Guide", "Portal Link", "Offline Method"]
         };
@@ -42,9 +42,9 @@ const processMessage = (msg) => {
         return {
             thought: "Document inquiry detected. Compiling list of accepted identity and address proofs.",
             response: getRandomResponse([
-                "For voter registration, you'll need to keep these documents ready:\n\n1. Age Proof: Aadhaar Card, PAN Card, or Birth Certificate.\n2. Address Proof: Passport, Utility Bill (Electricity/Water), or Ration Card.\n3. Photograph: A recent color passport-size photograph with a white background.\n\nDo you have these documents ready in digital format (JPEG or PDF)?\nI can help you check if your specific document is accepted.",
-                "To register as a voter, please prepare the following documents:\n\n- Proof of Age: Aadhaar, PAN, or 10th Class Marksheet.\n- Proof of Residence: Bank Passbook, Passport, or Electricity Bill.\n- A recent passport-size photograph.\n\nAre your documents prepared and scanned for online upload?\nI can provide the full list of alternatives if you're missing any of these.",
-                "You will require these items for a successful voter application:\n\n1. Valid Age Proof (document showing your date of birth).\n2. Valid Address Proof (document showing your current residence).\n3. A recent color photo of yourself.\n\nWould you like to see the full list of officially accepted documents?\nHaving the right documents makes the verification process much faster."
+                "For voter registration, prepare these documents for upload:\n1. Age Proof: Aadhaar Card, PAN Card, or Birth Certificate.\n2. Address Proof: Passport, Utility Bill, or Bank Passbook.\n3. Photograph: A recent color passport-size photo.\n4. Ensure all files are in JPEG or PDF format for submission.",
+                "To register as a voter, keep the following items ready:\n• Proof of Age: Aadhaar, PAN, or 10th Class Marksheet.\n• Proof of Residence: Electricity Bill, Passport, or Ration Card.\n• A recent passport-size photograph with a white background.\n• Scanned copies are required for the online application process.",
+                "You will require these items for a successful voter application:\n1. Valid Age Proof showing your exact date of birth.\n2. Valid Address Proof showing your current residence address.\n3. A recent color photo for the Voter ID card (EPIC).\n4. All documents must be clearly legible and officially recognized."
             ]),
             quickReplies: ["Check Age Proofs", "Check Address Proofs"]
         };
@@ -55,9 +55,9 @@ const processMessage = (msg) => {
         return {
             thought: "Correction intent detected. Redirecting to Form 8.",
             response: getRandomResponse([
-                "For corrections in your voter details or changing your address within the same constituency, you need to submit Form 8.\nThis form is also used for the replacement of a lost or damaged EPIC (Voter ID Card).\nYou can file this online through the VSP portal or the Voter Helpline App.\n\nWould you like assistance with filling out Form 8 for your specific correction?\nIt's important to keep your electoral details up to date.",
-                "To update your address, name, or correct any errors on your Voter ID, you must file Form 8.\nThis is the unified form for all types of corrections and shifting of residence.\nYou will need supporting documents for the changes you are requesting (e.g., marriage cert for name change).\n\nShould I provide more details on Form 8 and how to submit it?\nI can help you understand which documents are required for your update.",
-                "Form 8 is the official document used for shifting of residence, correction of entries, and replacement of EPIC.\nIf you've moved to a new house or found a spelling error in your ID, this is the form you need.\nYou can track the status of your application once submitted via the reference number.\n\nDo you want the direct link to submit Form 8 or help with the steps?\nEnsuring your address is correct is vital for finding your polling station."
+                "For corrections in your voter details, use Form 8:\n1. Use this for shifting residence or correcting data entries.\n2. Can be filed online via the VSP portal or the Helpline App.\n3. Supporting documents are required for the specific change.\n4. Use this form also for a replacement Voter ID card (EPIC).",
+                "To update your details or correct errors, follow these steps:\n• Access Form 8 through the national Voters Service Portal.\n• Provide proof of change (e.g., certificate for name change).\n• Submit the request for shifting residence within constituency.\n• Track the correction status using your unique reference ID.",
+                "Form 8 is used for shifting, correction, and EPIC replacement:\n1. Correct spelling errors in name, age, or address details.\n2. Update your photograph if the current one is outdated.\n3. Request a replacement card if your current one is damaged.\n4. Essential for maintaining an accurate electoral record."
             ]),
             quickReplies: ["Help with Form 8", "Voter ID Status"]
         };
@@ -68,9 +68,9 @@ const processMessage = (msg) => {
         return {
             thought: "Greeting detected. Responding in a warm, friendly tone.",
             response: getRandomResponse([
-                "Hey there! 👋 I'm VoterAI, your dedicated assistant for all things related to Indian Elections.\n\nI can help you with:\n1. New Voter Registration (Form 6)\n2. Checking your Eligibility to vote\n3. Updating or Correcting your Voter ID (Form 8)\n4. Finding your Polling Station\n\nWhat's on your mind today? I'm here to make the process as simple as possible for you!",
-                "Hi! Great to see you here. 😊 I'm VoterAI, and I'm ready to assist you with your electoral needs.\n\nI can guide you through:\n- Registering to vote for the first time\n- Checking if you meet the age and residency criteria\n- Updating your details on the electoral roll\n- Understanding the different forms like Form 6 and Form 8\n\nWhat do you need help with specifically? Just ask, and I'll provide the details!",
-                "Hello! Welcome to VoterAI. I'm here to ensure your voice is heard by making the voter registration process easy.\n\nWould you like to:\n1. Register as a new voter using Form 6?\n2. Update existing details or change your address via Form 8?\n3. Check if you're eligible to vote in the upcoming elections?\n\nI can provide detailed information on any of these topics. How can I assist you today?"
+                "Hello! I am VoterAI, your assistant for Indian Elections:\n1. Help with New Voter Registration (Form 6).\n2. Assistance with Checking your Voting Eligibility.\n3. Guidance for Updating or Correcting Voter ID (Form 8).\n4. Information on finding your local Polling Station.",
+                "Welcome! I am VoterAI, ready to assist with your electoral needs:\n• Guide you through the first-time registration process.\n• Explain the criteria for being an eligible voter in India.\n• Help you update your details on the electoral roll.\n• Provide info on essential forms like Form 6 and Form 8.",
+                "Hi! Welcome to VoterAI. I am here to simplify voting for you:\n1. Assistance with Registering as a new voter via Form 6.\n2. Information on Updating details or changing address (Form 8).\n3. Details on Checking if you are eligible for the elections.\n4. Clear answers to your common voting-related questions."
             ]),
             quickReplies: ["Am I eligible?", "How to register?", "Update my info"]
         };
@@ -80,9 +80,9 @@ const processMessage = (msg) => {
     return {
         thought: "No specific intent match. Generating contextualized clarifying response.",
         response: getRandomResponse([
-            "I couldn't find a direct match for your query in my electoral database.\nI am a specialized assistant focused specifically on **Indian Electoral procedures**.\nI can assist with registration, eligibility, documentation, and voter ID updates.\n\nCould you please rephrase your query or ask about topics like Form 6, Form 8, or voter eligibility?\nI want to make sure I give you the most accurate voting information possible.",
-            "I apologize, but my training is restricted to assisting with **voting and election-related matters in India**.\nI cannot provide information on topics outside of voter registration, polling, and electoral rolls.\nIf you have questions about becoming a voter or updating your EPIC details, I'd be happy to help!\n\nIs there anything specific about the voting process I can clarify for you today?\nMy goal is to help every citizen exercise their right to vote.",
-            "My neural core is strictly limited to **Indian Electoral assistance** and procedural guidance.\nFor non-electoral topics, I am unable to provide information or answers.\nHowever, I can tell you everything you need to know about Form 6, Form 8, and the Voters' Service Portal.\n\nHow can I help you with your voter registration or electoral status today?\nPlease feel free to ask any question related to the Indian voting system."
+            "I couldn't find a match for your query in my database:\n1. I am specialized specifically in Indian Electoral procedures.\n2. I can assist with registration, eligibility, and updates.\n3. Please ask about topics like Form 6, Form 8, or voter ID.\n4. My focus is entirely on helping you with voting information.",
+            "I apologize, but my training is restricted to Indian voting:\n• I cannot provide info on topics outside of voter registration.\n• I assist with Form 6, Form 8, and electoral roll updates.\n• Please rephrase your query to focus on election-related items.\n• I am here to help every citizen exercise their right to vote.",
+            "My neural core is limited to Indian Electoral assistance:\n1. I provide guidance on registration and procedural status.\n2. I am unable to answer questions on non-electoral topics.\n3. Please ask about Form 6, Form 8, or the VSP portal.\n4. How can I help you with your voter registration status today?"
         ]),
         quickReplies: ["Registration", "Eligibility", "ID Update"]
     };
