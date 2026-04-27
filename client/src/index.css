@@ -326,7 +326,7 @@ button, a, [role="button"] { min-height: 44px; }
   padding: 13px 16px;
   border-radius: 18px;
   font-size: 0.875rem;
-  line-height: 1.65;
+  line-height: 1.8;
   position: relative;
 }
 .message-card.bot {

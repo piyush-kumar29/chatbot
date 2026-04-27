@@ -73,7 +73,8 @@ FORMATTING — FOLLOW STRICTLY:
 - Use numbered lists (1. 2. 3.) or the bullet character • (Unicode bullet).
 - Each point or bullet MUST be on its own separate line.
 - Leave one blank line between the introduction and your list/points.
-- Keep the overall response around 5 to 6 lines to maintain clarity and spacing.
+- IMPORTANT: Leave one blank line between each numbered or bulleted point for proper spacing.
+- Keep the overall response around 7 to 8 lines to accommodate the extra spacing.
 ${langRule}
 
 Heuristic Context: ${analysis.thought}
