@@ -105,7 +105,7 @@ const SimulationPage = () => {
         <div style={{ flex: 1.5, minWidth: 'min(300px, 100%)', backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '24px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '30px' }}>
             <h2 style={{ fontSize: '24px', display: 'flex', alignItems: 'center', gap: '10px' }}>📊 Live Analytics Hub</h2>
-            <div style={{ color: '#3b82f6', fontWeight: 'bold', backgroundColor: 'rgba(59,130,246,0.1)', padding: '5px 15px', borderRadius: '20px' }}>
+            <div style={{ color: '#3b82f6', fontWeight: 'bold', backgroundColor: 'rgba(59,130,246,0.1)', padding: '5px 12px', borderRadius: '20px', fontSize: '12px' }}>
               {totalVotes.toLocaleString()} Total Votes
             </div>
           </div>
@@ -356,7 +356,7 @@ const ECIPortal = () => {
         ))}
       </div>
 
-      <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: '40px', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+      <div style={{ backgroundColor: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '24px', padding: 'clamp(16px, 5vw, 40px)', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
         {submitted ? (
           <div style={{ textAlign: 'center', padding: '40px 0', animation: 'scaleIn 0.5s ease-out' }}>
             <div style={{ fontSize: '60px', marginBottom: '20px' }}>🇮🇳</div>
@@ -843,7 +843,7 @@ const App = () => {
       {/* Navigation */}
       <nav style={{ position: 'fixed', top: 0, left: 0, width: '100%', padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: 'var(--bg-chat)', backdropFilter: 'blur(10px)', zIndex: 100, borderBottom: '1px solid var(--glass-border)', boxSizing: 'border-box', transition: 'background-color 0.3s' }}>
         <div style={{ fontSize: '1.5rem', fontWeight: '900', letterSpacing: '-1px' }}>VOTER AI</div>
-        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'nowrap', justifyContent: 'flex-end', overflowX: 'auto', paddingBottom: '4px' }} className="custom-scrollbar">
           {/* App Theme Toggle */}
           <button 
             onClick={() => handleAppThemeChange(appTheme === 'dark' ? 'light' : (appTheme === 'light' ? 'system' : 'dark'))}
@@ -1125,30 +1125,20 @@ const App = () => {
         )}
       </div>
 
-      {/* Chat Overlay Backdrop to hide homepage */}
-      <AnimatePresence>
-        {isChatOpen && (
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            style={{ position: 'fixed', inset: 0, backgroundColor: 'var(--bg-main)', zIndex: 999 }} 
-          />
-        )}
-      </AnimatePresence>
+      {/* Chat Overlay Backdrop removed to keep page visible on mobile like desktop */}
 
       {/* Chat Overlay */}
       {isChatOpen && (() => {
-        const chatW = Math.min(500, window.innerWidth - 40);
-        const chatH = Math.min(600, window.innerHeight - 80);
+        const isMobile = window.innerWidth <= 480;
+        const chatW = isMobile ? Math.min(360, window.innerWidth - 32) : 440;
+        const chatH = isMobile ? Math.min(500, window.innerHeight - 100) : 600;
         return (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, pointerEvents: 'none' }}>
           <Rnd
             key={chatRndKey}
             default={{
-              x: Math.round((window.innerWidth - chatW) / 2),
-              y: Math.round((window.innerHeight - chatH) / 2),
+              x: window.innerWidth - chatW - (isMobile ? 16 : 24),
+              y: window.innerHeight - chatH - (isMobile ? 16 : 24),
               width: chatW,
               height: chatH,
             }}
