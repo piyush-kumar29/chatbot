@@ -78,7 +78,7 @@ const processMessage = (msg) => {
 
     // DEFAULT FALLBACK (Dynamic Contextualization)
     return {
-        thought: "No specific intent match. Generating contextualized clarifying response.",
+        thought: "Irrelevant topic detected. No voting or election-related intent found in user input.",
         response: getRandomResponse([
             "I couldn't find a match for your query in my database:\n\n1. I am specialized specifically in Indian Electoral procedures.\n\n2. I can assist with registration, eligibility, and updates.\n\n3. Please ask about topics like Form 6, Form 8, or voter ID.",
             "I apologize, but my training is restricted to Indian voting:\n\n• I cannot provide info on topics outside of voter registration.\n\n• I assist with Form 6, Form 8, and electoral roll updates.\n\n• Please rephrase your query to focus on election-related items.",
