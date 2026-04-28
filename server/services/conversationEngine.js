@@ -60,6 +60,7 @@ STRICT RULES:
 NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
 - Provide a clear and helpful response.
 - Focus on the most important points.
+- RESTRICT your response to a maximum of 6 lines.
 
 FORMATTING — FOLLOW STRICTLY:
 - Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
@@ -98,6 +99,11 @@ Tone: Professional, Friendly, Clear.`;
         if (langMatch) {
             detectedLang = langMatch[1];
             botResponse = botResponse.replace(/\[\[LANG:.*?\]\]/gi, '').trim();
+        }
+
+        // Restrict to 6 lines if agent mode is off
+        if (!agentMode) {
+            botResponse = botResponse.split('\n').slice(0, 6).join('\n').trim();
         }
 
         return {
