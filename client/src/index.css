@@ -3,7 +3,7 @@
 [data-theme="dark"], :root {
   --bg-main: #030305;
   --bg-card: rgba(255, 255, 255, 0.02);
-  --bg-chat: rgba(9, 9, 14, 0.85);
+  --bg-chat: #09090e;
   --bg-input: rgba(255, 255, 255, 0.05);
   --bg-bot-msg: rgba(255, 255, 255, 0.04);
   --bg-hover: rgba(255, 255, 255, 0.06);
@@ -18,7 +18,7 @@
 [data-theme="light"] {
   --bg-main: #f8fafc;
   --bg-card: rgba(255, 255, 255, 0.7);
-  --bg-chat: rgba(255, 255, 255, 0.85);
+  --bg-chat: #ffffff;
   --bg-input: rgba(0, 0, 0, 0.04);
   --bg-bot-msg: rgba(0, 0, 0, 0.03);
   --bg-hover: rgba(0, 0, 0, 0.05);
@@ -129,8 +129,6 @@ button, a, [role="button"] { min-height: 44px; }
 /* ─── Chat Window ─────────────────────────────────────── */
 .chat-window {
   background: var(--bg-chat);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--glass-border);
   border-radius: 24px;
   display: flex;
@@ -492,8 +490,6 @@ button, a, [role="button"] { min-height: 44px; }
   right: 16px;
   width: 240px;
   background: var(--bg-main);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--glass-border);
   border-radius: 16px;
   padding: 16px;
