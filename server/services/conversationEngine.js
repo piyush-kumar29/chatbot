@@ -60,7 +60,7 @@ STRICT RULES:
 NORMAL MODE EXCLUSIVES (YOU MUST DO THIS):
 - Provide a clear and helpful response.
 - Focus on the most important points.
-- RESTRICT your response to a maximum of 6 lines.
+- RESTRICT your response to at most 6 points (numbered or bulleted).
 
 FORMATTING — FOLLOW STRICTLY:
 - Do NOT use any Markdown. No **, no ##, no __, no backticks, no ---.
@@ -101,9 +101,23 @@ Tone: Professional, Friendly, Clear.`;
             botResponse = botResponse.replace(/\[\[LANG:.*?\]\]/gi, '').trim();
         }
 
-        // Restrict to 6 lines if agent mode is off
+        // Restrict to 6 points if agent mode is off
         if (!agentMode) {
-            botResponse = botResponse.split('\n').slice(0, 6).join('\n').trim();
+            const lines = botResponse.split('\n');
+            let pointCount = 0;
+            const resultLines = [];
+            
+            for (const line of lines) {
+                const trimmedLine = line.trim();
+                // Check if line starts a new point (numbered list or bullet)
+                if (trimmedLine.match(/^(\d+\.|•)/)) {
+                    pointCount++;
+                }
+                // If we already have 6 points and this line starts a 7th, stop
+                if (pointCount > 6) break;
+                resultLines.push(line);
+            }
+            botResponse = resultLines.join('\n').trim();
         }
 
         return {
