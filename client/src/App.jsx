@@ -43,6 +43,13 @@ const App = () => {
   const [isListening, setIsListening] = useState(false);
   const [sourcesExpanded, setSourcesExpanded] = useState(false);
   const [speechLang, setSpeechLang] = useState('en-US');
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const voiceEnabledRef = useRef(false);
   useEffect(() => { voiceEnabledRef.current = voiceEnabled; }, [voiceEnabled]);
@@ -427,15 +434,15 @@ const App = () => {
 
       {/* Chat Overlay */}
       {isChatOpen && (() => {
-        const isMobile = window.innerWidth <= 480;
-        const chatW = isMobile ? Math.min(360, window.innerWidth - 32) : 440;
+        const isMobile = windowWidth <= 480;
+        const chatW = isMobile ? Math.min(360, windowWidth - 32) : 440;
         const chatH = isMobile ? Math.min(500, window.innerHeight - 100) : 600;
         return (
         <div style={{ position: 'fixed', inset: 0, zIndex: 1000, pointerEvents: 'none' }}>
           <Rnd
             key={chatRndKey}
             default={{
-              x: window.innerWidth - chatW - (isMobile ? 16 : 24),
+              x: windowWidth - chatW - (isMobile ? 16 : 24),
               y: window.innerHeight - chatH - (isMobile ? 16 : 24),
               width: chatW,
               height: chatH,
