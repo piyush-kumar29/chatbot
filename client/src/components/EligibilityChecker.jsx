@@ -32,7 +32,7 @@ const EligibilityChecker = ({ setPage }) => {
         <p className="text-gray-400">Answer 3 simple questions to check if you can register to vote.</p>
       </div>
 
-      <div className="glass p-12 rounded-[40px] border border-white/5 relative overflow-hidden">
+      <div className="glass p-12 rounded-40 border border-white-5 relative overflow-hidden">
         <AnimatePresence mode="wait">
           {!result ? (
             <motion.div 
@@ -51,7 +51,7 @@ const EligibilityChecker = ({ setPage }) => {
                   value={data.age} 
                   onChange={(e) => setData({...data, age: e.target.value})}
                   placeholder="Enter your age"
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-5 px-8 text-xl text-white outline-none focus:border-blue-500/50 transition-all"
+                  className="w-full bg-white-5 border border-white-10 rounded-2xl py-5 px-8 text-xl text-white outline-none focus:border-blue-500-50 transition-all"
                 />
               </div>
 
@@ -134,7 +134,7 @@ const EligibilityChecker = ({ setPage }) => {
                     {parseInt(data.age) < 18 ? ` You must be at least 18 years old.` : ''}
                     {!data.citizen ? ` Only Indian citizens can register.` : ''}
                   </p>
-                  <button onClick={reset} className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-white font-black uppercase tracking-widest">
+                  <button onClick={reset} className="w-full py-5 rounded-2xl bg-white-5 border border-white-10 text-white font-black uppercase tracking-widest">
                     Try Again
                   </button>
                 </>

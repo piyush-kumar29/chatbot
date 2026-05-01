@@ -49,7 +49,7 @@ const AdminDashboard = ({ token, currentUser }) => {
 
   return (
     <div className="max-w-7xl mx-auto py-32 px-8 animate-fade-in">
-      <h1 className="text-[60px] font-black mb-4 tracking-tighter">System Administration.</h1>
+      <h1 className="text-60 font-black mb-4 tracking-tighter">System Administration.</h1>
       <p className="text-gray-400 font-medium mb-16">Global registry of all verified neural link users.</p>
 
       {loading ? (
@@ -60,18 +60,18 @@ const AdminDashboard = ({ token, currentUser }) => {
         </div>
       ) : (
         <div className="glass overflow-hidden shadow-2xl">
-          <div className="p-8 border-b border-white/5 flex justify-between items-center bg-white/2">
+          <div className="p-8 border-b border-white-5 flex justify-between items-center bg-white-2">
             <h3 className="text-xl font-black flex items-center gap-3">
                User Ledger
             </h3>
-            <span className="bg-blue-600/20 text-blue-400 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest">
+            <span className="bg-blue-600-20 text-blue-400 px-4 py-2 rounded-full text-xs font-black uppercase tracking-widest">
               {usersList.length} Active Nodes
             </span>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-left">
               <thead>
-                <tr className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-600 border-b border-white/5">
+                <tr className="text-10 font-black uppercase tracking-02 text-gray-600 border-b border-white-5">
                   <th className="p-8">Username</th>
                   <th className="p-8">Email</th>
                   <th className="p-8">Clearance</th>
@@ -80,7 +80,7 @@ const AdminDashboard = ({ token, currentUser }) => {
               </thead>
               <tbody>
                 {usersList.map((u) => (
-                  <tr key={u._id} className="border-b border-white/5 hover:bg-white/1 transition-colors">
+                  <tr key={u._id} className="border-b border-white-5 hover:bg-white-1 transition-colors">
                     <td className="p-8 font-bold text-white">@{u.username}</td>
                     <td className="p-8 text-gray-400">{u.email}</td>
                     <td className="p-8">
@@ -91,10 +91,10 @@ const AdminDashboard = ({ token, currentUser }) => {
                     <td className="p-8 text-right">
                        {currentUser && currentUser.username !== u.username && (
                          <div className="flex justify-end gap-4">
-                           <button onClick={() => handleRoleChange(u._id, u.role)} className="text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
+                           <button onClick={() => handleRoleChange(u._id, u.role)} className="text-10 font-black uppercase tracking-widest text-gray-500 hover:text-white transition-colors">
                              {u.role === 'admin' ? 'Revoke' : 'Promote'}
                            </button>
-                           <button onClick={() => handleDeleteUser(u._id)} className="text-[10px] font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 transition-colors">
+                           <button onClick={() => handleDeleteUser(u._id)} className="text-10 font-black uppercase tracking-widest text-red-500/60 hover:text-red-500 transition-colors">
                              Delete
                            </button>
                          </div>

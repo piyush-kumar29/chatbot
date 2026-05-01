@@ -21,12 +21,12 @@ const Navbar = ({ onOpenChat, setPage, currentPage }) => {
     <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'py-4 bg-black/70 backdrop-blur-xl border-b border-white/5' : 'py-8 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
         <div onClick={() => setPage('home')} className="flex items-center gap-3 cursor-pointer group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center shadow-lg group-hover-scale-105 transition-transform">
             <Landmark size={20} color="white" />
           </div>
           <div className="flex flex-col leading-none">
             <span className="text-xl font-black tracking-tighter uppercase">VoterAI</span>
-            <span className="text-[8px] font-bold text-blue-400 tracking-[0.3em] uppercase">Assistant</span>
+            <span className="text-[8px] font-bold text-blue-400 tracking-03 uppercase">Assistant</span>
           </div>
         </div>
 
@@ -43,7 +43,7 @@ const Navbar = ({ onOpenChat, setPage, currentPage }) => {
           ))}
           <button 
             onClick={onOpenChat}
-            className="px-6 py-3 rounded-xl bg-blue-600/10 border border-blue-500/20 text-[10px] font-black uppercase tracking-widest hover:bg-blue-600 hover:border-blue-600 transition-all flex items-center gap-2 cursor-pointer text-blue-400 hover:text-white"
+            className="px-6 py-3 rounded-xl bg-blue-600-10 border border-blue-500-20 text-10 font-black uppercase tracking-widest hover:bg-blue-600 hover:border-blue-600 transition-all flex items-center gap-2 cursor-pointer text-blue-400 hover:text-white"
           >
             <MessageSquare size={14} /> Ask AI Assistant
           </button>
@@ -57,7 +57,7 @@ const Navbar = ({ onOpenChat, setPage, currentPage }) => {
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-black/95 backdrop-blur-3xl border-b border-white/5 p-8 flex flex-col gap-6 animate-fade-in">
+        <div className="md:hidden bg-black/95 backdrop-blur-3xl border-b border-white-5 p-8 flex flex-col gap-6 animate-fade-in">
           {navLinks.map((link) => (
             <button 
               key={link.id} onClick={() => { setPage(link.id); setMobileMenuOpen(false); }}

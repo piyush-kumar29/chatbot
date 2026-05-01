@@ -31,37 +31,40 @@ const Home = ({ onOpenChat, setPage }) => {
           <motion.div 
             initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}
           >
-            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-[0.2em] mb-8">
-              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-              Your AI-Powered Voter Registration Assistant
-            </div>
-            <h1 className="text-[80px] font-black leading-[0.9] tracking-tighter mb-10">
-              Empowering <br />
-              India's <br />
-              <span className="gradient-text">Electorate.</span>
-            </h1>
-            <p className="text-xl text-gray-400 font-medium max-w-xl mb-12 leading-relaxed">
-              Simplified guidance for voter registration, address updates, and electoral roll verification. Powered by AI to make democracy accessible to everyone.
-            </p>
-            
-            <div className="flex flex-wrap gap-6">
-              <button onClick={onOpenChat} className="btn-primary px-10 py-5 text-lg shadow-xl shadow-blue-600/20">
-                <MessageSquare size={24} />
-                Ask Registration Assistant
-              </button>
-              <button className="glass px-8 py-5 text-lg font-bold flex items-center gap-2 hover:bg-white/5 group transition-all" onClick={() => setPage('eci')}>
-                Guided Registration <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
+            <div className="absolute -top-10 -right-5 w-400 h-400 bg-blue-500-5 blur-3xl animate-spin-slow" />
+            <div className="relative">
+              <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-blue-500-10 border border-blue-500-20 text-blue-400 text-10 font-black uppercase tracking-02 mb-8">
+                <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                Your AI-Powered Voter Registration Assistant
+              </div>
+              <h1 className="text-80 font-black leading-none tracking-tighter mb-10">
+                Empowering <br />
+                India's <br />
+                <span className="gradient-text">Electorate.</span>
+              </h1>
+              <p className="text-xl text-gray-400 font-medium max-w-xl mb-12 leading-relaxed">
+                Simplified guidance for voter registration, address updates, and electoral roll verification. Powered by AI to make democracy accessible to everyone.
+              </p>
+              
+              <div className="flex flex-wrap gap-6">
+                <button onClick={onOpenChat} className="btn-primary px-10 py-5 text-lg shadow-xl shadow-blue-600-20">
+                  <MessageSquare size={24} />
+                  Ask Registration Assistant
+                </button>
+                <button className="glass px-8 py-5 text-lg font-bold flex items-center gap-2 hover:bg-white-5 group transition-all" onClick={() => setPage('eci')}>
+                  Guided Registration <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
 
-            {/* Live Stats */}
-            <div className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-12">
-              {stats.map((s, i) => (
-                <div key={i} className="flex flex-col">
-                  <span className={`text-3xl font-black ${s.color} tracking-tighter`}>{s.val}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-gray-600 mt-2">{s.label}</span>
-                </div>
-              ))}
+              {/* Live Stats */}
+              <div className="mt-20 grid grid-cols-2 sm:grid-cols-4 gap-12">
+                {stats.map((s, i) => (
+                  <div key={i} className="flex flex-col">
+                    <span className={`text-3xl font-black ${s.color} tracking-tighter`}>{s.val}</span>
+                    <span className="text-10 font-bold uppercase tracking-widest text-gray-600 mt-2">{s.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </motion.div>
         </div>
@@ -69,7 +72,7 @@ const Home = ({ onOpenChat, setPage }) => {
         {/* Hero Right: Search Module */}
         <motion.div 
           initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="glass p-12 relative overflow-hidden group shadow-[0_48px_96px_-24px_rgba(0,0,0,0.6)]"
+          className="glass p-12 relative overflow-hidden group shadow-hero"
         >
           <div className="absolute top-0 right-0 p-8 opacity-5">
             <Globe size={180} className="rotate-12 group-hover:rotate-0 transition-transform duration-1000" />
@@ -80,24 +83,24 @@ const Home = ({ onOpenChat, setPage }) => {
 
           <div className="space-y-6">
             <div className="relative">
-              <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-500" size={20} />
+              <Search className="absolute left-5 top-1-2 translate-y-m1-2 text-gray-500" size={20} />
               <input 
                 type="text" value={query} onChange={(e) => setQuery(e.target.value)}
                 placeholder="e.g. How to apply for a new voter ID?"
-                className="w-full bg-black/40 border border-white/10 rounded-2xl py-5 pl-14 pr-6 text-sm text-white font-medium focus:border-blue-500/50 transition-all outline-none"
+                className="w-full bg-black-40 border border-white-10 rounded-2xl py-5 pl-14 pr-6 text-sm text-white font-medium focus:border-blue-500-50 transition-all outline-none"
                 onKeyPress={(e) => e.key === 'Enter' && onOpenChat()}
               />
             </div>
             <div className="flex flex-wrap gap-2">
               {['New Registration', 'Address Change', 'Age Proof', 'Track Status'].map(t => (
-                <button key={t} className="px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[11px] font-bold text-gray-500 hover:text-white hover:border-blue-500/30 transition-all">
+                <button key={t} className="px-4 py-2 rounded-xl bg-white-5 border border-white-5 text-11 font-bold text-gray-500 hover:text-white hover:border-blue-500-30 transition-all">
                   {t}
                 </button>
               ))}
             </div>
             <button 
               onClick={onOpenChat}
-              className="w-full py-5 rounded-2xl bg-blue-600/10 border border-blue-500/30 text-blue-400 font-bold hover:bg-blue-600/20 transition-all flex items-center justify-center gap-2 mt-6"
+              className="w-full py-5 rounded-2xl bg-blue-600-10 border border-blue-500-30 text-blue-400 font-bold hover:bg-blue-600-20 transition-all flex items-center justify-center gap-2 mt-6"
             >
               Analyze Query <Zap size={18} />
             </button>
@@ -118,14 +121,24 @@ const Home = ({ onOpenChat, setPage }) => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="glass p-8 rounded-3xl border border-white/5"
+              className="glass p-8 rounded-3xl border border-white-5"
             >
-              <div className="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center mb-6">
+              <div className="w-12 h-12 rounded-2xl bg-white-5 flex items-center justify-center mb-6">
                 {step.icon}
               </div>
               <h3 className="text-xl font-bold mb-3">{step.title}</h3>
               <p className="text-gray-400 text-sm leading-relaxed">{step.desc}</p>
             </motion.div>
+          ))}
+        </div>
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-4 gap-4">
+          {["Form 6 Guide", "Eligibility Checker", "Booth Locator", "EPIC Download"].map((item) => (
+            <div key={item} className="glass p-6 rounded-2xl border border-white-5 flex items-center gap-4 hover:bg-white-5 transition-all cursor-pointer">
+              <div className="w-10 h-10 rounded-xl bg-blue-600-10 flex items-center justify-center text-blue-400">
+                <CheckCircle2 size={18} />
+              </div>
+              <span className="font-bold text-sm">{item}</span>
+            </div>
           ))}
         </div>
       </div>
@@ -147,20 +160,20 @@ const Home = ({ onOpenChat, setPage }) => {
               </div>
             ))}
           </div>
-          <button onClick={() => setPage('features')} className="mt-10 px-8 py-4 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 font-bold hover:bg-blue-600/30 transition-all">
+          <button onClick={() => setPage('features')} className="mt-10 px-8 py-4 rounded-xl bg-blue-600-20 border border-blue-500-30 text-blue-400 font-bold hover:bg-blue-600-30 transition-all">
             Check Your Eligibility Now
           </button>
         </div>
-        <div className="glass p-12 rounded-[40px] border border-white/5 relative">
-          <div className="absolute -top-10 -right-10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl"></div>
+        <div className="glass p-12 rounded-40 border border-white-5 relative overflow-hidden">
+          <div className="absolute top-m10 right-m10 w-40 h-40 bg-blue-500/20 rounded-full blur-3xl"></div>
           <h3 className="text-2xl font-black mb-6">Required Documents</h3>
           <div className="grid grid-cols-2 gap-6">
-            <div className="p-6 rounded-2xl bg-white/5">
-              <span className="text-[10px] font-black uppercase text-blue-400 tracking-widest block mb-2">Age Proof</span>
+            <div className="p-6 rounded-2xl bg-white-5">
+              <span className="text-10 font-black uppercase text-blue-400 tracking-widest block mb-2">Age Proof</span>
               <p className="text-sm text-gray-400">Birth Certificate, Passport, PAN Card, Driving License, etc.</p>
             </div>
-            <div className="p-6 rounded-2xl bg-white/5">
-              <span className="text-[10px] font-black uppercase text-purple-400 tracking-widest block mb-2">Address Proof</span>
+            <div className="p-6 rounded-2xl bg-white-5">
+              <span className="text-10 font-black uppercase text-purple-400 tracking-widest block mb-2">Address Proof</span>
               <p className="text-sm text-gray-400">Utility Bills, Ration Card, Bank Passbook, etc.</p>
             </div>
           </div>

@@ -3,7 +3,7 @@ import { Landmark, ExternalLink, Shield, AlertTriangle } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-black/40 border-t border-white/5 pt-20 pb-10 px-8">
+    <footer className="bg-black-40 border-t border-white-5 pt-20 pb-10 px-8">
       <div className="max-w-7xl mx-auto">
         {/* Government Disclaimer - Mandatory */}
         <div className="mb-16 p-6 rounded-3xl bg-red-500/5 border border-red-500/10 flex items-start gap-4">
@@ -28,10 +28,10 @@ const Footer = () => {
               Simplifying the democratic process through secure AI guidance. Registered with Render Infrastructure and MongoDB Atlas for data integrity.
             </p>
             <div className="flex gap-4">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] font-bold text-gray-500">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white-5 border border-white-5 text-10 font-bold text-gray-500">
                 <Shield size={12} className="text-blue-500" /> AES-256 Encrypted
               </div>
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/5 text-[10px] font-bold text-gray-500">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white-5 border border-white-5 text-10 font-bold text-gray-500">
                 <Shield size={12} className="text-green-500" /> Atlas Verified
               </div>
             </div>
@@ -67,11 +67,11 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-          <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">
+        <div className="pt-10 border-t border-white-5 flex flex-col md:flex-row justify-between items-center gap-6">
+          <p className="text-10 font-black uppercase tracking-widest text-gray-600">
             © 2026 VoterAI Infrastructure. Built for the Electorate of India.
           </p>
-          <div className="flex gap-8 text-[10px] font-black uppercase tracking-widest text-gray-600">
+          <div className="flex gap-8 text-10 font-black uppercase tracking-widest text-gray-600">
             <span className="hover:text-white cursor-pointer transition-colors">Privacy Protocol</span>
             <span className="hover:text-white cursor-pointer transition-colors">Terms of Service</span>
             <span className="hover:text-white cursor-pointer transition-colors">Security Audit</span>

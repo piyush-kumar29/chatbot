@@ -354,7 +354,7 @@ const App = () => {
                 { title: 'EPIC Download', desc: 'Download your e-EPIC identity card digitally.', url: 'https://voters.eci.gov.in/home/download-epic' },
                 { title: 'Voter Helpline App', desc: 'Mobile-first official application for Android & iOS.', url: 'https://play.google.com/store/apps/details?id=com.eci.citizen' }
               ].map((res, i) => (
-                <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="glass p-8 rounded-3xl border border-white/5 hover:border-blue-500/30 transition-all group">
+                <a key={i} href={res.url} target="_blank" rel="noopener noreferrer" className="glass p-8 rounded-3xl border border-white-5 hover:border-blue-500-30 transition-all group">
                   <h3 className="text-xl font-bold mb-3 group-hover:text-blue-400">{res.title} <ExternalLink size={14} className="inline ml-2" /></h3>
                   <p className="text-gray-400 text-sm">{res.desc}</p>
                 </a>
@@ -367,25 +367,25 @@ const App = () => {
         
         {(currentPage === 'login' || currentPage === 'signup') && (
           <div className="max-w-md mx-auto py-40 px-8">
-            <div className="glass p-10 rounded-[40px] border border-white/5 shadow-2xl">
+            <div className="glass p-10 rounded-40 border border-white-5 shadow-2xl">
               <h2 className="text-3xl font-black mb-8 text-center">{currentPage === 'login' ? 'Welcome Back' : 'Create Account'}</h2>
               <div className="space-y-6">
                 {currentPage === 'signup' && (
                   <input
                     type="text" placeholder="Username"
                     value={authData.username} onChange={e => setAuthData({ ...authData, username: e.target.value })}
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500/50"
+                    className="w-full bg-white-5 border border-white-10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500-50"
                   />
                 )}
                 <input
                   type="email" placeholder="Email Address"
                   value={authData.email} onChange={e => setAuthData({ ...authData, email: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500/50"
+                  className="w-full bg-white-5 border border-white-10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500-50"
                 />
                 <input
                   type="password" placeholder="Password"
                   value={authData.password} onChange={e => setAuthData({ ...authData, password: e.target.value })}
-                  className="w-full bg-white/5 border border-white/10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500/50"
+                  className="w-full bg-white-5 border border-white-10 rounded-2xl py-4 px-6 text-white outline-none focus:border-blue-500-50"
                 />
                 <button
                   onClick={() => handleAuth(currentPage)}
@@ -399,7 +399,7 @@ const App = () => {
         )}
 
         {/* System Infrastructure Section - Portfolio Proof */}
-        <div className="max-w-7xl mx-auto px-8 py-20 border-t border-white/5 mt-40">
+        <div className="max-w-7xl mx-auto px-8 py-20 border-t border-white-5 mt-40">
            <div className="flex flex-col md:flex-row justify-between items-start gap-12">
               <div className="max-w-md">
                 <h4 className="text-xl font-black mb-4 uppercase tracking-tighter">Infrastructure Stack</h4>
@@ -409,19 +409,19 @@ const App = () => {
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 w-full md:w-auto">
                 <div>
-                  <span className="text-[10px] font-black uppercase text-blue-400 tracking-widest block mb-2">Hosting</span>
+                  <span className="text-10 font-black uppercase text-blue-400 tracking-widest block mb-2">Hosting</span>
                   <p className="text-sm font-bold text-white">Render Cloud</p>
-                  <p className="text-[10px] text-gray-600">Auto-scaling PAAS</p>
+                  <p className="text-10 text-gray-600">Auto-scaling PAAS</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-black uppercase text-purple-400 tracking-widest block mb-2">Database</span>
+                  <span className="text-10 font-black uppercase text-purple-400 tracking-widest block mb-2">Database</span>
                   <p className="text-sm font-bold text-white">MongoDB Atlas</p>
-                  <p className="text-[10px] text-gray-600">Global Cluster v6.0</p>
+                  <p className="text-10 text-gray-600">Global Cluster v6.0</p>
                 </div>
                 <div>
-                  <span className="text-[10px] font-black uppercase text-green-400 tracking-widest block mb-2">AI Engine</span>
+                  <span className="text-10 font-black uppercase text-green-400 tracking-widest block mb-2">AI Engine</span>
                   <p className="text-sm font-bold text-white">Groq LPU</p>
-                  <p className="text-[10px] text-gray-600">Llama 3.3 Inference</p>
+                  <p className="text-10 text-gray-600">Llama 3.3 Inference</p>
                 </div>
               </div>
            </div>

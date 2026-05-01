@@ -32,7 +32,7 @@ const RegistrationForm = () => {
   return (
     <div className="max-w-4xl mx-auto py-20 px-4">
       <div className="text-center mb-16">
-        <h1 className="text-[50px] font-black leading-none mb-4">
+        <h1 className="text-50 font-black leading-none mb-4">
           <span className="text-blue-500 uppercase tracking-tighter">ECI</span> <br />
           Voter Service Portal
         </h1>
@@ -51,7 +51,7 @@ const RegistrationForm = () => {
         ))}
       </div>
 
-      <div className="glass p-10 rounded-[40px] border border-white/5 relative shadow-2xl">
+      <div className="glass p-10 rounded-40 border border-white-5 relative shadow-2xl">
         {submitted ? (
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="text-center py-20">
             <div className="text-6xl mb-8">🇮🇳</div>
@@ -74,7 +74,7 @@ const RegistrationForm = () => {
                 {step === 8 && "Optional Details"}
                 {step === 9 && "Declaration"}
               </h3>
-              <span className="text-xs font-bold text-gray-600 bg-white/5 px-3 py-1 rounded-full uppercase tracking-widest">Step {step} of 9</span>
+              <span className="text-xs font-bold text-gray-600 bg-white-5 px-3 py-1 rounded-full uppercase tracking-widest">Step {step} of 9</span>
             </div>
 
             <div className="grid gap-6">
@@ -120,8 +120,8 @@ const RegistrationForm = () => {
 
               {step === 5 && (
                 <div className="space-y-6">
-                  <input type="text" placeholder="12-Digit Aadhaar Number" value={formData.aadhar} onChange={e => setFormData({ ...formData, aadhar: e.target.value })} maxLength="12" className="input-field w-full tracking-[0.5em] text-center text-2xl font-black" />
-                  <p className="text-[10px] text-gray-500 uppercase tracking-widest text-center">Providing Aadhaar is voluntary for electoral roll authentication.</p>
+                  <input type="text" placeholder="12-Digit Aadhaar Number" value={formData.aadhar} onChange={e => setFormData({ ...formData, aadhar: e.target.value })} maxLength="12" className="input-field w-full tracking-05 text-center text-2xl font-black" />
+                  <p className="text-10 text-gray-500 uppercase tracking-widest text-center">Providing Aadhaar is voluntary for electoral roll authentication.</p>
                 </div>
               )}
 
@@ -157,7 +157,7 @@ const RegistrationForm = () => {
               )}
 
               {step === 9 && (
-                <div className="p-8 rounded-3xl bg-blue-600/5 border border-blue-500/20">
+                <div className="p-8 rounded-3xl bg-blue-600/5 border border-blue-500-20">
                   <h4 className="text-white font-bold mb-4">Declaration</h4>
                   <p className="text-sm text-gray-400 leading-relaxed mb-6">
                     I hereby declare that I am a citizen of India and ordinarily resident at the address given. I have not applied for inclusion in the electoral roll for any other constituency.
@@ -171,15 +171,15 @@ const RegistrationForm = () => {
             </div>
 
             <div className="flex justify-between pt-10">
-              <button onClick={handlePrev} disabled={step === 1} className="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all bg-white/5 border border-white/10 text-gray-500 hover:text-white disabled:opacity-20">
+              <button onClick={handlePrev} disabled={step === 1} className="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all bg-white-5 border border-white-10 text-gray-500 hover:text-white disabled-opacity-20">
                 <ChevronLeft size={16} /> Back
               </button>
               {step < 9 ? (
-                <button onClick={handleNext} className="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all bg-blue-600 text-white shadow-xl shadow-blue-600/20 hover:scale-105 active:scale-95">
+                <button onClick={handleNext} className="flex items-center gap-2 px-8 py-4 rounded-2xl font-bold uppercase tracking-widest text-xs transition-all bg-blue-600 text-white shadow-xl shadow-blue-600-20 hover-scale-105 active-scale-95">
                   Continue <ChevronRight size={16} />
                 </button>
               ) : (
-                <button onClick={submitForm} className="px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all bg-green-600 text-white shadow-xl shadow-green-600/20 hover:scale-105 active:scale-95">
+                <button onClick={submitForm} className="px-10 py-4 rounded-2xl font-black uppercase tracking-widest text-xs transition-all bg-green-600 text-white shadow-xl shadow-green-600-20 hover-scale-105 active-scale-95">
                   Submit Form 6
                 </button>
               )}
@@ -190,7 +190,7 @@ const RegistrationForm = () => {
       
       <div className="mt-12 flex items-center justify-center gap-4 text-gray-600">
         <Info size={14} />
-        <p className="text-[10px] font-bold uppercase tracking-[0.2em]">Data encrypted and stored on MongoDB Atlas Secure Nodes</p>
+        <p className="text-10 font-bold uppercase tracking-02">Data encrypted and stored on MongoDB Atlas Secure Nodes</p>
       </div>
     </div>
   );
