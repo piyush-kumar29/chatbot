@@ -333,12 +333,19 @@ const ECIPortal = () => {
         logger: m => { if (m.status === 'recognizing text') setVerifyProgress(Math.round(m.progress * 100)); }
       });
       const text = result.data.text.toLowerCase();
+      
+      // Strict Check: Does it even look like an official document?
+      const isOfficialDoc = text.includes('india') || text.includes('gov') || text.includes('identity') || text.includes('card') || text.includes('election') || text.includes('cert') || text.includes('bill') || text.includes('mark');
+
       let isValid = false;
-      if (type === 'dob') {
-          isValid = text.includes('dob') || text.includes('birth') || text.includes('year') || text.includes('date');
-      } else {
-          isValid = text.includes('address') || text.includes('house') || text.includes('village') || text.includes('road') || text.includes('bill');
+      if (isOfficialDoc) {
+          if (type === 'dob') {
+              isValid = text.includes('dob') || text.includes('birth') || text.includes('year') || text.includes('date');
+          } else {
+              isValid = text.includes('address') || text.includes('house') || text.includes('village') || text.includes('road') || text.includes('bill') || text.includes('dist');
+          }
       }
+      
       setVerifyResults(prev => ({ ...prev, [type]: isValid ? 'success' : 'fail' }));
     } catch (e) {
       setVerifyResults(prev => ({ ...prev, [type]: 'fail' }));
