@@ -161,11 +161,18 @@ export const AIDocVerificationPage = ({ currentUser }) => {
       let foundType = 'Identity Document';
       let hasAddress = lowerText.includes('address') || lowerText.includes('house') || lowerText.includes('road') || lowerText.includes('village');
       let hasDob = lowerText.includes('dob') || lowerText.includes('birth') || lowerText.includes('year');
-
+      
+      // Comprehensive heuristic for all valid election documents
       if (lowerText.includes('aadhaar')) foundType = 'Aadhaar Card';
       else if (lowerText.includes('pan card')) foundType = 'PAN Card';
       else if (lowerText.includes('passport')) foundType = 'Passport';
       else if (lowerText.includes('driving')) foundType = 'Driving License';
+      else if (lowerText.includes('voter') || lowerText.includes('epic')) foundType = 'Voter ID (EPIC)';
+      else if (lowerText.includes('ration')) foundType = 'Ration Card';
+      else if (lowerText.includes('bank') || lowerText.includes('passbook')) foundType = 'Bank Passbook';
+      else if (lowerText.includes('electricity') || lowerText.includes('water') || lowerText.includes('bill')) foundType = 'Utility Bill';
+      else if (lowerText.includes('birth') || lowerText.includes('certificate')) foundType = 'Birth Certificate';
+      else if (lowerText.includes('marksheet') || lowerText.includes('school')) foundType = 'Educational Certificate';
 
       const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
       const namePattern = /^[A-Z][a-z]+ [A-Z][a-z]+( [A-Z][a-z]+)?$/;

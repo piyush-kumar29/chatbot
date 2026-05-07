@@ -335,14 +335,17 @@ const ECIPortal = () => {
       const text = result.data.text.toLowerCase();
       
       // Strict Check: Does it even look like an official document?
-      const isOfficialDoc = text.includes('india') || text.includes('gov') || text.includes('identity') || text.includes('card') || text.includes('election') || text.includes('cert') || text.includes('bill') || text.includes('mark');
+      const isOfficialDoc = text.includes('india') || text.includes('gov') || text.includes('identity') || text.includes('card') || text.includes('election') || text.includes('cert') || text.includes('bill') || text.includes('mark') || text.includes('ration') || text.includes('bank') || text.includes('passport');
 
       let isValid = false;
       if (isOfficialDoc) {
+          // If it's a valid official document, check if it fits the category (DOB or Address)
           if (type === 'dob') {
-              isValid = text.includes('dob') || text.includes('birth') || text.includes('year') || text.includes('date');
+              // Aadhaar, Birth Cert, Passport, and Marksheets are all valid for DOB
+              isValid = text.includes('dob') || text.includes('birth') || text.includes('year') || text.includes('date') || text.includes('aadhaar') || text.includes('passport') || text.includes('mark');
           } else {
-              isValid = text.includes('address') || text.includes('house') || text.includes('village') || text.includes('road') || text.includes('bill') || text.includes('dist');
+              // Aadhaar, Ration Card, Passport, Utility bills, and Passbooks are all valid for Address
+              isValid = text.includes('address') || text.includes('house') || text.includes('village') || text.includes('road') || text.includes('bill') || text.includes('dist') || text.includes('aadhaar') || text.includes('ration') || text.includes('passbook');
           }
       }
       
