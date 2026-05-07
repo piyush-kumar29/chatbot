@@ -4,6 +4,7 @@ import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Za
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
 import { RequiredDocumentsPage, AIDocVerificationPage, FAQPage } from './pages/NewSections';
+import Tesseract from 'tesseract.js';
 
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
@@ -317,15 +318,40 @@ const ECIPortal = () => {
     declarationPlace: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [verifyingDoc, setVerifyingDoc] = useState(null); // 'dob' | 'address' | null
+  const [verifyProgress, setVerifyProgress] = useState(0);
+  const [verifyResults, setVerifyResults] = useState({ dob: null, address: null });
 
   const handleNext = () => setStep(prev => Math.min(prev + 1, 9));
   const handlePrev = () => setStep(prev => Math.max(prev - 1, 1));
+
+  const verifyDoc = async (file, type) => {
+    setVerifyingDoc(type);
+    setVerifyProgress(0);
+    try {
+      const result = await Tesseract.recognize(file, 'eng', {
+        logger: m => { if (m.status === 'recognizing text') setVerifyProgress(Math.round(m.progress * 100)); }
+      });
+      const text = result.data.text.toLowerCase();
+      let isValid = false;
+      if (type === 'dob') {
+          isValid = text.includes('dob') || text.includes('birth') || text.includes('year') || text.includes('date');
+      } else {
+          isValid = text.includes('address') || text.includes('house') || text.includes('village') || text.includes('road') || text.includes('bill');
+      }
+      setVerifyResults(prev => ({ ...prev, [type]: isValid ? 'success' : 'fail' }));
+    } catch (e) {
+      setVerifyResults(prev => ({ ...prev, [type]: 'fail' }));
+    }
+    setVerifyingDoc(null);
+  };
 
   const submitForm = () => {
     setSubmitted(true);
     setTimeout(() => {
       setStep(1);
       setFormData({ state: '', constituency: '', name: '', dob: '', relativeName: '', mobile: '', address: '', epicId: '', aadhar: '', document: null });
+      setVerifyResults({ dob: null, address: null });
       setSubmitted(false);
     }, 4000);
   };
@@ -466,9 +492,16 @@ const ECIPortal = () => {
                     <option value="Third Gender">Third Gender</option>
                   </select>
                   <input type="date" placeholder="Date of Birth" value={formData.dob} onChange={e => setFormData({ ...formData, dob: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', colorScheme: 'dark', boxSizing: 'border-box' }} />
-                  <div style={{ border: '1px dashed rgba(59,130,246,0.5)', padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)' }}>
-                    <p style={{ color: '#60a5fa', marginBottom: '10px', fontSize: '14px' }}>Upload Date of Birth Proof (Birth Certificate, Class 10 Marksheet, etc.)</p>
-                    <input type="file" style={{ color: '#94a3b8', fontSize: '14px' }} />
+                  <div style={{ border: `1px dashed ${verifyResults.dob === 'success' ? '#10b981' : verifyResults.dob === 'fail' ? '#ef4444' : 'rgba(59,130,246,0.5)'}`, padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)', transition: 'all 0.3s' }}>
+                    <p style={{ color: verifyResults.dob === 'success' ? '#10b981' : verifyResults.dob === 'fail' ? '#ef4444' : '#60a5fa', marginBottom: '10px', fontSize: '14px', fontWeight: 'bold' }}>
+                      {verifyingDoc === 'dob' ? `Verifying... ${verifyProgress}%` : verifyResults.dob === 'success' ? '✔ DOB Proof Verified' : verifyResults.dob === 'fail' ? '⚠ Invalid DOB Proof Detected' : 'Upload Date of Birth Proof'}
+                    </p>
+                    {verifyingDoc === 'dob' && (
+                        <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginBottom: '10px', overflow: 'hidden' }}>
+                            <div style={{ width: `${verifyProgress}%`, height: '100%', backgroundColor: '#3b82f6', transition: 'width 0.2s' }} />
+                        </div>
+                    )}
+                    <input type="file" onChange={e => e.target.files[0] && verifyDoc(e.target.files[0], 'dob')} style={{ color: '#94a3b8', fontSize: '14px' }} />
                   </div>
                 </>
               )}
@@ -477,9 +510,16 @@ const ECIPortal = () => {
                   <input type="text" placeholder="House/Building/Apartment No." value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                   <input type="text" placeholder="Village / Town" value={formData.village} onChange={e => setFormData({ ...formData, village: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
                   <input type="text" placeholder="PIN Code" value={formData.pinCode} onChange={e => setFormData({ ...formData, pinCode: e.target.value })} style={{ padding: '15px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)', backgroundColor: 'rgba(255,255,255,0.05)', color: 'white', width: '100%', boxSizing: 'border-box' }} />
-                  <div style={{ border: '1px dashed rgba(59,130,246,0.5)', padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)' }}>
-                    <p style={{ color: '#60a5fa', marginBottom: '10px', fontSize: '14px' }}>Upload Address Proof (Utility Bill, Passport, etc.)</p>
-                    <input type="file" style={{ color: '#94a3b8', fontSize: '14px' }} />
+                  <div style={{ border: `1px dashed ${verifyResults.address === 'success' ? '#10b981' : verifyResults.address === 'fail' ? '#ef4444' : 'rgba(59,130,246,0.5)'}`, padding: '20px', borderRadius: '12px', textAlign: 'center', backgroundColor: 'rgba(59,130,246,0.05)', transition: 'all 0.3s' }}>
+                    <p style={{ color: verifyResults.address === 'success' ? '#10b981' : verifyResults.address === 'fail' ? '#ef4444' : '#60a5fa', marginBottom: '10px', fontSize: '14px', fontWeight: 'bold' }}>
+                      {verifyingDoc === 'address' ? `Verifying... ${verifyProgress}%` : verifyResults.address === 'success' ? '✔ Address Proof Verified' : verifyResults.address === 'fail' ? '⚠ Invalid Address Proof Detected' : 'Upload Address Proof'}
+                    </p>
+                    {verifyingDoc === 'address' && (
+                        <div style={{ width: '100%', height: '4px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '2px', marginBottom: '10px', overflow: 'hidden' }}>
+                            <div style={{ width: `${verifyProgress}%`, height: '100%', backgroundColor: '#3b82f6', transition: 'width 0.2s' }} />
+                        </div>
+                    )}
+                    <input type="file" onChange={e => e.target.files[0] && verifyDoc(e.target.files[0], 'address')} style={{ color: '#94a3b8', fontSize: '14px' }} />
                   </div>
                 </>
               )}
