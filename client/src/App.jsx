@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Settings, Moon, Sun, Monitor, Maximize, Copy, Check, Trash2, Shield, Zap, ShieldCheck, Globe, Users, FileCheck, BarChart3, MapPin, ArrowRight, Activity, Lock, Award, FileText, Landmark, AlertCircle, ChevronDown, ChevronUp, Mic, MicOff, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Rnd } from 'react-rnd';
+import { RequiredDocumentsPage, AIDocVerificationPage, FAQPage } from './pages/NewSections';
 
 // --- ROBUST CONSOLIDATED APP ---
 // Eliminates all external component imports to resolve the white screen issue.
@@ -856,6 +857,9 @@ const App = () => {
           <button onClick={() => setCurrentPage('features')} style={{ background: 'none', border: 'none', color: currentPage === 'features' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>FEATURES</button>
           <button onClick={() => setCurrentPage('simulation')} style={{ background: 'none', border: 'none', color: currentPage === 'simulation' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>SIMULATION</button>
           <button onClick={() => setCurrentPage('portal')} style={{ background: 'none', border: 'none', color: currentPage === 'portal' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>ECI PORTAL</button>
+          <button onClick={() => setCurrentPage('documents')} style={{ background: 'none', border: 'none', color: currentPage === 'documents' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>DOCUMENTS</button>
+          <button onClick={() => setCurrentPage('verify')} style={{ background: 'none', border: 'none', color: currentPage === 'verify' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>VERIFY</button>
+          <button onClick={() => setCurrentPage('faq')} style={{ background: 'none', border: 'none', color: currentPage === 'faq' ? 'var(--accent-blue)' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>FAQ</button>
           {user?.role === 'admin' && (
             <button onClick={() => setCurrentPage('admin')} style={{ background: 'none', border: 'none', color: currentPage === 'admin' ? '#ef4444' : 'var(--text-secondary)', cursor: 'pointer', fontWeight: 'bold' }}>ADMIN</button>
           )}
@@ -1063,6 +1067,9 @@ const App = () => {
         {currentPage === 'admin' && <AdminDashboard token={token} currentUser={user} />}
         {currentPage === 'simulation' && <SimulationPage />}
         {currentPage === 'portal' && <ECIPortal />}
+        {currentPage === 'documents' && <RequiredDocumentsPage />}
+        {currentPage === 'verify' && <AIDocVerificationPage />}
+        {currentPage === 'faq' && <FAQPage />}
         {currentPage === 'features' && (
           <div>
             <h1 style={{ fontSize: 'clamp(30px, 8vw, 60px)', fontWeight: '900', marginBottom: '30px' }}>System Architecture.</h1>
