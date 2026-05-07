@@ -116,21 +116,24 @@ export const RequiredDocumentsPage = () => {
 };
 
 // ─── AI Document Verification Page ────────────────────────────────────────
-export const AIDocVerificationPage = () => {
+export const AIDocVerificationPage = ({ currentUser }) => {
   const [dragOver, setDragOver] = useState(false);
   const [file, setFile] = useState(null);
   const [stage, setStage] = useState('idle'); // idle | verifying | success | warning
   const [progress, setProgress] = useState(0);
-  const [extractedData, setExtractedData] = useState({ name: '', type: '', addressFound: false, dobFound: false });
+  const [extractedData, setExtractedData] = useState({ name: '', type: '', addressFound: false, dobFound: false, nameMatch: false });
+  const [errorMsg, setErrorMsg] = useState('');
 
   const runVerification = async (f) => {
     setFile(f);
     setStage('verifying');
     setProgress(0);
-    setExtractedData({ name: '', type: '', addressFound: false, dobFound: false });
+    setErrorMsg('');
+    setExtractedData({ name: '', type: '', addressFound: false, dobFound: false, nameMatch: false });
 
     const ext = f.name.split('.').pop().toLowerCase();
     if (!['jpg', 'jpeg', 'png'].includes(ext)) {
+      setErrorMsg('Unsupported format. Please upload JPG or PNG.');
       setStage('warning');
       return;
     }
@@ -138,27 +141,33 @@ export const AIDocVerificationPage = () => {
     try {
       const result = await Tesseract.recognize(f, 'eng', {
         logger: m => {
-          if (m.status === 'recognizing text') {
-            setProgress(Math.round(m.progress * 100));
-          }
+          if (m.status === 'recognizing text') setProgress(Math.round(m.progress * 100));
         }
       });
 
       const text = result.data.text;
-      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
+      const lowerText = text.toLowerCase();
       
+      // Validity Check: Does it look like an ID?
+      const isDoc = lowerText.includes('india') || lowerText.includes('government') || lowerText.includes('identity') || lowerText.includes('election') || lowerText.includes('card');
+      
+      if (!isDoc) {
+        setErrorMsg('Invalid Document: This does not appear to be a recognized Identity Proof.');
+        setStage('warning');
+        return;
+      }
+
       let foundName = '';
-      let foundType = 'Document';
-      let hasAddress = text.toLowerCase().includes('address') || text.toLowerCase().includes('house') || text.toLowerCase().includes('road');
-      let hasDob = text.toLowerCase().includes('dob') || text.toLowerCase().includes('birth') || text.toLowerCase().includes('year');
+      let foundType = 'Identity Document';
+      let hasAddress = lowerText.includes('address') || lowerText.includes('house') || lowerText.includes('road') || lowerText.includes('village');
+      let hasDob = lowerText.includes('dob') || lowerText.includes('birth') || lowerText.includes('year');
 
-      // Simple heuristic for name extraction
-      if (text.toLowerCase().includes('aadhaar')) foundType = 'Aadhaar Card';
-      else if (text.toLowerCase().includes('pan card')) foundType = 'PAN Card';
-      else if (text.toLowerCase().includes('passport')) foundType = 'Passport';
-      else if (text.toLowerCase().includes('driving')) foundType = 'Driving License';
+      if (lowerText.includes('aadhaar')) foundType = 'Aadhaar Card';
+      else if (lowerText.includes('pan card')) foundType = 'PAN Card';
+      else if (lowerText.includes('passport')) foundType = 'Passport';
+      else if (lowerText.includes('driving')) foundType = 'Driving License';
 
-      // Look for lines that might be names (Capitalized words, usually at the top)
+      const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 2);
       const namePattern = /^[A-Z][a-z]+ [A-Z][a-z]+( [A-Z][a-z]+)?$/;
       for (let line of lines) {
           if (namePattern.test(line) && !line.toLowerCase().includes('india') && !line.toLowerCase().includes('government')) {
@@ -167,33 +176,43 @@ export const AIDocVerificationPage = () => {
           }
       }
 
+      // Name Match Check
+      let match = true;
+      if (currentUser && foundName) {
+          const userParts = currentUser.username.toLowerCase().split(/[_\s]+/);
+          const foundParts = foundName.toLowerCase().split(' ');
+          match = userParts.some(p => p.length > 2 && foundParts.includes(p)) || foundParts.some(p => p.length > 2 && userParts.includes(p));
+      }
+
       setExtractedData({
         name: foundName || 'Verified Holder',
         type: foundType,
         addressFound: hasAddress,
-        dobFound: hasDob
+        dobFound: hasDob,
+        nameMatch: match
       });
 
-      setStage('success');
+      if (!match) {
+          setErrorMsg('Name Mismatch: The name on this document does not match your profile.');
+          setStage('warning');
+      } else {
+          setStage('success');
+      }
+
     } catch (err) {
+      setErrorMsg('OCR Analysis Failed. Please ensure the image is clear and try again.');
       setStage('warning');
     }
   };
 
-  const reset = () => { setStage('idle'); setFile(null); setProgress(0); };
+  const reset = () => { setStage('idle'); setFile(null); setProgress(0); setErrorMsg(''); };
 
   const successResults = [
     { label: `${extractedData.type} Detected`, icon: '✔', color: '#10b981' },
-    { label: `Name: ${extractedData.name}`, icon: '✔', color: '#10b981' },
+    { label: `Name Match: ${extractedData.name}`, icon: '✔', color: '#10b981' },
     { label: extractedData.addressFound ? 'Address Verified' : 'Address Check Passed', icon: '✔', color: '#10b981' },
     { label: extractedData.dobFound ? 'DOB Confirmed' : 'Age Eligibility Confirmed', icon: '✔', color: '#10b981' },
     { label: 'Verification Successful', icon: '✔', color: '#10b981' },
-  ];
-
-  const warnings = [
-    { label: 'Invalid document format', icon: '⚠', color: '#ef4444' },
-    { label: 'Low resolution or blurry', icon: '⚠', color: '#f59e0b' },
-    { label: 'Verification incomplete', icon: '⚠', color: '#f59e0b' },
   ];
 
   return (
@@ -278,22 +297,20 @@ export const AIDocVerificationPage = () => {
 
       {stage === 'warning' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-          {warnings.map((r, i) => (
-            <div
-              key={i}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '16px',
-                padding: '18px 24px',
-                backgroundColor: 'rgba(245,158,11,0.05)',
-                border: `1px solid ${r.color}44`,
-                borderRadius: '16px',
-                animation: `fadeIn 0.4s ease-out ${i * 0.08}s both`,
-              }}
-            >
-              <span style={{ fontSize: '20px', color: r.color, fontWeight: 'bold' }}>{r.icon}</span>
-              <span style={{ fontSize: '1rem', fontWeight: '600', color: '#e2e8f0' }}>{r.label}</span>
-            </div>
-          ))}
+          <div
+            style={{
+              padding: '24px',
+              backgroundColor: 'rgba(239,68,68,0.05)',
+              border: '1px solid rgba(239,68,68,0.2)',
+              borderRadius: '16px',
+              textAlign: 'center',
+              animation: 'fadeIn 0.4s ease-out',
+            }}
+          >
+            <div style={{ fontSize: '32px', marginBottom: '12px' }}>⚠️</div>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 'bold', marginBottom: '8px', color: '#ef4444' }}>Verification Failed</h3>
+            <p style={{ color: '#94a3b8', fontSize: '0.9rem', lineHeight: 1.6 }}>{errorMsg}</p>
+          </div>
           <button onClick={reset} style={{ marginTop: '8px', padding: '14px', backgroundColor: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '14px', color: '#94a3b8', fontWeight: 'bold', cursor: 'pointer', fontSize: '0.9rem', fontFamily: 'inherit' }}>
             Try Again
           </button>

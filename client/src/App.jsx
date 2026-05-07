@@ -1068,7 +1068,7 @@ const App = () => {
         {currentPage === 'simulation' && <SimulationPage />}
         {currentPage === 'portal' && <ECIPortal />}
         {currentPage === 'documents' && <RequiredDocumentsPage />}
-        {currentPage === 'verify' && <AIDocVerificationPage />}
+        {currentPage === 'verify' && <AIDocVerificationPage currentUser={user} />}
         {currentPage === 'faq' && <FAQPage />}
         {currentPage === 'features' && (
           <div>
