@@ -982,107 +982,174 @@ const App = () => {
                 </div>
               </div>
 
-              {/* Right Column (Hero Graphic) */}
-              <div style={{ flex: '1 1 400px', display: 'flex', justifyContent: 'center', position: 'relative', height: '500px' }}>
-                {/* Glowing Background Pedestal */}
-                <div style={{ position: 'absolute', bottom: '20px', left: '50%', transform: 'translateX(-50%)', width: '300px', height: '100px', background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.3) 0%, rgba(3,3,5,0) 70%)', borderRadius: '50%', borderBottom: '2px solid rgba(59,130,246,0.5)', boxShadow: '0 20px 50px rgba(59,130,246,0.2)' }} />
-                <div style={{ position: 'absolute', bottom: '40px', left: '50%', transform: 'translateX(-50%)', width: '200px', height: '60px', background: 'radial-gradient(ellipse at center, rgba(59,130,246,0.4) 0%, rgba(3,3,5,0) 70%)', borderRadius: '50%', borderBottom: '2px solid #3b82f6' }} />
-                
-                {/* Central Floating Shield */}
-                <motion.div 
-                  animate={{ y: [-10, 10, -10] }} 
-                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                  style={{ position: 'absolute', bottom: '80px', left: '50%', marginLeft: '-60px', width: '120px', height: '120px', borderRadius: '30px', background: 'rgba(59,130,246,0.1)', backdropFilter: 'blur(10px)', border: '2px solid rgba(59,130,246,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 40px rgba(59,130,246,0.4), inset 0 0 20px rgba(59,130,246,0.2)', zIndex: 10 }}
-                >
-                  <ShieldCheck size={60} color="#60a5fa" strokeWidth={1.5} style={{ filter: 'drop-shadow(0 0 10px #60a5fa)' }} />
-                </motion.div>
+              {/* Right Column (Hero Graphic) - Illustrated Sky Scene */}
+              <div style={{ flex: '1 1 400px', position: 'relative', height: '520px', borderRadius: '28px', overflow: 'hidden', border: '3px solid rgba(255,255,255,0.18)', boxShadow: '0 30px 60px rgba(0,0,0,0.45)' }}>
 
-                {/* Main Glass Panel (Custom Realistic Globe) */}
-                <div style={{ position: 'absolute', top: '20px', left: '10%', right: '20%', bottom: '120px', background: 'var(--bg-card)', backdropFilter: 'blur(20px)', border: '1px solid var(--glass-border)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
-                  <svg viewBox="0 0 400 400" width="85%" height="85%" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                      <radialGradient id="sphereGradient" cx="30%" cy="30%" r="70%">
-                        <stop offset="0%" stopColor="#60a5fa" stopOpacity="0.4" />
-                        <stop offset="50%" stopColor="#1e40af" stopOpacity="0.1" />
-                        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0.3" />
-                      </radialGradient>
-                      <radialGradient id="highlightGradient" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stopColor="white" stopOpacity="0.2" />
-                        <stop offset="100%" stopColor="white" stopOpacity="0" />
-                      </radialGradient>
-                      <filter id="glow">
-                        <feGaussianBlur stdDeviation="5" result="blur" />
-                        <feMerge>
-                          <feMergeNode in="blur" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    {/* Outer Atmosphere Glow */}
-                    <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(59,130,246,0.1)" strokeWidth="1" filter="url(#glow)" />
-                    
-                    {/* Main Sphere */}
-                    <circle cx="200" cy="200" r="150" fill="url(#sphereGradient)" stroke="rgba(59,130,246,0.3)" strokeWidth="0.5" />
-                    
-                    {/* Grid Lines (Latitude) */}
-                    {[100, 150, 200, 250, 300].map((y, i) => {
-                      const r = 150;
-                      const dy = Math.abs(200 - y);
-                      const width = Math.sqrt(r * r - dy * dy) * 2;
-                      return (
-                        <ellipse key={`lat-${i}`} cx="200" cy={y} rx={width/2} ry={width/10} fill="none" stroke="rgba(59,130,246,0.15)" strokeWidth="0.5" />
-                      );
-                    })}
-                    
-                    {/* Grid Lines (Longitude) */}
-                    {[100, 150, 200, 250, 300].map((x, i) => {
-                      const r = 150;
-                      const dx = Math.abs(200 - x);
-                      const height = Math.sqrt(r * r - dx * dx) * 2;
-                      return (
-                        <ellipse key={`long-${i}`} cx={x} cy="200" rx={height/10} ry={height/2} fill="none" stroke="rgba(59,130,246,0.15)" strokeWidth="0.5" />
-                      );
-                    })}
+                {/* Sky Gradient Background */}
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, #29B6F6 0%, #4FC3F7 25%, #81D4FA 55%, #c5f0a4 80%, #8BC34A 100%)' }} />
 
-                    {/* Animated Orbital Ring */}
-                    <motion.ellipse 
-                      cx="200" cy="200" rx="170" ry="60" 
-                      fill="none" stroke="rgba(96,165,250,0.4)" strokeWidth="1" strokeDasharray="10 20"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                    />
+                {/* Animated Tech Scanning Line */}
+                <motion.div
+                  animate={{ top: ['0%', '100%', '0%'] }}
+                  transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+                  style={{ position: 'absolute', left: 0, width: '100%', height: '2px', background: 'linear-gradient(90deg, transparent, rgba(59,130,246,0.8), transparent)', boxShadow: '0 0 15px rgba(59,130,246,0.6)', zIndex: 15 }}
+                />
 
-                    {/* Highlights */}
-                    <circle cx="140" cy="140" r="60" fill="url(#highlightGradient)" />
+                {/* Sun with Glow */}
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ position: 'absolute', top: '28px', right: '55px', width: '72px', height: '72px', borderRadius: '50%', background: 'radial-gradient(circle, #FFFDE7 30%, #FFE082 65%, rgba(255,235,59,0) 100%)', boxShadow: '0 0 50px 15px rgba(255,235,59,0.4), 0 0 100px 40px rgba(255,235,59,0.15)', zIndex: 5 }}
+                />
+
+                {/* Animated Birds */}
+                <div className="hero-bird hero-bird-1" style={{ position: 'absolute', top: '60px', left: '150px', zIndex: 6 }}>
+                  <svg width="24" height="12" viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 6C4 6 8 0 12 6C16 12 20 6 24 6" stroke="rgba(0,0,0,0.3)" strokeWidth="2" strokeLinecap="round"/>
                   </svg>
-                  <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, transparent 30%, var(--bg-card) 100%)' }} />
+                </div>
+                <div className="hero-bird hero-bird-2" style={{ position: 'absolute', top: '85px', left: '180px', zIndex: 6 }}>
+                  <svg width="18" height="10" viewBox="0 0 24 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 6C4 6 8 0 12 6C16 12 20 6 24 6" stroke="rgba(0,0,0,0.25)" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
                 </div>
 
-                {/* Floating Stats Cards */}
-                <div style={{ position: 'absolute', right: '0', top: '40px', display: 'flex', flexDirection: 'column', gap: '20px', zIndex: 20 }}>
+                {/* Drifting Fingers instead of Clouds */}
+                <div className="hero-finger-element hero-finger-1" style={{ position: 'absolute', top: '45px', left: 0, zIndex: 4 }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '90px', height: 'auto', opacity: 0.7 }} />
+                </div>
+                <div className="hero-finger-element hero-finger-2" style={{ position: 'absolute', top: '110px', right: 0, zIndex: 4 }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '70px', height: 'auto', opacity: 0.6 }} />
+                </div>
+                <div className="hero-finger-element hero-finger-3" style={{ position: 'absolute', top: '190px', left: 0, zIndex: 4 }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '60px', height: 'auto', opacity: 0.5 }} />
+                </div>
+                <div className="hero-finger-element hero-finger-1" style={{ position: 'absolute', top: '250px', right: '100px', zIndex: 4, animationDelay: '-8s' }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '55px', height: 'auto', opacity: 0.4 }} />
+                </div>
+                <div className="hero-finger-element hero-finger-2" style={{ position: 'absolute', top: '320px', left: '200px', zIndex: 4, animationDelay: '-12s' }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '45px', height: 'auto', opacity: 0.3 }} />
+                </div>
+                <div className="hero-finger-element hero-finger-3" style={{ position: 'absolute', top: '380px', right: '50px', zIndex: 4, animationDelay: '-20s' }}>
+                  <img src="/voting_finger.png" alt="voted" style={{ width: '40px', height: 'auto', opacity: 0.35 }} />
+                </div>
+
+                {/* Tech Particles/Data Nodes */}
+                {[...Array(10)].map((_, i) => (
+                  <motion.div
+                    key={`particle-${i}`}
+                    animate={{ 
+                      x: [Math.random() * 400, Math.random() * 400], 
+                      y: [Math.random() * 400, Math.random() * 400],
+                      opacity: [0.1, 0.5, 0.1] 
+                    }}
+                    transition={{ duration: 10 + Math.random() * 10, repeat: Infinity, ease: 'linear' }}
+                    style={{ position: 'absolute', width: '3px', height: '3px', background: '#60a5fa', borderRadius: '50%', boxShadow: '0 0 12px #3b82f6', zIndex: 5 }}
+                  />
+                ))}
+
+                {/* Green Ground */}
+                <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '115px', background: 'linear-gradient(180deg, #8BC34A 0%, #558B2F 100%)', borderRadius: '0 0 25px 25px', zIndex: 8 }} />
+                {/* Ground shadow strip */}
+                <div style={{ position: 'absolute', bottom: '105px', left: 0, right: 0, height: '18px', background: 'linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.12) 100%)', zIndex: 9 }} />
+
+                {/* SVG Trees - Left */}
+                <svg style={{ position: 'absolute', bottom: '104px', left: '14px', width: '46px', height: '85px', filter: 'drop-shadow(2px 2px 3px rgba(0,0,0,0.3))', zIndex: 10 }} viewBox="0 0 50 90">
+                  <rect x="20" y="58" width="10" height="32" fill="#4E342E" />
+                  <polygon points="25,2 2,42 16,36 0,74 50,74 34,36 48,42" fill="#33691E" />
+                  <polygon points="25,0 0,46 18,40 1,78 49,78 32,40 50,46" fill="#558B2F" />
+                  <polygon points="25,8 4,46 17,41 2,76 48,76 33,41 46,46" fill="#8BC34A" opacity="0.4" />
+                </svg>
+                <svg style={{ position: 'absolute', bottom: '104px', left: '48px', width: '34px', height: '65px', filter: 'drop-shadow(2px 2px 3px rgba(0,0,0,0.25))', zIndex: 10 }} viewBox="0 0 50 90">
+                  <rect x="20" y="58" width="10" height="32" fill="#4E342E" />
+                  <polygon points="25,2 2,42 16,36 0,74 50,74 34,36 48,42" fill="#2E7D32" />
+                  <polygon points="25,0 0,46 18,40 1,78 49,78 32,40 50,46" fill="#388E3C" />
+                </svg>
+
+                {/* SVG Trees - Right */}
+                <svg style={{ position: 'absolute', bottom: '104px', right: '12px', width: '42px', height: '78px', filter: 'drop-shadow(-2px 2px 3px rgba(0,0,0,0.3))', zIndex: 10 }} viewBox="0 0 50 90">
+                  <rect x="20" y="58" width="10" height="32" fill="#4E342E" />
+                  <polygon points="25,2 2,42 16,36 0,74 50,74 34,36 48,42" fill="#33691E" />
+                  <polygon points="25,0 0,46 18,40 1,78 49,78 32,40 50,46" fill="#558B2F" />
+                  <polygon points="25,8 4,46 17,41 2,76 48,76 33,41 46,46" fill="#8BC34A" opacity="0.4" />
+                </svg>
+                <svg style={{ position: 'absolute', bottom: '104px', right: '44px', width: '30px', height: '58px', filter: 'drop-shadow(-2px 2px 3px rgba(0,0,0,0.2))', zIndex: 10 }} viewBox="0 0 50 90">
+                  <rect x="20" y="58" width="10" height="32" fill="#4E342E" />
+                  <polygon points="25,2 2,42 16,36 0,74 50,74 34,36 48,42" fill="#2E7D32" />
+                </svg>
+
+                {/* Ink-dot sparkles around finger */}
+                <motion.div
+                  animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                  style={{ position: 'absolute', bottom: '310px', left: '52%', width: '10px', height: '10px', borderRadius: '50%', background: '#3b82f6', boxShadow: '0 0 12px 4px rgba(59,130,246,0.6)', zIndex: 11 }}
+                />
+                <motion.div
+                  animate={{ opacity: [0, 1, 0], scale: [0.5, 1.1, 0.5] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                  style={{ position: 'absolute', bottom: '325px', left: '42%', width: '7px', height: '7px', borderRadius: '50%', background: '#60a5fa', boxShadow: '0 0 10px 3px rgba(96,165,250,0.5)', zIndex: 11 }}
+                />
+                <motion.div
+                  animate={{ opacity: [0, 1, 0], scale: [0.5, 1, 0.5] }}
+                  transition={{ duration: 2.5, repeat: Infinity, delay: 1.5 }}
+                  style={{ position: 'absolute', bottom: '295px', left: '56%', width: '6px', height: '6px', borderRadius: '50%', background: '#818cf8', boxShadow: '0 0 8px 3px rgba(129,140,248,0.5)', zIndex: 11 }}
+                />
+
+                {/* Main Animated Voting Finger */}
+                <motion.div
+                  animate={{ y: [-16, 8, -16], rotate: [-1.5, 1.5, -1.5] }}
+                  transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ position: 'absolute', bottom: '105px', left: '50%', transform: 'translateX(-50%)', zIndex: 10, mixBlendMode: 'multiply' }}
+                >
+                  <img
+                    src="/voting_finger.png"
+                    alt="Voting Finger - Your Vote Counts"
+                    style={{ height: '265px', maxWidth: '210px', objectFit: 'contain' }}
+                  />
+                </motion.div>
+
+                {/* Floating Stats Cards - overlaid right side */}
+                <div style={{ position: 'absolute', right: '12px', top: '12px', display: 'flex', flexDirection: 'column', gap: '10px', zIndex: 20 }}>
                   {[
-                    { icon: <Users size={20} />, value: '96.8Cr+', label: 'Voters Verified', sub: 'Across India' },
-                    { icon: <Shield size={20} />, value: '45.2M+', label: 'Documents Verified', sub: 'This Month' },
-                    { icon: <BarChart3 size={20} />, value: '8,543', label: 'Constituencies', sub: 'Active Records' }
+                    { icon: <Users size={15} />, value: '96.8Cr+', label: 'Voters Verified' },
+                    { icon: <Shield size={15} />, value: '45.2M+', label: 'Docs Verified' },
+                    { icon: <BarChart3 size={15} />, value: '8,543', label: 'Constituencies' }
                   ].map((stat, i) => (
-                    <motion.div 
+                    <motion.div
                       key={i}
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: 24 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.2 }}
-                      style={{ padding: '16px 20px', background: 'var(--bg-chat)', backdropFilter: 'blur(20px)', border: '1px solid rgba(59,130,246,0.3)', borderRadius: '16px', display: 'flex', alignItems: 'center', gap: '16px', boxShadow: '0 10px 30px rgba(0,0,0,0.3), inset 0 0 10px rgba(59,130,246,0.1)' }}
+                      transition={{ delay: i * 0.2 + 0.3 }}
+                      style={{ padding: '10px 14px', background: 'rgba(5,10,25,0.6)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.22)', borderRadius: '14px', display: 'flex', alignItems: 'center', gap: '10px', boxShadow: '0 6px 20px rgba(0,0,0,0.35)' }}
                     >
-                      <div style={{ width: '48px', height: '48px', borderRadius: '12px', background: 'rgba(59,130,246,0.15)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '32px', height: '32px', borderRadius: '8px', background: 'rgba(59,130,246,0.3)', color: '#60a5fa', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                         {stat.icon}
                       </div>
                       <div>
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '2px' }}>{stat.label}</div>
-                        <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--text-primary)', lineHeight: 1 }}>{stat.value}</div>
-                        <div style={{ fontSize: '0.65rem', color: '#60a5fa', marginTop: '4px' }}>{stat.sub}</div>
+                        <div style={{ fontSize: '0.6rem', color: 'rgba(255,255,255,0.65)', marginBottom: '1px', fontWeight: 600, letterSpacing: '0.4px', textTransform: 'uppercase' }}>{stat.label}</div>
+                        <div style={{ fontSize: '1rem', fontWeight: 800, color: 'white', lineHeight: 1 }}>{stat.value}</div>
                       </div>
                     </motion.div>
                   ))}
                 </div>
+
+                {/* Bottom Info Card - orange/saffron like reference */}
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.6, ease: 'easeOut' }}
+                  style={{ position: 'absolute', bottom: '16px', left: '14px', right: '14px', background: 'linear-gradient(135deg, #FF8F00 0%, #FFB300 50%, #FF6F00 100%)', borderRadius: '20px', padding: '16px 20px', boxShadow: '0 8px 28px rgba(255,143,0,0.5), 0 3px 0 rgba(0,0,0,0.2)', border: '2.5px solid rgba(255,255,255,0.35)', zIndex: 20, cursor: 'pointer' }}
+                  onClick={openChat}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <span style={{ fontSize: '1.6rem', lineHeight: 1 }}>🗳️</span>
+                    <div>
+                      <div style={{ fontSize: '1rem', fontWeight: 900, color: '#1a0a00', lineHeight: 1.2, letterSpacing: '-0.3px' }}>Your Vote. Your Power.</div>
+                      <div style={{ fontSize: '0.73rem', color: 'rgba(30,10,0,0.72)', marginTop: '3px', fontWeight: 500, lineHeight: 1.4 }}>AI-powered voter guidance for every Indian citizen.</div>
+                    </div>
+                  </div>
+                </motion.div>
+
               </div>
             </div>
 
